@@ -1,10 +1,11 @@
 import React from "react";
-import { NativeBaseProvider, Box } from "native-base";
+import { NavigationContainer } from "@react-navigation/native";
+import AppNavigation from "./navigation";
 
 export default function App() {
     return (
-        <NativeBaseProvider>
-            <Box>Test</Box>
-        </NativeBaseProvider>
+        <NavigationContainer>
+            <AppNavigation />
+        </NavigationContainer>
     );
 }
