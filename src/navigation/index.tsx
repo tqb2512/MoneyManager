@@ -11,7 +11,7 @@ const BottomBar = createBottomTabNavigator();
 function BottomBarTabs()
 {
     return (
-        <BottomBar.Navigator>
+        <BottomBar.Navigator screenOptions={{headerShown: false}}>
             <BottomBar.Screen name="Home" component={Home} />
             <BottomBar.Screen name="Stats" component={Stats} />
         </BottomBar.Navigator>
