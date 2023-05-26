@@ -26,7 +26,7 @@ const Budget = () => {
   const [incomeColor, setIncomeColor] = useState('#46CDCF');
   const [expenseColor, setExpenseColor] = useState('black');
 
-  const [type, setType] = useState('income');
+  const [budgetType, setBudgetType] = useState('income');
   const [isCategoriesClicked, setIsCategoriesClicked] = useState(false);
   const [isAccountsClicked, setIsAccountsClicked] = useState(false);
   const [isDateClicked, setIsDateClicked] = useState(false);
@@ -55,16 +55,6 @@ const Budget = () => {
     console.log(fDate + " " + fTime)
 
   }
-  // const handleDateFocus = () => {
-  //   const currentTime = new Date();
-  //   const formatedDate = currentTime.toLocaleDateString('en-US', {
-  //     month: '2-digit',
-  //     day: '2-digit',
-  //     year: 'numeric',
-  //   })
-  //   const formattedTime = currentTime.toLocaleTimeString('en-US');
-  //   setDateValue(`${formatedDate} ${formattedTime}`);
-  // }
 
   return (
     <NativeBaseProvider>
@@ -75,7 +65,7 @@ const Budget = () => {
               onPress={() => {
                 setIncomeColor('#46CDCF');
                 setExpenseColor('black');
-                setType('income');
+                setBudgetType('income');
               }}>
               <View style={[styles.typeButton, {borderColor: incomeColor}]}>
                 <Text style={[styles.typeText, {color: incomeColor}]}>
@@ -87,7 +77,7 @@ const Budget = () => {
               onPress={() => {
                 setExpenseColor('orange');
                 setIncomeColor('black');
-                setType('expense');
+                setBudgetType('expense');
               }}>
               <View style={[styles.typeButton, {borderColor: expenseColor}]}>
                 <Text style={[styles.typeText, {color: expenseColor}]}>
@@ -235,7 +225,7 @@ const Budget = () => {
           />
 
           <View style={{flexDirection: 'row', padding: 16, marginTop: 16}}>
-            <TouchableOpacity style={[styles.saveButton, {backgroundColor: type === 'income'? '#46CDCF' : 'orange' }]}>
+            <TouchableOpacity style={[styles.saveButton, {backgroundColor: budgetType === 'income'? '#46CDCF' : 'orange' }]}>
               <Text>Save</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.continueButton}>
