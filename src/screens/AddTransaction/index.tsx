@@ -190,6 +190,7 @@ const AddTransaction = () => {
               showSoftInputOnFocus={false}
             />
           </View>
+          
           {/* Account */}
           <View style={styles.input}>
             <Text style={styles.inputLabel}>Account</Text>
