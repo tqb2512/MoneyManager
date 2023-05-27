@@ -1,21 +1,9 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
+import {Transaction} from '../../../models/transaction';
 
-export type Props = {
-  id_budget: any;
-  type: any;
-  category: any;
-  account: any;
-  amount: any;
-  date: any;
-  month: any;
-  year: any;
-  img_url: any;
-  note: any;
-};
-
-const DailyBudget: React.FC<Props> = ({
-  id_budget,
+const DailyBudget: React.FC<Transaction> = ({
+  id,
   type,
   category,
   account,
