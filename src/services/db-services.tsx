@@ -1,6 +1,8 @@
 import { enablePromise, openDatabase, SQLiteDatabase } from 'react-native-sqlite-storage';
 
 import { Transaction } from '../models/transaction';
+import { Category } from '../models/category';
+import { Account } from '../models/account';
 
 enablePromise(true);
 
@@ -14,14 +16,25 @@ export const createTable = async (db: SQLiteDatabase): Promise<void> => {
     await db.executeSql(`CREATE TABLE IF NOT EXISTS ${tableName} (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         type TEXT,
-        category TEXT,
-        account TEXT,
-        amount REAL,
+        category_id INTEGER,
+        account_id INTEGER,
+        amount INTEGER,
         note TEXT,
         date INTEGER,
-        month INTEGER,
-        year INTEGER,
-        img_url TEXT
+    )`);
+
+    await db.executeSql(`CREATE TABLE IF NOT EXISTS accounts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        balance INTEGER,
+        type TEXT,
+        note TEXT
+    )`);
+
+    await db.executeSql(`CREATE TABLE IF NOT EXISTS categories (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        image TEXT
     )`);
 }
 
@@ -33,9 +46,6 @@ export const insertTransaction = async (db: SQLiteDatabase, transaction: Transac
         transaction.amount,
         transaction.note,
         transaction.date,
-        transaction.month,
-        transaction.year,
-        transaction.img_url
     ]);
 }
 
@@ -51,10 +61,7 @@ export const getTransactions = async (db: SQLiteDatabase): Promise<Transaction[]
             account: row.account,
             amount: row.amount,
             note: row.note,
-            date: row.date,
-            month: row.month,
-            year: row.year,
-            img_url: row.img_url
+            date: row.date
         });
     }
     return transactions;
@@ -72,13 +79,20 @@ export const getTransactionsByDate = async (db: SQLiteDatabase, date: number, mo
             account: row.account,
             amount: row.amount,
             note: row.note,
-            date: row.date,
-            month: row.month,
-            year: row.year,
-            img_url: row.img_url
+            date: row.date
         });
     }
     return transactions;
+}
+
+export const getCategoryById = async (db: SQLiteDatabase, id: number): Promise<Category> => {
+    const [results] = await db.executeSql(`SELECT * FROM categories WHERE id = ?`, [id]);
+    const row = results.rows.item(0);
+    return {
+        id: row.id,
+        name: row.name,
+        image: row.image
+    };
 }
 
 export const getAllDatesList = async (db: SQLiteDatabase): Promise<number[]> => {
@@ -90,3 +104,4 @@ export const getAllDatesList = async (db: SQLiteDatabase): Promise<number[]> => 
     }
     return dates;
 }
+

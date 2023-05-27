@@ -21,6 +21,8 @@ import React, {useState} from 'react';
 import Categories from './components/Categories';
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Transaction } from '../../models/transaction';
+import { Category } from '../../models/category';
+import { Account } from '../../models/account';
 import { getDBConnection, createTable, insertTransaction } from '../../services/db-services';
 
 
