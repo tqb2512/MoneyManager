@@ -10,17 +10,17 @@ import Account from '../screens/Account';
 import AddAccount from '../screens/Account/AddAccount';
 import {NavigationContainer} from '@react-navigation/native';
 import AddTransaction from '../screens/AddTransaction';
+import DeleteAccount from '../screens/Account/DeleteAccount';
 const BottomBar = createBottomTabNavigator();
 const TopTabNavigatior = createMaterialTopTabNavigator();
 
 
-const Stack = createNativeStackNavigator<RootStackParams>();
+const Stack = createNativeStackNavigator();
 
 export type RootStackParams = {
-  Home: undefined
   Account: undefined
   AddAccount: undefined
-  Stats: undefined
+  DeleteAccount: undefined
 };
 
 function BottomBarTabs() {
@@ -29,9 +29,9 @@ function BottomBarTabs() {
       <BottomBar.Screen name="Home" component={Home} />
       <BottomBar.Screen name="Stats" component={Stats} />
       <BottomBar.Screen name="Add" component={AddTransaction} />
-      <BottomBar.Screen
+      <Stack.Screen
         name="Account"
-        component={Account}
+        component={AppNavigation}
         options={{headerShown: false}}
       />
     </BottomBar.Navigator>
@@ -40,12 +40,11 @@ function BottomBarTabs() {
 
 function AppNavigation() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='Account'>
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Stats" component={Stats} />
-        <Stack.Screen name="Account" component={Account} />
+    <NavigationContainer independent={true}>
+      <Stack.Navigator>
+        <Stack.Screen name="Account" component={Account} options={{headerShown: false}} />
         <Stack.Screen name="AddAccount" component={AddAccount} />
+        <Stack.Screen name="DeleteAccount" component={DeleteAccount} />
       </Stack.Navigator>
     </NavigationContainer>
   );

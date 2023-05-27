@@ -15,6 +15,7 @@ import {
   NativeBaseProvider,
   CloseIcon,
   ThreeDotsIcon,
+  KeyboardAvoidingView,
 
 } from 'native-base';
 import React, {useState} from 'react';
@@ -24,6 +25,7 @@ import { Transaction } from '../../models/transaction';
 import { Category } from '../../models/category';
 import { Account } from '../../models/account';
 import { getDBConnection, createTable, insertTransaction } from '../../services/db-services';
+import { useKeyboardDismissable } from 'native-base';
 
 
 const AddTransaction = () => {
@@ -73,7 +75,7 @@ const AddTransaction = () => {
 
   return (
     <NativeBaseProvider>
-      <SafeAreaView style={styles.mainContainer}>
+      <KeyboardAvoidingView style={styles.mainContainer}>
         <View style={{backgroundColor: 'white'}}>
           <View style={[styles.buttonContainer, {}]}>
             <TouchableOpacity
@@ -126,6 +128,7 @@ const AddTransaction = () => {
               }}
               showSoftInputOnFocus={false}
               value={dateValue}
+              caretHidden={true}
             />           
           </View>
 
@@ -145,29 +148,10 @@ const AddTransaction = () => {
               }}
               showSoftInputOnFocus={false}
               value={timeValue}
+              caretHidden={true}
             />
           </View>
 
-          <View style={styles.input}>
-            <Text style={styles.inputLabel}>Amount</Text>
-            <TextInput
-              style={{
-                flex: 1,
-                borderBottomWidth: 0.4,
-                borderBottomColor: 'gray',
-              }}
-              placeholder=""
-              keyboardType='number-pad'
-              onPressIn={()=> {
-                setIsDateClicked(false);
-                setIsCategoriesClicked(false);
-                setIsAccountsClicked(false);
-                setIsTimeClick(false);
-              }}
-              onChangeText={text => setTransaction({...Transaction, amount: text})
-              }
-            />
-          </View>
 
           {/* Category */}
           <View style={styles.input}>
@@ -188,6 +172,7 @@ const AddTransaction = () => {
                 setIsTimeClick(false);
               }}
               showSoftInputOnFocus={false}
+              caretHidden={true}
             />
           </View>
           {/* Account */}
@@ -209,8 +194,30 @@ const AddTransaction = () => {
                 setIsTimeClick(false);
               }}
               showSoftInputOnFocus={false}
+              caretHidden={true}
             />
           </View>
+          <View style={styles.input}>
+            <Text style={styles.inputLabel}>Amount</Text>
+            <TextInput
+              style={{
+                flex: 1,
+                borderBottomWidth: 0.4,
+                borderBottomColor: 'gray',
+              }}
+              placeholder=""
+              keyboardType='number-pad'
+              onPressIn={()=> {
+                setIsDateClicked(false);
+                setIsCategoriesClicked(false);
+                setIsAccountsClicked(false);
+                setIsTimeClick(false);
+              }}
+              onChangeText={text => setTransaction({...Transaction, amount: text})
+              }
+            />
+          </View>
+          
           <View style={styles.input}>
             <Text style={styles.inputLabel}>Note</Text>
             <TextInput
@@ -281,14 +288,17 @@ const AddTransaction = () => {
 
             <View style={styles.categoryContainer}>
                   <Categories
+                  onClose={() => {setIsCategoriesClicked(false)}}
                   onSelect={text => setCategoryValue(text)}
                   categoryName="Eating"
                   />
                   <Categories
+                  onClose={() => {setIsCategoriesClicked(false)}}
                   onSelect={text => setCategoryValue(text)}
                   categoryName="Playing"
                   />
                   <Categories
+                  onClose={() => {setIsCategoriesClicked(false)}}
                   onSelect={text => setCategoryValue(text)}
                   categoryName="Sleeping"
                   />
@@ -389,7 +399,7 @@ const AddTransaction = () => {
           />
         )
         }
-      </SafeAreaView>
+      </KeyboardAvoidingView>
     </NativeBaseProvider>
   );
 };
@@ -447,8 +457,8 @@ const styles = StyleSheet.create({
     width: 220,
     paddingLeft: 30,
     paddingRight: 30,
-    marginRight: 10,
-    marginLeft: 10,
+    marginRight: 12,
+    marginLeft: 6,
     alignItems: 'center',
   },
 
@@ -459,7 +469,6 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     paddingRight: 30,
     marginRight: 10,
-    marginLeft: 10,
     alignItems: 'center',
   },
 
@@ -467,9 +476,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     zIndex: 50,
-    backgroundColor: 'gray',
+    backgroundColor: '#666161',
     width: '100%',
-    height: 300,
+    height: '50%',
   },
 
   categoryTopBar: {

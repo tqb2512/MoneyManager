@@ -13,12 +13,12 @@ import {ThreeDotsIcon} from 'native-base';
 import {NativeBaseProvider} from 'native-base';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParams} from '../../navigation';
+import { RootStackParams } from '../../navigation';
 
 const Account: React.FC = () => {
   const [showView, setShowView] = useState(false);
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const navigation = useNavigation<NavigationProp<RootStackParams>>();
+    // useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const handlePress = () => {
     navigation.navigate('AddAccount');
@@ -71,12 +71,15 @@ const Account: React.FC = () => {
           <View style={styles.subView}>
             <TouchableOpacity
               style={styles.subViewButton}
-              onPress={() => {
-                navigation.navigate('AddAccount');
-              }}>
+              onPress={() => { 
+                navigation.navigate('AddAccount')
+                setShowView(false)
+               }}>
               <Text>Add account</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.subViewButton}>
+            <TouchableOpacity 
+              onPress={() => { navigation.navigate('DeleteAccount')}}
+              style={styles.subViewButton}>
               <Text>Delete account</Text>
             </TouchableOpacity>
           </View>
