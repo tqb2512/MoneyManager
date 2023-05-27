@@ -1,5 +1,5 @@
 export type Transaction = {
-    id_budget: any;
+    id: any;
     type: any;
     category: any;
     account: any;

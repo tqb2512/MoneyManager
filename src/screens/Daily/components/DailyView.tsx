@@ -1,6 +1,8 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import DailyBudget from './DailyBudget';
+import { Transaction } from '../../../models/transaction';
+import { getDBConnection, getTransactions } from '../../../services/db-services';
 
 export type Props = {
   date: any;
@@ -11,6 +13,17 @@ export type Props = {
 };
 
 const DailyView: React.FC<Props> = ({date, month, year, income, expense}) => {
+
+  const [transactionsList, setTransactionsList] = React.useState<Transaction[]>([]);
+  
+  useEffect(() => {
+    getDBConnection().then((db) => {
+      getTransactions(db).then((transactions) => {
+        setTransactionsList(transactions);
+      });
+    });
+  }, []);  
+
   return (
     <View style={styles.mainContainer}>
       {/* Hiện ngày tháng năm, tiền thu chi */}
@@ -33,44 +46,9 @@ const DailyView: React.FC<Props> = ({date, month, year, income, expense}) => {
         </View>
       </View>
       {/* Danh sách khoản thu chi */}
-      <DailyBudget
-        id_budget=""
-        type="income"
-        category="Playing"
-        account="Card"
-        amount="69"
-        note="Note 1"
-        date="22"
-        month="03"
-        year="2003"
-        img_url="https://lzd-img-global.slatic.net/g/p/6358f080921cd733a75669f106cce6cc.jpg_720x720q80.jpg"
-      />
-
-      <DailyBudget
-        id_budget=""
-        type="income"
-        category="Sleeping"
-        account="Card"
-        amount="69"
-        note="Note 23"
-        date="22"
-        month="03"
-        year="2003"
-        img_url="https://lzd-img-global.slatic.net/g/p/6358f080921cd733a75669f106cce6cc.jpg_720x720q80.jpg"
-      />
-
-      <DailyBudget
-        id_budget=""
-        type="expense"
-        category="Playing"
-        account="Account"
-        amount="35"
-        note="Note 2"
-        date="22"
-        month="03"
-        year="2003"
-        img_url="https://lzd-img-global.slatic.net/g/p/6358f080921cd733a75669f106cce6cc.jpg_720x720q80.jpg"
-      />
+      {transactionsList.map((transaction) => {
+        return <DailyBudget {...transaction} />;
+      })}
     </View>
   );
 };

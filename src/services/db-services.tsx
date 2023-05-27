@@ -45,7 +45,7 @@ export const getTransactions = async (db: SQLiteDatabase): Promise<Transaction[]
     for (let i = 0; i < results.rows.length; i++) {
         const row = results.rows.item(i);
         transactions.push({
-            id_budget: row.id,
+            id: row.id,
             type: row.type,
             category: row.category,
             account: row.account,
@@ -58,4 +58,35 @@ export const getTransactions = async (db: SQLiteDatabase): Promise<Transaction[]
         });
     }
     return transactions;
+}
+
+export const getTransactionsByDate = async (db: SQLiteDatabase, date: number, month: number, year: number): Promise<Transaction[]> => {
+    const [results] = await db.executeSql(`SELECT * FROM ${tableName} WHERE date = ? AND month = ? AND year = ?`, [date, month, year]);
+    const transactions: Transaction[] = [];
+    for (let i = 0; i < results.rows.length; i++) {
+        const row = results.rows.item(i);
+        transactions.push({
+            id: row.id,
+            type: row.type,
+            category: row.category,
+            account: row.account,
+            amount: row.amount,
+            note: row.note,
+            date: row.date,
+            month: row.month,
+            year: row.year,
+            img_url: row.img_url
+        });
+    }
+    return transactions;
+}
+
+export const getAllDatesList = async (db: SQLiteDatabase): Promise<number[]> => {
+    const [results] = await db.executeSql(`SELECT DISTINCT date FROM ${tableName}`);
+    const dates: number[] = [];
+    for (let i = 0; i < results.rows.length; i++) {
+        const row = results.rows.item(i);
+        dates.push(row.date);
+    }
+    return dates;
 }

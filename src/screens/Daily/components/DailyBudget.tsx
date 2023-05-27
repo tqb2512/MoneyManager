@@ -3,7 +3,7 @@ import React from 'react';
 import {Transaction} from '../../../models/transaction';
 
 const DailyBudget: React.FC<Transaction> = ({
-  id_budget,
+  id,
   type,
   category,
   account,
