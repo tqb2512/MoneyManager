@@ -1,5 +1,5 @@
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import DailyView from './components/DailyView';
 import DailyHeader from './components/DailyHeader';
 

@@ -20,6 +20,8 @@ import {
 import React, {useState} from 'react';
 import Categories from './components/Categories';
 import DateTimePicker from '@react-native-community/datetimepicker'
+import { Transaction } from '../../models/transaction';
+import { getDBConnection, createTable, insertTransaction } from '../../services/db-services';
 
 
 const Budget = () => {
@@ -41,6 +43,8 @@ const Budget = () => {
   const [noteValue, setNoteValue] = useState<any | null>(null);
   const [descripTion, setDescription] = useState<any | null>(null);
 
+  const [Transaction, setTransaction] = useState<Transaction>({} as Transaction);
+
   const [date, setDate] = useState(new Date());
   const timeNow = new Date()
 
@@ -53,8 +57,17 @@ const Budget = () => {
     let fTime = tempDate.getHours() + ':' + tempDate.getMinutes()
     setDateValue(fDate + " " + fTime)
     console.log(fDate + " " + fTime)
-
   }
+
+  const saveTransaction = (transaction: Transaction) => {
+    getDBConnection().then((db) => {
+      createTable(db).then(() => {
+        insertTransaction(db, transaction);
+      });
+    });
+    console.log(transaction);
+  }
+
 
   return (
     <NativeBaseProvider>
@@ -148,8 +161,8 @@ const Budget = () => {
                 setIsAccountsClicked(false);
                 setIsTimeClick(false);
               }}
-              onChangeText={text => setAmountValue(text)}
-              value={amountValue}    
+              onChangeText={text => setTransaction({...Transaction, amount: text})
+              }
             />
           </View>
 
@@ -225,7 +238,10 @@ const Budget = () => {
           />
 
           <View style={{flexDirection: 'row', padding: 16, marginTop: 16}}>
-            <TouchableOpacity style={[styles.saveButton, {backgroundColor: budgetType === 'income'? '#46CDCF' : 'orange' }]}>
+            <TouchableOpacity 
+              style={[styles.saveButton, {backgroundColor: budgetType === 'income'? '#46CDCF' : 'orange' }]}
+              onPress={() => saveTransaction(Transaction)}
+              >
               <Text>Save</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.continueButton}>
