@@ -20,7 +20,7 @@ import {
 import React, {useState} from 'react';
 import Categories from './components/Categories';
 import DateTimePicker from '@react-native-community/datetimepicker'
-
+import { Toast } from 'native-base';
 
 const Budget = () => {
   const [incomeColor, setIncomeColor] = useState('#46CDCF');
@@ -43,6 +43,14 @@ const Budget = () => {
 
   const [date, setDate] = useState(new Date());
   const timeNow = new Date()
+
+  const toastFunction = (test: string) => {
+    Toast.show({
+      title: test,
+      placement: 'bottom',
+      // status: 'success'
+    });
+  }
 
   const onChange = (event: Event, selectedDate: Date) => {
     const currentDate = selectedDate || date;
@@ -93,6 +101,7 @@ const Budget = () => {
             paddingBottom: 24,
             marginBottom: 12,
             backgroundColor: 'white',
+            height: '60%',
           }}>
           <View style={styles.input}>
             <Text style={styles.inputLabel}>Date</Text>
@@ -225,7 +234,9 @@ const Budget = () => {
           />
 
           <View style={{flexDirection: 'row', padding: 16, marginTop: 16}}>
-            <TouchableOpacity style={[styles.saveButton, {backgroundColor: budgetType === 'income'? '#46CDCF' : 'orange' }]}>
+            <TouchableOpacity 
+              onPress={() => toastFunction(amountValue)}
+              style={[styles.saveButton, {backgroundColor: budgetType === 'income'? '#46CDCF' : 'orange' }]}>
               <Text>Save</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.continueButton}>
@@ -410,6 +421,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     margin: 2,
+    height: '15%'
   },
   inputLabel: {
     marginRight: 16,
@@ -445,7 +457,7 @@ const styles = StyleSheet.create({
 
   categoryAction: {
     position: 'absolute',
-    bottom: 16,
+    bottom: 0,
     zIndex: 50,
     backgroundColor: 'gray',
     width: '100%',
