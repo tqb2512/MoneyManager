@@ -1,6 +1,9 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {Transaction} from '../../../../models/transaction';
+import { Category } from '../../../../models/category';
+
+import { getDBConnection, getCategoryById } from '../../../../services/db-services';
 
 const DailyBudget: React.FC<Transaction> = ({
   id,
@@ -10,10 +13,17 @@ const DailyBudget: React.FC<Transaction> = ({
   amount,
   note,
   date,
-  month,
-  year,
-  img_url,
 }) => {
+  const [img_url, setImgUrl] = React.useState<string>('');
+
+  React.useEffect(() => {
+    getDBConnection().then((db) => {
+      getCategoryById(db, category).then((category) => {
+        setImgUrl(category.image);
+      });
+    });
+  }, []);
+    
   return (
     <TouchableOpacity>
       <View style={{flexDirection: 'row', backgroundColor: 'white'}}>
