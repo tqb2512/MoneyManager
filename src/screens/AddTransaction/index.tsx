@@ -24,7 +24,7 @@ import { Transaction } from '../../models/transaction';
 import { getDBConnection, createTable, insertTransaction } from '../../services/db-services';
 
 
-const Budget = () => {
+const AddTransaction = () => {
   const [incomeColor, setIncomeColor] = useState('#46CDCF');
   const [expenseColor, setExpenseColor] = useState('black');
 
@@ -47,14 +47,6 @@ const Budget = () => {
 
   const [date, setDate] = useState(new Date());
   const timeNow = new Date()
-
-  const toastFunction = (test: string) => {
-    Toast.show({
-      title: test,
-      placement: 'bottom',
-      // status: 'success'
-    });
-  }
 
   const onChange = (event: Event, selectedDate: Date) => {
     const currentDate = selectedDate || date;
@@ -400,7 +392,7 @@ const Budget = () => {
   );
 };
 
-export default Budget;
+export default AddTransaction;
 
 const styles = StyleSheet.create({
   mainContainer: {

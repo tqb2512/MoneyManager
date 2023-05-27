@@ -6,11 +6,10 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 
 import Home from '../screens/Home';
 import Stats from '../screens/Stats';
-import Budget from '../screens/Budget';
 import Account from '../screens/Account';
-import Transaction from '../screens/Transaction';
-import AddAccount from '../screens/AddAccount';
+import AddAccount from '../screens/Account/AddAccount';
 import {NavigationContainer} from '@react-navigation/native';
+import AddTransaction from '../screens/AddTransaction';
 const BottomBar = createBottomTabNavigator();
 const TopTabNavigatior = createMaterialTopTabNavigator();
 
@@ -29,15 +28,10 @@ function BottomBarTabs() {
     <BottomBar.Navigator>
       <BottomBar.Screen name="Home" component={Home} />
       <BottomBar.Screen name="Stats" component={Stats} />
-      <BottomBar.Screen name="Budget" component={Budget} />
+      <BottomBar.Screen name="Add" component={AddTransaction} />
       <BottomBar.Screen
         name="Account"
         component={Account}
-        options={{headerShown: false}}
-      />
-      <BottomBar.Screen
-        name="Transaction"
-        component={Transaction}
         options={{headerShown: false}}
       />
     </BottomBar.Navigator>

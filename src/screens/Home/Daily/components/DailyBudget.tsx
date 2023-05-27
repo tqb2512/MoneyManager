@@ -1,6 +1,6 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import {Transaction} from '../../../models/transaction';
+import {Transaction} from '../../../../models/transaction';
 
 const DailyBudget: React.FC<Transaction> = ({
   id,

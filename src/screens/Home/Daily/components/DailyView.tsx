@@ -1,8 +1,8 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, { useEffect } from 'react';
 import DailyBudget from './DailyBudget';
-import { Transaction } from '../../../models/transaction';
-import { getDBConnection, getTransactions } from '../../../services/db-services';
+import { Transaction } from '../../../../models/transaction';
+import { getDBConnection, getTransactions } from '../../../../services/db-services';
 
 export type Props = {
   date: any;
