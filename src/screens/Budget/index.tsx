@@ -48,6 +48,14 @@ const Budget = () => {
   const [date, setDate] = useState(new Date());
   const timeNow = new Date()
 
+  const toastFunction = (test: string) => {
+    Toast.show({
+      title: test,
+      placement: 'bottom',
+      // status: 'success'
+    });
+  }
+
   const onChange = (event: Event, selectedDate: Date) => {
     const currentDate = selectedDate || date;
     setDate(selectedDate)
@@ -106,6 +114,7 @@ const Budget = () => {
             paddingBottom: 24,
             marginBottom: 12,
             backgroundColor: 'white',
+            height: '60%',
           }}>
           <View style={styles.input}>
             <Text style={styles.inputLabel}>Date</Text>
@@ -426,6 +435,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     margin: 2,
+    height: '15%'
   },
   inputLabel: {
     marginRight: 16,
@@ -461,7 +471,7 @@ const styles = StyleSheet.create({
 
   categoryAction: {
     position: 'absolute',
-    bottom: 16,
+    bottom: 0,
     zIndex: 50,
     backgroundColor: 'gray',
     width: '100%',
