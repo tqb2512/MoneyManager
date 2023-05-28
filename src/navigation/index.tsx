@@ -12,7 +12,7 @@ import Transaction from '../screens/Transaction';
 import AddAccount from '../screens/AddAccount';
 import {NavigationContainer} from '@react-navigation/native';
 const BottomBar = createBottomTabNavigator();
-const TopTabNavigatior = createMaterialTopTabNavigator();
+const TopTabNavigator = createMaterialTopTabNavigator();
 
 
 const Stack = createNativeStackNavigator<RootStackParams>();
@@ -28,7 +28,7 @@ function BottomBarTabs() {
   return (
     <BottomBar.Navigator>
       <BottomBar.Screen name="Home" component={Home} />
-      <BottomBar.Screen name="Stats" component={Stats} />
+      <BottomBar.Screen name="Stats" component={Stats} options={{headerTitleAlign:'center'}}/>
       <BottomBar.Screen name="Budget" component={Budget} />
       <BottomBar.Screen
         name="Account"
@@ -49,7 +49,7 @@ function AppNavigation() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName='Account'>
         <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Stats" component={Stats} />
+        <Stack.Screen name="Stats" component={Stats}  />
         <Stack.Screen name="Account" component={Account} />
         <Stack.Screen name="AddAccount" component={AddAccount} />
       </Stack.Navigator>

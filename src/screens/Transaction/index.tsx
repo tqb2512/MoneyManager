@@ -7,23 +7,23 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import Monthly from '../Monthly';
 import Daily from '../Daily';
 
-const TopTabNavigatior = createMaterialTopTabNavigator();
+const TopTabNavigator = createMaterialTopTabNavigator();
 
 const Transaction = () => {
   const insets = useSafeAreaInsets()
   return (
-    <TopTabNavigatior.Navigator style={{marginTop: insets.top}}>
-      <TopTabNavigatior.Screen
+    <TopTabNavigator.Navigator style={{marginTop: insets.top}}>
+      <TopTabNavigator.Screen
         name="Daily"
         component={Daily}
         options={{tabBarLabel: 'Daily'}}
       />
-      <TopTabNavigatior.Screen
+      <TopTabNavigator.Screen
         name="Monthly"
         component={Monthly}
         options={{tabBarLabel: 'Monthly'}}
       />
-    </TopTabNavigatior.Navigator>
+    </TopTabNavigator.Navigator>
   );
 };
 
