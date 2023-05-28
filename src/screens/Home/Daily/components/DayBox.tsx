@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, { useEffect } from 'react';
-import DailyBudget from './DailyBudget';
+import DailyBudget from './DayInfo';
 import { Transaction } from '../../../../models/transaction';
 import { getDBConnection, getTransactions } from '../../../../services/db-services';
 
