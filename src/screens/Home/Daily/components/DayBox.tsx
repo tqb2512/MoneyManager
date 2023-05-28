@@ -1,28 +1,47 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {DatePickerIOSProps, StyleSheet, Text, View} from 'react-native';
 import React, { useEffect } from 'react';
-import DailyBudget from './DayInfo';
+import DayInfo from './DayInfo';
 import { Transaction } from '../../../../models/transaction';
-import { getDBConnection, getTransactions } from '../../../../services/db-services';
+import { getDBConnection, getTransactionsByDate } from '../../../../services/db-services';
 
-export type Props = {
-  date: any;
-  month: any;
-  year: any;
-  income: any;
-  expense: any;
-};
-
-const DailyView: React.FC<Props> = ({date, month, year, income, expense}) => {
-
+const DayBox = (props: {date: Date}) => {
   const [transactionsList, setTransactionsList] = React.useState<Transaction[]>([]);
-  
+  const [income, setIncome] = React.useState<number>(0);
+  const [expense, setExpense] = React.useState<number>(0);
+
   useEffect(() => {
     getDBConnection().then((db) => {
-      getTransactions(db).then((transactions) => {
+      getTransactionsByDate(db, props.date.getDate(), props.date.getMonth(), props.date.getFullYear()).then((transactions) => {
         setTransactionsList(transactions);
+        var income = 0;
+        var expense = 0;
+        transactions.forEach((transaction) => {
+          if (transaction.type == 'income') {
+            income += transaction.amount;
+          } else {
+            expense += transaction.amount;
+          }
+        });
+        setIncome(income);
+        setExpense(expense);
       });
     });
-  }, []);  
+  }, []);
+
+  const getDayOfWeek = (date: Date) => {
+    var dayOfWeek = new Date(date).getDay();
+    return isNaN(dayOfWeek)
+      ? null
+      : [
+          'Sunday',
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+        ][dayOfWeek];
+  };
 
   return (
     <View style={styles.mainContainer}>
@@ -30,13 +49,13 @@ const DailyView: React.FC<Props> = ({date, month, year, income, expense}) => {
       <View style={styles.header}>
         <View style={{flexDirection: 'row'}}>
           <View>
-            <Text style={styles.date}>{date}</Text>
+            <Text style={styles.date}>{props.date.getDate()}</Text>
           </View>
           <View style={styles.monthYear}>
-            <Text>Sunday</Text>
+            <Text>{getDayOfWeek(props.date)}</Text>
             <View style={{flexDirection: 'row'}}>
-              <Text style={styles.month}>{month}/</Text>
-              <Text style={styles.year}>{year}</Text>
+              <Text style={styles.month}>{props.date.getMonth()}/</Text>
+              <Text style={styles.year}>{props.date.getFullYear()}</Text>
             </View>
           </View>
         </View>
@@ -47,13 +66,13 @@ const DailyView: React.FC<Props> = ({date, month, year, income, expense}) => {
       </View>
       {/* Danh sách khoản thu chi */}
       {transactionsList.map((transaction) => {
-        return <DailyBudget {...transaction} />;
+        return <DayInfo {...transaction} />;
       })}
     </View>
   );
 };
 
-export default DailyView;
+export default DayBox;
 
 const styles = StyleSheet.create({
   mainContainer: {

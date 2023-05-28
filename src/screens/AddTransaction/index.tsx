@@ -39,13 +39,13 @@ const AddTransaction = () => {
   const [isTimeClicked, setIsTimeClick] = useState(false);
 
   // Value đưa vào khi bấm save
-  const [categoryValue, setCategoryValue] = useState<any | null>(null);
+  /*const [categoryValue, setCategoryValue] = useState<any | null>(null);
   const [accountValue, setAccountValue] = useState<any | null>(null);
   const [dateValue, setDateValue] = useState('');
   const [timeValue, setTimeValue] = useState('');
   const [amountValue, setAmountValue] = useState<any | null>(null);
   const [noteValue, setNoteValue] = useState<any | null>(null);
-  const [descripTion, setDescription] = useState<any | null>(null);
+  const [descripTion, setDescription] = useState<any | null>(null);*/
 
   const [Transaction, setTransaction] = useState<Transaction>({} as Transaction);
 
@@ -57,10 +57,7 @@ const AddTransaction = () => {
     setDate(selectedDate)
 
     let tempDate = new Date(currentDate)
-    let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
-    let fTime = tempDate.getHours() + ':' + tempDate.getMinutes()
-    setDateValue(fDate + " " + fTime)
-    console.log(fDate + " " + fTime)
+    setTransaction({...Transaction, day: tempDate.getDate(), month: tempDate.getMonth() + 1, year: tempDate.getFullYear()})
   }
 
   const saveTransaction = (transaction: Transaction) => {
@@ -127,7 +124,7 @@ const AddTransaction = () => {
                 setIsTimeClick(false)
               }}
               showSoftInputOnFocus={false}
-              value={dateValue}
+              value={Transaction.day + '/' + Transaction.month + '/' + Transaction.year}
               caretHidden={true}
             />           
           </View>
@@ -147,7 +144,7 @@ const AddTransaction = () => {
                 setIsTimeClick(true)
               }}
               showSoftInputOnFocus={false}
-              value={timeValue}
+              value={Transaction.time}
               caretHidden={true}
             />
           </View>
@@ -162,8 +159,8 @@ const AddTransaction = () => {
                 borderBottomWidth: 0.4,
                 borderBottomColor: 'gray',
               }}
-              value={categoryValue}
-              onChangeText={text => setCategoryValue(text)}
+              value={Transaction.category}
+              onChangeText={text => setTransaction({...Transaction, category: text})}
               placeholder=""
               onPressIn={() => {
                 setIsCategoriesClicked(true);
@@ -185,8 +182,8 @@ const AddTransaction = () => {
                 borderBottomWidth: 0.4,
                 borderBottomColor: 'gray',
               }}
-              value={accountValue}
-              onChangeText={text => setAccountValue(text)}
+              value={Transaction.account}
+              onChangeText={text => setTransaction({...Transaction, account: text})}
               placeholder=""
               onPressIn={() => {
                 setIsDateClicked(false)
@@ -228,8 +225,8 @@ const AddTransaction = () => {
                 borderBottomColor: 'gray',
               }}
               placeholder=""
-              onChangeText={text => setNoteValue(text)}
-              value={noteValue}             
+              onChangeText={text => setTransaction({...Transaction, note: text})}
+              value={Transaction.note}           
             />
           </View>
         </View>
@@ -244,8 +241,8 @@ const AddTransaction = () => {
               marginRight: 12,
             }}
             placeholder="Description"
-            onChangeText={text => setDescription(text)}
-            value={descripTion}      
+            //onChangeText={text => setDescripTion(text)}
+            //value={descripTion}      
           />
 
           <View style={{flexDirection: 'row', padding: 16, marginTop: 16}}>
@@ -290,17 +287,17 @@ const AddTransaction = () => {
             <View style={styles.categoryContainer}>
                   <Categories
                   onClose={() => {setIsCategoriesClicked(false)}}
-                  onSelect={text => setCategoryValue(text)}
+                  onSelect={text => Transaction.category.name = text}
                   categoryName="Eating"
                   />
                   <Categories
                   onClose={() => {setIsCategoriesClicked(false)}}
-                  onSelect={text => setCategoryValue(text)}
+                  onSelect={text => Transaction.category.name = text}
                   categoryName="Playing"
                   />
                   <Categories
                   onClose={() => {setIsCategoriesClicked(false)}}
-                  onSelect={text => setCategoryValue(text)}
+                  onSelect={text => Transaction.category.name = text}
                   categoryName="Sleeping"
                   />
             </View>
@@ -330,7 +327,7 @@ const AddTransaction = () => {
             <View style={styles.accountContainer}>
               <TouchableOpacity 
                 onPress={() => {
-                  setAccountValue('Account')
+                  //setAccountValue('Account')
                   setIsAccountsClicked(false)
                 }}
                 style={styles.chooseAccountButton}>
@@ -339,7 +336,7 @@ const AddTransaction = () => {
 
               <TouchableOpacity 
                 onPress={() => {
-                  setAccountValue('Cash')
+                  //setAccountValue('Cash')
                   setIsAccountsClicked(false)
                 }}
                 style={styles.chooseAccountButton}>
@@ -348,7 +345,7 @@ const AddTransaction = () => {
 
               <TouchableOpacity 
                 onPress={() => {
-                  setAccountValue('Card')
+                  //setAccountValue('Card')
                   setIsAccountsClicked(false)
                 }}
                 style={styles.chooseAccountButton}>
@@ -369,8 +366,7 @@ const AddTransaction = () => {
               setIsDateClicked(false)
               const currentDate = selectedDate || date;         
               let tempDate = new Date(currentDate)
-              let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
-              setDateValue(fDate)
+              setTransaction({...Transaction, day: tempDate.getDate(), month: tempDate.getMonth() + 1, year: tempDate.getFullYear()})
             }}
           />
         )
@@ -394,8 +390,7 @@ const AddTransaction = () => {
               tempDate.getHours().toString().length < 2 ? fHour = "0" + tempDate.getHours().toString() : fHour = tempDate.getHours().toString()
               tempDate.getMinutes().toString().length < 2 ? fMinute = "0" + tempDate.getMinutes().toString() : fMinute = tempDate.getMinutes().toString()
 
-              let fTime = fHour + ':' + fMinute 
-              setTimeValue(fTime);
+              setTransaction({...Transaction, time: fHour + ":" + fMinute})
             }}
           />
         )
