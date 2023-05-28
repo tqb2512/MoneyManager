@@ -86,7 +86,7 @@ const AddAccount = () => {
           onRequestClose={() => {
             setGroupIsClicked(!groupIsClicked);
           }}>
-          <View style={styles.centeredView}>
+          <Pressable onPress={() => setGroupIsClicked(false)} style={styles.centeredView}>
             <View style={styles.modalView}>
               <View
                 style={{
@@ -110,7 +110,7 @@ const AddAccount = () => {
                 />
               </Pressable>
             </View>
-          </View>
+          </Pressable>
         </Modal>
       )}
 

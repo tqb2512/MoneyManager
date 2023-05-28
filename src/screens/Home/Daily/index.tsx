@@ -9,16 +9,21 @@ const Daily = () => {
 
   const [DateList, setDateList] = React.useState<Date[]>([]);
 
-  useEffect(() => {
-    var date = new Date();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
-    getDBConnection().then((db) => {
-      getAllDatesListByMonth(db, month, year).then((dates) => {
-        setDateList(dates);
-      });
-    });
-  }, []);
+  // useEffect(() => {
+  //   // getDBConnection().then((db) => {
+  //   //   createTable(db);
+  //   //   importTestData(db);
+  //   // })
+
+  //   var date = new Date();
+  //   var month = date.getMonth() + 1;
+  //   var year = date.getFullYear();
+  //   getDBConnection().then((db) => {
+  //     getAllDatesListByMonth(db, month, year).then((dates) => {
+  //       setDateList(dates);
+  //     });
+  //   });
+  // }, []);
 
   return (
     <SafeAreaView>
