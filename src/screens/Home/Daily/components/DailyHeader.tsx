@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-const Header = () => {
+const DailyHeader = () => {
   return (
     <View>
       <View style={styles.secondTopBar}>
@@ -22,7 +22,7 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default DailyHeader;
 
 const styles = StyleSheet.create({
   secondTopBar: {

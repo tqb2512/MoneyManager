@@ -1,37 +1,20 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React, { useEffect } from 'react';
-import DayInfo from './components/DayInfo';
-import DayBox from './components/DayBox';
+import DailyView from './components/DailyView';
+import DailyHeader from './components/DailyHeader';
 import { Transaction } from '../../../models/transaction';
-import { getDBConnection, getTransactions, createTable, importTestData, clearDatabase, getAllDatesListByMonth, dropDatabaseAndRecreate, logAllToConsole } from '../../../services/db-services';
+import { getDBConnection, getTransactions } from '../../../services/db-services';
 
 const Daily = () => {
 
-  const [DateList, setDateList] = React.useState<Date[]>([]);
-
-  useEffect(() => {
-    var date = new Date();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
-    getDBConnection().then((db) => {
-      getAllDatesListByMonth(db, month, year).then((dates) => {
-        setDateList(dates);
-      });
-    });
-  }, []);
+  const [transactionsList, setTransactionsList] = React.useState<Transaction[]>([]);
+  
 
   return (
     <SafeAreaView>
-      {/* Income, expense, total, bar */}
+        {/* Income, expense, total, bar */}
       {/* Show list view chi tiêt schi tiêu ngày */}
-
-      {DateList.map((date) => {
-        return (
-          <DayBox date={date} />
-        );
-      })
-      }
-      
+      <DailyView date='22' month='03' year='2003' income='69' expense='35' />
     </SafeAreaView>
   );
 };
@@ -39,5 +22,5 @@ const Daily = () => {
 export default Daily;
 
 const styles = StyleSheet.create({
-
+    
 });

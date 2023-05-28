@@ -2,7 +2,7 @@ import {SafeAreaView, StyleSheet, Text, View, ScrollView} from 'react-native';
 import React from 'react';
 
 import Daily from '../../Daily';
-import DailyView from '../../Daily/components/DayBox';
+import DailyView from '../../Daily/components/DailyView';
 
 export type Props = {
   month: any;
@@ -40,6 +40,10 @@ const Monthly: React.FC<Props> = ({
 
       {/* List daily */}
       <ScrollView>
+        <DailyView date="22" month="03" year="2003" income="69" expense="35" />
+        <DailyView date="23" month="03" year="2003" income="69" expense="35" />
+        <DailyView date="24" month="03" year="2003" income="69" expense="35" />
+        <DailyView date="25" month="03" year="2003" income="69" expense="35" />
         <View style={{width: '100%', height: 180}}></View>
       </ScrollView>
 

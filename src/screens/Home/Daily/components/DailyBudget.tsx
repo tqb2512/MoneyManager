@@ -5,16 +5,14 @@ import { Category } from '../../../../models/category';
 
 import { getDBConnection, getCategoryById } from '../../../../services/db-services';
 
-const DayInfo: React.FC<Transaction> = ({
+const DailyBudget: React.FC<Transaction> = ({
   id,
   type,
   category,
   account,
   amount,
   note,
-  day,
-  month,
-  year
+  date,
 }) => {
   const [img_url, setImgUrl] = React.useState<string>('');
 
@@ -60,6 +58,6 @@ const DayInfo: React.FC<Transaction> = ({
   );
 };
 
-export default DayInfo;
+export default DailyBudget;
 
 const styles = StyleSheet.create({});
