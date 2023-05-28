@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
   ActionSheetIOS,
+  ScrollView,
 } from 'react-native';
 import {
   Container,
@@ -128,7 +129,33 @@ const AddTransaction = () => {
               caretHidden={true}
             />           
           </View>
-
+          {/* Input date, amount, category,  note*/}
+          <View
+            style={{
+              paddingBottom: 24,
+              marginBottom: 12,
+              backgroundColor: 'white',
+              height: '60%',
+            }}>
+            <View style={styles.input}>
+              <Text style={styles.inputLabel}>Date</Text>
+              <TextInput
+                style={{
+                  flex: 1,
+                  borderBottomWidth: 0.4,
+                  borderBottomColor: 'gray',
+                }}
+                onPressIn={()=>{
+                  setIsDateClicked(true);
+                  setIsCategoriesClicked(false);
+                  setIsAccountsClicked(false);
+                  setIsTimeClick(false)
+                }}
+                showSoftInputOnFocus={false}
+                value={dateValue}
+                caretHidden={true}
+              />           
+            </View>
           <View style={styles.input}>
             <Text style={styles.inputLabel}>Time</Text>
             <TextInput
@@ -215,22 +242,20 @@ const AddTransaction = () => {
               }
             />
           </View>
-          
-          <View style={styles.input}>
-            <Text style={styles.inputLabel}>Note</Text>
+
+          {/* Description + Save button + Continue button */}
+          <View style={styles.bottomContainer}>
             <TextInput
               style={{
-                flex: 1,
                 borderBottomWidth: 0.4,
                 borderBottomColor: 'gray',
+                marginLeft: 12,
+                marginRight: 12,
               }}
               placeholder=""
               onChangeText={text => setTransaction({...Transaction, note: text})}
               value={Transaction.note}           
             />
-          </View>
-        </View>
-
         {/* Description + Save button + Continue button */}
         <View style={styles.bottomContainer}>
           <TextInput
@@ -256,34 +281,32 @@ const AddTransaction = () => {
               <Text>Continue</Text>
             </TouchableOpacity>
           </View>
-        </View>
 
-        {/* Show categories */}
-        {isCategoriesClicked && (
-          <View style={styles.categoryAction}>
-            <View style={styles.categoryTopBar}>
-              <Text
-                style={{
-                  color: 'white',
-                  fontWeight: '600',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: 8,
-                }}>
-                Category
-              </Text>
-              <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity style={styles.icons}>
-                  <ThreeDotsIcon size="4" mt="0.5" color="emerald.500" />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => setIsCategoriesClicked(false)}
-                  style={styles.icons}>
-                  <CloseIcon size="4" mt="0.5" color="emerald.500" />
-                </TouchableOpacity>
+          {/* Show categories */}
+          {isCategoriesClicked && (
+            <View style={styles.categoryAction}>
+              <View style={styles.categoryTopBar}>
+                <Text
+                  style={{
+                    color: 'white',
+                    fontWeight: '600',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: 8,
+                  }}>
+                  Category
+                </Text>
+                <View style={{flexDirection: 'row'}}>
+                  <TouchableOpacity style={styles.icons}>
+                    <ThreeDotsIcon size="4" mt="0.5" color="emerald.500" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => setIsCategoriesClicked(false)}
+                    style={styles.icons}>
+                    <CloseIcon size="4" mt="0.5" color="emerald.500" />
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-
             <View style={styles.categoryContainer}>
                   <Categories
                   onClose={() => {setIsCategoriesClicked(false)}}
@@ -301,29 +324,57 @@ const AddTransaction = () => {
                   categoryName="Sleeping"
                   />
             </View>
-          </View>
-        )}
+          )}
 
-        {/* Show accounts */}
-        {isAccountsClicked && (
-          <View style={styles.categoryAction}>
-            <View style={styles.categoryTopBar}>
-              <Text style={{color: 'white', fontWeight: '600', alignItems: 'center', justifyContent:'center', padding: 8}}>Account</Text>
-              <View style={{flexDirection:'row'}}>
-                <TouchableOpacity style={styles.icons}>
-                  <ThreeDotsIcon size="4" mt="0.5" color="emerald.500" />
-                </TouchableOpacity>
+          {/* Show accounts */}
+          {isAccountsClicked && (
+            <View style={styles.categoryAction}>
+              <View style={styles.categoryTopBar}>
+                <Text style={{color: 'white', fontWeight: '600', alignItems: 'center', justifyContent:'center', padding: 8}}>Account</Text>
+                <View style={{flexDirection:'row'}}>
+                  <TouchableOpacity style={styles.icons}>
+                    <ThreeDotsIcon size="4" mt="0.5" color="emerald.500" />
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    onPress={()=> {
+                      setIsAccountsClicked(!isAccountsClicked)
+                    }}  
+                    style={styles.icons}
+                  >
+                    <CloseIcon size="4" mt="0.5" color="emerald.500"/>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              
+              <View style={styles.accountContainer}>
                 <TouchableOpacity 
-                  onPress={()=> {
-                    setIsAccountsClicked(!isAccountsClicked)
-                  }}  
-                  style={styles.icons}
-                >
-                  <CloseIcon size="4" mt="0.5" color="emerald.500"/>
+                  onPress={() => {
+                    setAccountValue('Account')
+                    setIsAccountsClicked(false)
+                  }}
+                  style={styles.chooseAccountButton}>
+                  <Text>Account</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                  onPress={() => {
+                    setAccountValue('Cash')
+                    setIsAccountsClicked(false)
+                  }}
+                  style={styles.chooseAccountButton}>
+                  <Text>Cash</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                  onPress={() => {
+                    setAccountValue('Card')
+                    setIsAccountsClicked(false)
+                  }}
+                  style={styles.chooseAccountButton}>
+                  <Text>Card</Text>
                 </TouchableOpacity>
               </View>
             </View>
-            
             <View style={styles.accountContainer}>
               <TouchableOpacity 
                 onPress={() => {
@@ -406,6 +457,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: 'rgba(229, 231, 235, 0.5)',
+    alignContent: 'center'
   },
 
   buttonContainer: {
@@ -450,20 +502,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#46CDCF',
     borderRadius: 4,
     padding: 10,
-    width: 220,
+    width: '65%',
     paddingLeft: 30,
     paddingRight: 30,
     marginRight: 12,
-    marginLeft: 6,
+    marginLeft: 4,
     alignItems: 'center',
   },
 
   continueButton: {
     borderWidth: 1,
     borderRadius: 4,
+    width: '30%',
     padding: 10,
-    paddingLeft: 30,
-    paddingRight: 30,
+    // paddingLeft: 30,
+    // paddingRight: 30,
+    marginLeft: 0,
     marginRight: 10,
     alignItems: 'center',
   },
