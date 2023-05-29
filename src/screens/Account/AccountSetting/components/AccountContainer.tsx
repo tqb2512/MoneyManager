@@ -15,16 +15,16 @@ import {
 } from 'react-native-heroicons/outline';
 
 export type Prop = {
-  accountType: String;
+  accountName: String;
   onPress: (event:GestureResponderEvent) => void
 };
 
-const AccountContainer: React.FC<Prop> = ({accountType, onPress}) => {
+const AccountContainer: React.FC<Prop> = ({accountName, onPress}) => {
   return (
     <View>
-      <Text style={{fontWeight: '500', fontSize: 16, margin: 4, marginTop: 12}}>
+      {/* <Text style={{fontWeight: '500', fontSize: 16, margin: 4, marginTop: 12}}>
         {accountType}
-      </Text>
+      </Text> */}
 
       {/* Render 1 list account như view bên dưới */}
       <View
@@ -36,7 +36,7 @@ const AccountContainer: React.FC<Prop> = ({accountType, onPress}) => {
           marginTop: 8,
         }}>
         <Pressable>
-          <Text>Account Name</Text>
+          <Text>{accountName}</Text>
         </Pressable>
         <View style={{flexDirection: 'row'}}>
             

@@ -36,7 +36,7 @@ export type RootStackParams2 = {
   CategoryButton: {categoryType: String, categoryName: String}
   AccountSetting: undefined
   AddAccount: undefined
-  EditAccountView: undefined
+  EditAccountView: { accountGroup: String, accountName: String, accountAmount: String, accountDescription: String }
 };
 
 function BottomBarTabs() {

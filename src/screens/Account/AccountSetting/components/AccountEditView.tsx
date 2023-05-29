@@ -1,11 +1,28 @@
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Modal, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../../AddAccount/components/AccountGroupButton';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { RootStackParams2 } from '../../../../navigation';
 
 const AccountEditView = () => {
 
+  const route = useRoute<RouteProp<RootStackParams2, 'EditAccountView'>>();
+
     const [groupIsClicked, setGroupIsClicked] = useState(false);
     const [groupValue, setGroupValue] = useState<any | null>(null);
+
+    const [group, setGroup] = useState('')
+    const [name, setName] = useState('')
+    const [amount, setAmount] = useState('')
+    const [description, setDescription] = useState('')
+
+
+    useEffect(() => {
+      setGroup(route.params.accountGroup.toString())
+      setName(route.params.accountName.toString())
+      setAmount(route.params.accountAmount.toString())
+      setDescription(route.params.accountDescription.toString())
+    }, [])
 
   return (
     <View style={{}}>
@@ -20,7 +37,7 @@ const AccountEditView = () => {
         }}
         onPressIn={() => setGroupIsClicked(!groupIsClicked)}
         showSoftInputOnFocus={false}
-        value={groupValue}
+        value={group}
         onChangeText={() => {}}
         caretHidden={true}
         //  Đưa giá trị vô đây
@@ -38,6 +55,7 @@ const AccountEditView = () => {
         onPressIn={() => {}}
         showSoftInputOnFocus={false}
         onChangeText={() => {}}
+        value={name}
         //  Đưa giá trị vô đây
       />
     </View>
@@ -53,6 +71,7 @@ const AccountEditView = () => {
         onPressIn={() => {}}
         onChangeText={() => {}}
         keyboardType="number-pad"
+        value={amount}
         //  Đưa giá trị vô đây
       />
     </View>
@@ -68,6 +87,7 @@ const AccountEditView = () => {
         onPressIn={() => {}}
         showSoftInputOnFocus={false}
         onChangeText={() => {}}
+        value={description}
         //  Đưa giá trị vô đây
       />
     </View>
@@ -93,12 +113,12 @@ const AccountEditView = () => {
             <Pressable style={[styles.button]}>
               <Button
                 accountGroup="Cash"
-                onSelect={text => setGroupValue(text)}
+                onSelect={text => setGroup(text.toString())}
                 onClose={() => setGroupIsClicked(!groupIsClicked)}
               />
               <Button
                 accountGroup="Account"
-                onSelect={text => setGroupValue(text)}
+                onSelect={text => setGroup(text.toString())}
                 onClose={() => setGroupIsClicked(!groupIsClicked)}
               />
             </Pressable>
@@ -106,6 +126,7 @@ const AccountEditView = () => {
         </Pressable>
       </Modal>
     )}
+
 
     {/* Nút save account */}
     <TouchableOpacity

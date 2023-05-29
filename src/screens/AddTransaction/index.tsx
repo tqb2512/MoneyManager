@@ -382,6 +382,7 @@ const AddTransaction = () => {
                 <View style={[styles.button]}>
                   {CategoryList.map((item, index) => (
                     <Categories
+                    key={index}
                     image_uri={item.image}
                     categoryName={item.name}
                     onSelect={text => setTransaction({ ...Transaction, category: text })}

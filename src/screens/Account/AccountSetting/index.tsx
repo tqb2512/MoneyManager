@@ -1,17 +1,27 @@
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-import AccountContainer from './components/AccountContainer';
+import React, { useEffect, useState } from 'react';
+import AccountButton from './components/AccountContainer';
 import { ArrowLeftIcon, PlusIcon } from 'react-native-heroicons/outline';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackParams2 } from '../../../navigation';
+import { getAllAccounts, getDBConnection } from '../../../services/db-services';
+import { Account } from '../../../models/account';
+import AccountContainer from './components/AccountContainer';
+import { ScrollView } from 'native-base';
 
 const AccountSetting = () => {
 
     const navigation = useNavigation<NavigationProp<RootStackParams2>>()
+    const [AccountList, setAccountList] = useState<Account[]>([]);
 
-    const handlePress = () => {
-        navigation.navigate('EditAccountView')
-    }
+    useEffect(() => {
+      getDBConnection().then(db => {
+        getAllAccounts(db).then(accounts => {
+          setAccountList(accounts);
+        });
+      });
+  
+    }, [])
 
   return (
     <View>
@@ -38,9 +48,17 @@ const AccountSetting = () => {
       </View>
       
       {/* Render ra 1 list các loại account như pressable ở dưới */}
-      <Pressable onPress={() => {navigation.navigate('EditAccountView')}}>
-        <AccountContainer onPress={handlePress} accountType="Cash" />
-      </Pressable>
+      <ScrollView>
+        {AccountList.map( (item, index) => (
+          <Pressable onPress={() => {navigation.navigate('EditAccountView', {accountGroup: item.type, accountAmount: item.balance, accountName: item.name, accountDescription: item.note})}}>
+            <AccountContainer 
+              key={index}
+              onPress={() => {navigation.navigate('EditAccountView', {accountGroup: item.type, accountAmount: item.balance, accountName: item.name, accountDescription: item.note})}} 
+              accountName={item.name} />
+          </Pressable>
+        ) )}
+      </ScrollView>
+
     </View>
   );
 };

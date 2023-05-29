@@ -21,13 +21,13 @@ const Daily = () => {
         console.log("Database cleared");
       });*/
       
-      /*createTable(db).then(() => {
-         console.log("Table created");
-      });*/
+      // createTable(db).then(() => {
+      //    console.log("Table created");
+      // });
 
-      /*importTestData(db).then(() => {
-         console.log("Test data imported");
-      });*/
+      // importTestData(db).then(() => {
+      //    console.log("Test data imported");
+      // });
     });
 
 

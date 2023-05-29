@@ -31,7 +31,6 @@ const CategoryEditView = () => {
           showSoftInputOnFocus={false}
           onChangeText={() => {}}
           value={name}
-          caretHidden={true}
         />
       </View>
       <TouchableOpacity
