@@ -38,16 +38,8 @@ const AddTransaction = () => {
   const [isDateClicked, setIsDateClicked] = useState(false);
   const [isTimeClicked, setIsTimeClick] = useState(false);
 
-  // Value đưa vào khi bấm save
-  /*const [categoryValue, setCategoryValue] = useState<any | null>(null);
-  const [accountValue, setAccountValue] = useState<any | null>(null);
-  const [dateValue, setDateValue] = useState('');
-  const [timeValue, setTimeValue] = useState('');
-  const [amountValue, setAmountValue] = useState<any | null>(null);
-  const [noteValue, setNoteValue] = useState<any | null>(null);
-  const [descripTion, setDescription] = useState<any | null>(null);*/
-
   const [Transaction, setTransaction] = useState<Transaction>({} as Transaction);
+  setTransaction({...Transaction, type: budgetType})
 
   const [date, setDate] = useState(new Date());
   const timeNow = new Date()
@@ -80,6 +72,7 @@ const AddTransaction = () => {
                 setIncomeColor('#46CDCF');
                 setExpenseColor('black');
                 setBudgetType('income');
+                setTransaction({...Transaction, type: 'income'})
               }}>
               <View style={[styles.typeButton, {borderColor: incomeColor}]}>
                 <Text style={[styles.typeText, {color: incomeColor}]}>
@@ -92,6 +85,7 @@ const AddTransaction = () => {
                 setExpenseColor('orange');
                 setIncomeColor('black');
                 setBudgetType('expense');
+                setTransaction({...Transaction, type: 'expense'})
               }}>
               <View style={[styles.typeButton, {borderColor: expenseColor}]}>
                 <Text style={[styles.typeText, {color: expenseColor}]}>
