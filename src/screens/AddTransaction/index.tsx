@@ -98,6 +98,8 @@ const AddTransaction = () => {
       });
     });
 
+    console.log(CategoryList);
+
     getDBConnection().then(db => {
       getAllAccounts(db).then(accounts => {
         setAccountList(accounts);
@@ -380,6 +382,7 @@ const AddTransaction = () => {
                 <View style={[styles.button]}>
                   {CategoryList.map((item, index) => (
                     <Categories
+                    image_uri={item.image}
                     categoryName={item.name}
                     onSelect={text => setTransaction({ ...Transaction, category: text })}
                     onClose={() => setIsCategoriesClicked(false)}

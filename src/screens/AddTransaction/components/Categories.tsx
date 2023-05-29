@@ -12,9 +12,10 @@ export type Props = {
   categoryName: String;
   onSelect: (text: String) => void;
   onClose: (bool: boolean) => void;
+  image_uri: string;
 };
 
-const Categories: React.FC<Props> = ({categoryName, onSelect, onClose}) => {
+const Categories: React.FC<Props> = ({categoryName, image_uri, onSelect, onClose}) => {
   return (
     <View style={{alignContent: 'center', alignItems: 'center'}}>
       <TouchableOpacity
@@ -32,7 +33,7 @@ const Categories: React.FC<Props> = ({categoryName, onSelect, onClose}) => {
             alignSelf: 'center',
           }}
           source={{
-            uri: 'https://static-00.iconduck.com/assets.00/burger-icon-512x473-15nsuo1h.png',
+            uri: image_uri,
           }}></Image>
         <Text style={{textAlign: 'center'}}>{categoryName}</Text>
       </TouchableOpacity>
