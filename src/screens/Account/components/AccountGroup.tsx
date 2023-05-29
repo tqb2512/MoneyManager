@@ -3,7 +3,6 @@ import React from 'react'
 
 export type Props = {
     accountType: String
-
 }
 
 const AccountGroup:React.FC<Props> = ({ accountType }) => {
