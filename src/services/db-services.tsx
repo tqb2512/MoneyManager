@@ -184,6 +184,22 @@ export const insertAccount = async (db: SQLiteDatabase, account: Account): Promi
     ]);
 }
 
+export const getAllAccounts = async (db: SQLiteDatabase): Promise<Account[]> => {
+    const [results] = await db.executeSql(`SELECT * FROM accounts`);
+    const accounts: Account[] = [];
+    for (let i = 0; i < results.rows.length; i++) {
+        const row = results.rows.item(i);
+        accounts.push({
+            id: row.id,
+            name: row.name,
+            balance: row.balance,
+            type: row.type,
+            note: row.note
+        });
+    }
+    return accounts;
+}
+
 export const getAllDatesList = async (db: SQLiteDatabase): Promise<number[]> => {
     const [results] = await db.executeSql(`SELECT DISTINCT day FROM ${tableName}`);
     const dates: number[] = [];

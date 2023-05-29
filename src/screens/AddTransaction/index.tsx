@@ -22,22 +22,25 @@ import {
   ThreeDotsIcon,
   KeyboardAvoidingView,
 } from 'native-base';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Categories from './components/Categories';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {Transaction} from '../../models/transaction';
-import {Category} from '../../models/category';
-import {Account} from '../../models/account';
+import { Transaction } from '../../models/transaction';
+import { Category } from '../../models/category';
+import { Account } from '../../models/account';
 import {
   getDBConnection,
   createTable,
   insertTransaction,
   dropDatabaseAndRecreate,
+  getAllCategories,
+  getAllAccounts
 } from '../../services/db-services';
 
 import Accounts from './components/Accounts';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
-import {RootStackParams2} from '../../navigation';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackParams2 } from '../../navigation';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 const AddTransaction = () => {
   const navigation = useNavigation<NavigationProp<RootStackParams2>>();
@@ -55,7 +58,8 @@ const AddTransaction = () => {
   const [isDescriptionClicked, setIsDescriptionClicked] = useState(false);
 
   const [Transaction, setTransaction] = useState<Transaction>({} as Transaction);
-  setTransaction({...Transaction, type: budgetType})
+  const [CategoryList, setCategoryList] = useState<Category[]>([]);
+  const [AccountList, setAccountList] = useState<Account[]>([]);
 
   const [date, setDate] = useState(new Date());
   const timeNow = new Date();
@@ -83,11 +87,23 @@ const AddTransaction = () => {
     console.log(transaction);
   };
 
-  useEffect(()=>{
-    setBudgetType('income')
+  useEffect(() => {
+    setTransaction({ ...Transaction, type: budgetType })
+
+    setDate(new Date());
+
     getDBConnection().then(db => {
-      dropDatabaseAndRecreate(db)
-    })
+      getAllCategories(db).then(categories => {
+        setCategoryList(categories);
+      });
+    });
+
+    getDBConnection().then(db => {
+      getAllAccounts(db).then(accounts => {
+        setAccountList(accounts);
+      });
+    });
+
   }, [])
 
   return (
@@ -97,16 +113,17 @@ const AddTransaction = () => {
         style={styles.mainContainer}>
         <View>
           <View>
-            <View style={{backgroundColor: 'white'}}>
+            <View style={{ backgroundColor: 'white' }}>
               <View style={[styles.buttonContainer, {}]}>
                 <TouchableOpacity
                   onPress={() => {
                     setIncomeColor('#46CDCF');
                     setExpenseColor('black');
                     setBudgetType('income');
+                    setTransaction({ ...Transaction, type: budgetType })
                   }}>
-                  <View style={[styles.typeButton, {borderColor: incomeColor}]}>
-                    <Text style={[styles.typeText, {color: incomeColor}]}>
+                  <View style={[styles.typeButton, { borderColor: incomeColor }]}>
+                    <Text style={[styles.typeText, { color: incomeColor }]}>
                       Income
                     </Text>
                   </View>
@@ -117,16 +134,15 @@ const AddTransaction = () => {
                     setExpenseColor('orange');
                     setIncomeColor('black');
                     setBudgetType('expense');
+                    setTransaction({ ...Transaction, type: budgetType })
                   }}>
-                    <View
-                      style={[styles.typeButton, {borderColor: expenseColor}]}>
-                      <Text style={[styles.typeText, {color: expenseColor}]}>
-                        Expense
-                      </Text>
-                    </View>
+                  <View
+                    style={[styles.typeButton, { borderColor: expenseColor }]}>
+                    <Text style={[styles.typeText, { color: expenseColor }]}>
+                      Expense
+                    </Text>
+                  </View>
                 </TouchableOpacity>
-
-                <TouchableOpacity onPress={()=>console.log(budgetType)}><Text>{budgetType}</Text></TouchableOpacity>
               </View>
             </View>
             <View
@@ -197,9 +213,9 @@ const AddTransaction = () => {
                     borderBottomWidth: 0.4,
                     borderBottomColor: 'gray',
                   }}
-                  value={/*Transaction.category*/ categoryValue}
+                  value={Transaction.category}
                   onChangeText={text =>
-                    setTransaction({...Transaction, category: text})
+                    setTransaction({ ...Transaction, category: text })
                   }
                   placeholder=""
                   onPressIn={() => {
@@ -225,9 +241,9 @@ const AddTransaction = () => {
                     borderBottomWidth: 0.4,
                     borderBottomColor: 'gray',
                   }}
-                  value={/*Transaction.account*/ accountValue}
+                  value={Transaction.account}
                   onChangeText={text =>
-                    setTransaction({...Transaction, account: text})
+                    setTransaction({ ...Transaction, account: text })
                   }
                   placeholder=""
                   onPressIn={() => {
@@ -264,7 +280,7 @@ const AddTransaction = () => {
                       setIsTimeClick(false);
                     }}
                     onChangeText={(text) =>
-                      setTransaction({...Transaction, amount: text})
+                      setTransaction({ ...Transaction, amount: text })
                     }
                   />
                 </View>
@@ -280,7 +296,7 @@ const AddTransaction = () => {
                   }}
                   placeholder=""
                   onChangeText={text =>
-                    setTransaction({...Transaction, note: text})
+                    setTransaction({ ...Transaction, note: text })
                   }
                   value={Transaction.note}
                 />
@@ -297,11 +313,11 @@ const AddTransaction = () => {
                   marginRight: 12,
                 }}
                 placeholder="Description"
-                onChangeText={text => {}}
-                value={descripTion}
+                onChangeText={text => { }}
+
               />
 
-              <View style={{flexDirection: 'row', padding: 16, marginTop: 16}}>
+              <View style={{ flexDirection: 'row', padding: 16, marginTop: 16 }}>
                 <TouchableOpacity
                   style={[
                     styles.saveButton,
@@ -312,7 +328,7 @@ const AddTransaction = () => {
                   ]}
                   onPress={() => {
                     //setTransaction(...Transaction, type: budgetType)  
-                    budgetType === 'income' ? setTransaction({...Transaction, type: 'income'}) : setTransaction({...Transaction, type: 'expense'})
+                    budgetType === 'income' ? setTransaction({ ...Transaction, type: 'income' }) : setTransaction({ ...Transaction, type: 'expense' })
                     saveTransaction(Transaction)
                   }}>
                   <Text>Save</Text>
@@ -344,17 +360,17 @@ const AddTransaction = () => {
                     borderBottomWidth: 0.2,
                   }}>
                   <Text style={styles.textHeaderStyle}>Select category</Text>
-                  <View style={{flexDirection: 'row'}}>
+                  <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity
-                      style={{margin: 8}}
+                      style={{ margin: 8 }}
                       onPress={() => {
                         navigation.navigate('IncomeCategory')
-                        setIsCategoriesClicked(false) 
+                        setIsCategoriesClicked(false)
                       }}>
                       <ThreeDotsIcon size="4" mt="0.5" color="black" />
                     </TouchableOpacity>
                     <TouchableOpacity
-                      style={{margin: 8}}
+                      style={{ margin: 8 }}
                       onPress={() => setIsCategoriesClicked(false)}>
                       <CloseIcon size="4" mt="0.5" color="black" />
                     </TouchableOpacity>
@@ -362,11 +378,13 @@ const AddTransaction = () => {
                 </View>
                 {/* Pressable cho giá trị của category */}
                 <View style={[styles.button]}>
-                  <Categories
-                    categoryName="Playing"
-                    onSelect={text => setCategoryValue(text)}
+                  {CategoryList.map((item, index) => (
+                    <Categories
+                    categoryName={item.name}
+                    onSelect={text => setTransaction({ ...Transaction, category: text })}
                     onClose={() => setIsCategoriesClicked(false)}
-                  />               
+                  />))
+                }
                 </View>
               </View>
             </View>
@@ -390,8 +408,8 @@ const AddTransaction = () => {
                     justifyContent: 'space-between',
                   }}>
                   <Text style={styles.textHeaderStyle}>Select Account</Text>
-                  <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity style={{margin: 8}} 
+                  <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity style={{ margin: 8 }}
                       onPress={() => {
                         navigation.navigate("AccountSetting")
                         setIsAccountsClicked(false)
@@ -399,7 +417,7 @@ const AddTransaction = () => {
                       <ThreeDotsIcon size="4" mt="0.5" color="black" />
                     </TouchableOpacity>
                     <TouchableOpacity
-                      style={{margin: 8}}
+                      style={{ margin: 8 }}
                       onPress={() => setIsAccountsClicked(false)}>
                       <CloseIcon size="4" mt="0.5" color="black" />
                     </TouchableOpacity>
@@ -407,21 +425,13 @@ const AddTransaction = () => {
                 </View>
                 {/* Pressable cho giá trị của group */}
                 <View style={[styles.buttonAccount]}>
-                  <Accounts
-                    accountName="Cash"
-                    onSelect={text => setAccountValue(text)}
+                  {AccountList.map((item, index) => (
+                    <Accounts
+                    accountName={item.name}
+                    onSelect={text => setTransaction({ ...Transaction, account: text })}
                     onClose={() => setIsAccountsClicked(false)}
-                  />
-                  <Accounts
-                    accountName="Card"
-                    onSelect={text => setAccountValue(text)}
-                    onClose={() => setIsAccountsClicked(false)}
-                  />
-                  <Accounts
-                    accountName="Account"
-                    onSelect={text => setAccountValue(text)}
-                    onClose={() => setIsAccountsClicked(false)}
-                  />
+                    />))
+                  }
                 </View>
               </View>
             </View>
@@ -432,7 +442,7 @@ const AddTransaction = () => {
         {isDateClicked && (
           <DateTimePicker
             testID="dateTimePicker"
-            value={timeNow}
+            value={date}
             mode={'date'}
             onChange={(event, selectedDate) => {
               setIsDateClicked(false);
@@ -470,7 +480,7 @@ const AddTransaction = () => {
                 ? (fMinute = '0' + tempDate.getMinutes().toString())
                 : (fMinute = tempDate.getMinutes().toString());
 
-              setTransaction({...Transaction, time: fHour + ':' + fMinute});
+              setTransaction({ ...Transaction, time: fHour + ':' + fMinute });
             }}
           />
         )}
