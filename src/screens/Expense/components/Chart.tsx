@@ -4,6 +4,7 @@ import { PieChart } from "react-native-gifted-charts";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SelectDropdown from 'react-native-select-dropdown'
 import Category from "./Category";
+import React, { useEffect } from "react";
 
 export type Props = {
     value: any,
@@ -19,7 +20,13 @@ export default function Chart(){
         {value: 11, color: '#ED6665'},
       ];
 
+    const [total, setTotal] = React.useState(0)
+
     const time = ["Daily", "Monthly", "Yearly"]
+
+    useEffect(() => {
+        setTotal(549)
+    }, [])
 
     return(
         <SafeAreaView>
@@ -56,17 +63,19 @@ export default function Chart(){
                 strokeWidth={4}
                 radius={150}
                 textSize={26}
-                focusOnPress
-                onPress={() => {
-                    
+                focusOnPress 
+                onPress={(index: any) => {
+                    console.log(index)
                 }}
                 textBackgroundRadius={26}
                 centerLabelComponent={() => {
-                    
-                    {/* thay 549 thành total */}
-
-                    return <Text style={{fontSize: 26}}>$ 549</Text>;
-                    }}
+                    return (
+                        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                            <Text style={{fontSize: 30, color: 'black'}}>${total}</Text>
+                            <Text style={{fontSize: 20, color: 'black'}}>Total</Text>
+                        </View>
+                    )
+                }}
                 />
             </View>
 
