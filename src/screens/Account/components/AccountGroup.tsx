@@ -14,6 +14,7 @@ const AccountGroup:React.FC<Props> = ({ accountType }) => {
          <Text style={{fontWeight: '600', fontSize: 16}}>{accountType}</Text>
          <Text>$35</Text>
       </View>
+      
     {/* list accounts */}
 
         <TouchableOpacity style={styles.accountButton}>

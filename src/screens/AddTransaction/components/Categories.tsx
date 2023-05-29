@@ -22,7 +22,7 @@ const Categories: React.FC<Props> = ({categoryName, onSelect, onClose}) => {
           onSelect(categoryName);
           onClose(false);
         }}
-        style={{marginLeft: 16, marginRight: 16, marginTop: 16, width: 72}}>
+        style={{marginLeft: 16, marginRight: 16, marginTop: 16, width: 68}}>
         <Image
           style={{
             height: 32,

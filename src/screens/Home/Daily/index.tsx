@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect } from 'react';
 import DayInfo from './components/DayInfo';
 import DayBox from './components/DayBox';
@@ -32,7 +32,6 @@ const Daily = () => {
 
 
 
-
     var date = new Date();
     var month = date.getMonth() + 1;
     var year = date.getFullYear();
@@ -47,14 +46,14 @@ const Daily = () => {
     <SafeAreaView>
       {/* Income, expense, total, bar */}
       {/* Show list view chi tiêt schi tiêu ngày */}
-
-      {DateList.map((date) => {
-        return (
-          <DayBox date={date}/>
-        );
-      })
-      }
-      
+      <ScrollView>
+        {DateList.map((date) => {
+          return (
+            <DayBox date={date} />
+          );
+        })
+        }
+      </ScrollView>
     </SafeAreaView>
   );
 };
