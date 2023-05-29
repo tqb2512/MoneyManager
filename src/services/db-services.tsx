@@ -37,7 +37,8 @@ export const createTable = async (db: SQLiteDatabase): Promise<void> => {
     await db.executeSql(`CREATE TABLE IF NOT EXISTS categories (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
-        image TEXT
+        image TEXT,
+        color TEXT
     )`);
 }
 
@@ -119,10 +120,32 @@ export const getTransactionsByMonth = async (db: SQLiteDatabase, month: number, 
     return transactions;
 }
 
+export const getTransactionsFromLastMonth = async (db: SQLiteDatabase): Promise<Transaction[]> => {
+    const [results] = await db.executeSql(`SELECT * FROM ${tableName} WHERE month = ? AND year = ?`, [new Date().getMonth() + 1, new Date().getFullYear()]);
+    const transactions: Transaction[] = [];
+    for (let i = 0; i < results.rows.length; i++) {
+        const row = results.rows.item(i);
+        transactions.push({
+            id: row.id,
+            type: row.type,
+            category: row.category,
+            account: row.account,
+            amount: row.amount,
+            note: row.note,
+            day: row.day,
+            month: row.month,
+            year: row.year,
+            time: row.time
+        });
+    }
+    return transactions;
+}
+
 export const insertCategory = async (db: SQLiteDatabase, category: Category): Promise<void> => {
-    await db.executeSql(`INSERT INTO categories (name, image) VALUES (?, ?)`, [
+    await db.executeSql(`INSERT INTO categories (name, image, color) VALUES (?, ?, ?)`, [
         category.name,
-        category.image
+        category.image,
+        category.color
     ]);
 }
 
@@ -132,7 +155,8 @@ export const getCategoryById = async (db: SQLiteDatabase, id: number): Promise<C
     return {
         id: row.id,
         name: row.name,
-        image: row.image
+        image: row.image,
+        color: row.color
     };
 }
 
@@ -144,7 +168,8 @@ export const getAllCategories = async (db: SQLiteDatabase): Promise<Category[]> 
         categories.push({
             id: row.id,
             name: row.name,
-            image: row.image
+            image: row.image,
+            color: row.color
         });
     }
     return categories;
@@ -183,9 +208,9 @@ export const getAllDatesListByMonth = async (db: SQLiteDatabase, month: number, 
 
 export const importTestData = async (db: SQLiteDatabase): Promise<void> => {
     const categories: Category[] = [
-        { id: 1, name: 'Food', image: 'food' },
-        { id: 2, name: 'Transport', image: 'transport' },
-        { id: 3, name: 'Shopping', image: 'shopping' }
+        { id: 1, name: 'Food', image: 'https://cdn-icons-png.flaticon.com/512/2922/2922506.png', color: '#FF0000'},
+        { id: 2, name: 'Transport', image: 'https://cdn-icons-png.flaticon.com/512/2922/2922506.png', color: '#00FF00'},
+        { id: 3, name: 'Shopping', image: 'https://cdn-icons-png.flaticon.com/512/2922/2922506.png', color: '#0000FF'}
     ];
 
     const accounts: Account[] = [

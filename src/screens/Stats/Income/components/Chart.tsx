@@ -4,6 +4,12 @@ import { PieChart } from "react-native-gifted-charts";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Category from "./Category";
 import SelectDropdown from "react-native-select-dropdown";
+import { getDBConnection, getTransactionsFromLastMonth, getAllCategories} from "../../../../services/db-services";
+import { Transaction } from "../../../../models/transaction";
+import { Category as CategoryModel } from "../../../../models/category";
+import { useEffect, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
+
 
 export type Props = {
     value: any,
@@ -11,14 +17,57 @@ export type Props = {
     color: any,
 }
 
+export type PieData = {
+    value: number,
+    color: string,
+}
+
 export default function Chart(){
-    const pieData = [
-        {value: 54, color: '#177AD5'},
-        {value: 35, color: '#79D2DE'},
-        {value: 11, color: '#ED6665'},
-      ];
+
+    const isFocused = useIsFocused();
+
+    const [categories, setCategories] = useState<CategoryModel[]>([]);
+    const [transactionsList, setTransactionsList] = useState<Transaction[]>([]); // [Transaction, Transaction, Transaction
+    const [pieData, setPieData] = useState<PieData[]>([]);
 
     const time = ["Daily", "Monthly", "Yearly"]
+
+    useEffect(() => {
+        
+        if (!isFocused) {
+            return;
+        }
+
+        
+        getDBConnection().then((db) => {
+            getTransactionsFromLastMonth(db).then((transactions) => {
+                setTransactionsList(transactions);
+            });
+        });
+
+        getDBConnection().then((db) => {
+            getAllCategories(db).then((categories) => {
+                setCategories(categories);
+            });
+        });
+
+        const pieData: PieData[] = [];
+        categories.forEach((category) => {
+            var total = 0;
+            transactionsList.forEach((transaction) => {
+                if (transaction.type == "income") {
+                    if (transaction.category == category.id) {
+                        total += transaction.amount;
+                    }
+                }
+            });
+            pieData.push({
+                value: total,
+                color: category.color,
+            });
+        });
+        setPieData(pieData);
+    }, [isFocused]);
 
     return(
         <SafeAreaView>
@@ -63,9 +112,10 @@ export default function Chart(){
                 />
             </View>
             <ScrollView>
-                <Category percentage={54} name={'Renting'} cost={350.00} color={'#177AD5'}/>
-                <Category percentage={35} name={'Food'} cost={176.00} color={'#79D2DE'}/>
-                <Category percentage={11} name={'Transition'} cost={23.00} color={'#ED6665'}/>
+                {pieData.map((item, index) => {
+                    return <Category key={index} name={item.value} cost={item.value} percentage={item.value} color={item.color}/>
+                })
+                }
                 <View style={{width: '100%', height: 180}}></View>
             </ScrollView>
         </SafeAreaView>

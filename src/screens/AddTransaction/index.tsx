@@ -54,21 +54,8 @@ const AddTransaction = () => {
   const [isNoteClicked, setIsNoteClicked] = useState(false);
   const [isDescriptionClicked, setIsDescriptionClicked] = useState(false);
 
-  const [accountValue, setAccountValue] = useState<any | null>(null);
-  const [categoryValue, setCategoryValue] = useState<any | null>(null);
-  const [descripTion, setDescription] = useState<any | null>(null);
-  // Value đưa vào khi bấm save
-  /*
-  const [accountValue, setAccountValue] = useState<any | null>(null);
-  const [dateValue, setDateValue] = useState('');
-  const [timeValue, setTimeValue] = useState('');
-  const [amountValue, setAmountValue] = useState<any | null>(null);
-  const [noteValue, setNoteValue] = useState<any | null>(null);
-  */
-
-  const [Transaction, setTransaction] = useState<Transaction>(
-    {} as Transaction,
-  );
+  const [Transaction, setTransaction] = useState<Transaction>({} as Transaction);
+  setTransaction({...Transaction, type: budgetType})
 
   const [date, setDate] = useState(new Date());
   const timeNow = new Date();
