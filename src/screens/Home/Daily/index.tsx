@@ -4,12 +4,17 @@ import DayInfo from './components/DayInfo';
 import DayBox from './components/DayBox';
 import { Transaction } from '../../../models/transaction';
 import { getDBConnection, getTransactions, createTable, importTestData, clearDatabase, getAllDatesListByMonth, dropDatabaseAndRecreate, logAllToConsole } from '../../../services/db-services';
+import { NativeBaseProvider, ScrollView } from 'native-base';
 
 const Daily = () => {
 
   const [DateList, setDateList] = React.useState<Date[]>([]);
 
   useEffect(() => {
+    getDBConnection().then((db) => {
+      createTable(db);
+    });
+
     var date = new Date();
     var month = date.getMonth() + 1;
     var year = date.getFullYear();
@@ -21,18 +26,22 @@ const Daily = () => {
   }, []);
 
   return (
-    <SafeAreaView>
-      {/* Income, expense, total, bar */}
-      {/* Show list view chi tiêt schi tiêu ngày */}
+    <NativeBaseProvider>
+        <SafeAreaView>
+        {/* Income, expense, total, bar */}
+        {/* Show list view chi tiêt schi tiêu ngày */}
 
-      {DateList.map((date) => {
-        return (
-          <DayBox date={date} />
-        );
-      })
-      }
-      
-    </SafeAreaView>
+        <ScrollView>
+          {DateList.map((date) => {
+            return (
+              <DayBox date={date} />
+            );
+          })
+          }
+        </ScrollView>
+        
+      </SafeAreaView>
+    </NativeBaseProvider>
   );
 };
 

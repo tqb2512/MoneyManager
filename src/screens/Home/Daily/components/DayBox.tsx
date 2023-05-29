@@ -33,13 +33,13 @@ const DayBox = (props: {date: Date}) => {
     return isNaN(dayOfWeek)
       ? null
       : [
-          'Sunday',
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
-          'Saturday',
+          'Sun',
+          'Mon',
+          'Tue',
+          'Wed',
+          'Thu',
+          'Fri',
+          'Sat',
         ][dayOfWeek];
   };
 
@@ -47,7 +47,7 @@ const DayBox = (props: {date: Date}) => {
     <View style={styles.mainContainer}>
       {/* Hiện ngày tháng năm, tiền thu chi */}
       <View style={styles.header}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', justifyContent:'flex-start', marginLeft: 10}}>
           <View>
             <Text style={styles.date}>{props.date.getDate()}</Text>
           </View>
@@ -59,10 +59,13 @@ const DayBox = (props: {date: Date}) => {
             </View>
           </View>
         </View>
-        <View>
-          <Text style={{color: '#2416CB'}}>${income}</Text>
-          <Text style={{color: '#FF914D'}}>${expense}</Text>
-        </View>
+          <View style={styles.inContainer}>
+            <Text style={styles.inText}>$ {income}</Text>
+          </View>
+          <View style={styles.outContainer}>
+            <Text style={styles.outText}>$ {expense}</Text>
+          </View>
+
       </View>
       {/* Danh sách khoản thu chi */}
       {transactionsList.map((transaction) => {
@@ -91,14 +94,38 @@ const styles = StyleSheet.create({
   },
 
   date: {
-    fontSize: 25,
-    fontWeight: '600',
+    fontSize: 28,
+    color: 'black',
+    fontWeight: "bold",
   },
 
   monthYear: {
     marginStart: 8,
   },
 
-  month: {},
-  year: {},
+  month: {
+    fontSize: 16
+  },
+  year: {
+    fontSize: 16
+  },
+  inContainer:{
+    marginRight: 0,
+    marginLeft: 50,
+    marginTop: 5,
+  },
+  inText:{
+    fontSize: 18,
+    color: "#9FE2BF",
+    fontWeight: "bold",
+  },
+  outContainer:{
+    marginRight: 13,
+    marginTop: 5,
+  },
+  outText:{
+    fontSize: 18,
+    color: "#FF7F50",
+    fontWeight: "bold",
+  }
 });
