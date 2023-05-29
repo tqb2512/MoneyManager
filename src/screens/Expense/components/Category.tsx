@@ -9,7 +9,7 @@ export type Props = {
     color: any
 };
 
-export default function Category({percentage, name, cost, color}) {
+export default function Category({percentage, name, cost, color}: Props) {
   return (
     <SafeAreaView>
         <TouchableOpacity style={styles.container}>
