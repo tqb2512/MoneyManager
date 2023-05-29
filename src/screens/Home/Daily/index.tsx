@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect } from 'react';
 import DayInfo from './components/DayInfo';
 import DayBox from './components/DayBox';
@@ -9,33 +9,33 @@ const Daily = () => {
 
   const [DateList, setDateList] = React.useState<Date[]>([]);
 
-  // useEffect(() => {
-  //   // getDBConnection().then((db) => {
-  //   //   createTable(db);
-  //   //   importTestData(db);
-  //   // })
+  useEffect(() => {
+    getDBConnection().then((db) => {
+      createTable(db);
+    })
 
-  //   var date = new Date();
-  //   var month = date.getMonth() + 1;
-  //   var year = date.getFullYear();
-  //   getDBConnection().then((db) => {
-  //     getAllDatesListByMonth(db, month, year).then((dates) => {
-  //       setDateList(dates);
-  //     });
-  //   });
-  // }, []);
+    var date = new Date();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    getDBConnection().then((db) => {
+      getAllDatesListByMonth(db, month, year).then((dates) => {
+        setDateList(dates);
+      });
+    });
+  }, []);
 
   return (
     <SafeAreaView>
       {/* Income, expense, total, bar */}
       {/* Show list view chi tiêt schi tiêu ngày */}
-
-      {DateList.map((date) => {
-        return (
-          <DayBox date={date} />
-        );
-      })
-      }
+      <ScrollView>
+        {DateList.map((date) => {
+          return (
+            <DayBox date={date} />
+          );
+        })
+        }
+      </ScrollView>
       
     </SafeAreaView>
   );
