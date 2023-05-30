@@ -47,8 +47,8 @@ const DayBox = (props: {date: Date}) => {
     <View style={styles.mainContainer}>
       {/* Hiện ngày tháng năm, tiền thu chi */}
       <View style={styles.header}>
-        <View style={{flexDirection: 'row', justifyContent:'flex-start', marginLeft: 10}}>
-          <View>
+        <View style={{flexDirection: 'row', justifyContent:'flex-start'}}>
+          <View style={{width: "25%", alignItems: "center"}}>
             <Text style={styles.date}>{props.date.getDate()}</Text>
           </View>
           <View style={styles.monthYear}>
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
 
   monthYear: {
-    marginStart: 8,
+    marginStart: "5%",
   },
 
   month: {
@@ -111,21 +111,24 @@ const styles = StyleSheet.create({
   },
   inContainer:{
     marginRight: 0,
-    marginLeft: 50,
     marginTop: 5,
+    width: "20%"
   },
   inText:{
     fontSize: 18,
     color: "#9FE2BF",
     fontWeight: "bold",
+    textAlign: "right"
   },
   outContainer:{
     marginRight: 13,
     marginTop: 5,
+    width: "30%"
   },
   outText:{
     fontSize: 18,
     color: "#FF7F50",
     fontWeight: "bold",
+    textAlign: "right"
   }
 });
