@@ -9,10 +9,22 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import Button from './components/AccountGroupButton';
+import { Account } from '../../../models/account';
+import { getDBConnection, insertAccount } from '../../../services/db-services';
 
 const AddAccount = () => {
   const [groupIsClicked, setGroupIsClicked] = useState(false);
   const [groupValue, setGroupValue] = useState<any | null>(null);
+  const [Account, setAccount] = useState<Account>({} as Account);
+
+  const saveAccount = () => {
+    console.log(Account);
+    getDBConnection().then((db) => {
+      insertAccount(db, Account).then((result) => {
+        console.log(result);
+      });
+    });
+  };
 
   return (
     <View style={{}}>
@@ -28,7 +40,9 @@ const AddAccount = () => {
           onPressIn={() => setGroupIsClicked(!groupIsClicked)}
           showSoftInputOnFocus={false}
           value={groupValue}
-          onChangeText={() => {}}
+          onChangeText={(groupValue) => {
+            setAccount({...Account, type: groupValue});
+          }}
           caretHidden={true}
           //  Đưa giá trị vô đây
         />
@@ -44,7 +58,9 @@ const AddAccount = () => {
           }}
           onPressIn={() => {}}
           showSoftInputOnFocus={false}
-          onChangeText={() => {}}
+          onChangeText={(name) => {
+            setAccount({...Account, name: name});
+          }}
           //  Đưa giá trị vô đây
         />
       </View>
@@ -58,7 +74,9 @@ const AddAccount = () => {
             borderBottomColor: 'gray',
           }}
           onPressIn={() => {}}
-          onChangeText={() => {}}
+          onChangeText={(amount) => {
+            setAccount({...Account, balance: amount});
+          }}
           keyboardType="number-pad"
           //  Đưa giá trị vô đây
         />
@@ -74,8 +92,9 @@ const AddAccount = () => {
           }}
           onPressIn={() => {}}
           showSoftInputOnFocus={false}
-          onChangeText={() => {}}
-          //  Đưa giá trị vô đây
+          onChangeText={(description) => {
+            setAccount({...Account, note: description});
+          }}
         />
       </View>
       {groupIsClicked && (
@@ -86,7 +105,7 @@ const AddAccount = () => {
           onRequestClose={() => {
             setGroupIsClicked(!groupIsClicked);
           }}>
-          <View style={styles.centeredView}>
+          <Pressable onPress={() => setGroupIsClicked(false)} style={styles.centeredView}>
             <View style={styles.modalView}>
               <View
                 style={{
@@ -110,7 +129,7 @@ const AddAccount = () => {
                 />
               </Pressable>
             </View>
-          </View>
+          </Pressable>
         </Modal>
       )}
 
@@ -120,7 +139,7 @@ const AddAccount = () => {
           styles.saveButton,
           {backgroundColor:'#46CDCF'},
         ]}
-        onPress={() => {}}>
+        onPress={() => saveAccount()}>
         <Text style={{fontWeight: '600'}}>Save</Text>
       </TouchableOpacity>
     </View>

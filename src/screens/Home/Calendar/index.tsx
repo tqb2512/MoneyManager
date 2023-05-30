@@ -1,53 +1,62 @@
-
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
-import {Touchable, TouchableOpacity, View, Button} from 'react-native';
-import {Calendar} from 'react-native-calendars';
-import {Text} from 'react-native-svg';
+import {Calendar} from 'react-native-big-calendar';
 
-interface MarkedDates {
-  [dateString: string]: {
-    marked: boolean;
-    dotColor: string;
-  };
-}
+const events = [
+  {
+    title: 'Meeting',
+    start: new Date(2023, 5, 29, 0, 0),
+    end: new Date(2023, 5, 29, 2, 0),
+  },
+  {
+    title: 'Coffee break',
+    start: new Date(2020, 1, 11, 15, 45),
+    end: new Date(2020, 1, 11, 16, 30),
+  },
+];
 
-const CalendarPicker: React.FC = () => {
-  const [markedDates, setMarkedDates] = useState<MarkedDates>({});
-  const [selected, setSelected] = useState('');
-
-  const markDate = (dateString: string) => {
-    if (markedDates[dateString]) {
-      const newMarkedDates = {...markedDates};
-      delete newMarkedDates[dateString];
-      setMarkedDates(newMarkedDates);
-    } else {
-      setMarkedDates({
-        ...markedDates,
-        [dateString]: {
-          marked: true,
-          dotColor: 'blue',
-        },
-      });
-    }
-  };
-
-  console.log(markedDates);
+const HeaderView = () => {
   return (
     <View>
-      <View>
-        <Calendar
-          // Đánh dấu ngày và bấm detail ngày
-          onDayLongPress={({dateString}) => markDate(dateString)}
-          onDayPress={day => {
-            setSelected(day.dateString);
-          }}
-          markedDates={markedDates}
-          markingType={'dot'}
-        />
+      <Text>Header View</Text>
+    </View>
+  )
+}
+
+const CalendarView = () => {
+
+  const [mode, setMode] = useState<any>('day')
+  return (
+    <View>
+      <View style = {{flexDirection: 'row'}}>
+        <TouchableOpacity onPress={() => setMode('day')}>
+          <Text>Day</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setMode('week')}>
+          <Text>Week</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => setMode('month')}>
+          <Text>Month</Text>
+        </TouchableOpacity>
       </View>
-        <Button title={selected} />
+      <Calendar
+        events={events}
+        height={600}
+        eventCellStyle={[
+          {backgroundColor: 'red'},
+          {borderWidth: 1, borderColor: 'green'},
+        ]}
+        mode={mode}
+        showAllDayEventCell={false}
+        swipeEnabled={true}
+        showTime={true}
+        //sortedMonthView={true}
+        // headerContainerStyle={HeaderView}
+      />
     </View>
   );
 };
 
-export default CalendarPicker;
+export default CalendarView;
+
+const styles = StyleSheet.create({});
