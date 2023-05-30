@@ -3,7 +3,6 @@ import React from 'react'
 
 export type Props = {
     accountType: String
-
 }
 
 const AccountGroup:React.FC<Props> = ({ accountType }) => {
@@ -14,6 +13,7 @@ const AccountGroup:React.FC<Props> = ({ accountType }) => {
          <Text style={{fontWeight: '600', fontSize: 16}}>{accountType}</Text>
          <Text>$35</Text>
       </View>
+      
     {/* list accounts */}
 
         <TouchableOpacity style={styles.accountButton}>

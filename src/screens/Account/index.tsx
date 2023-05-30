@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import AccountGroup from './components/AccountGroup';
 import {ThreeDotsIcon} from 'native-base';
@@ -14,15 +14,27 @@ import {NativeBaseProvider} from 'native-base';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import { RootStackParams } from '../../navigation';
+import { Account as AccountModel } from '../../models/account';
+import { getDBConnection, getAllAccounts } from '../../services/db-services';
 
 const Account: React.FC = () => {
   const [showView, setShowView] = useState(false);
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
     // useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
+  const [AccountList, setAccountList] = useState<AccountModel[]>([]);
+
   const handlePress = () => {
     navigation.navigate('AddAccount');
   };
+
+  useEffect(() => {
+    getDBConnection().then((db) => {
+      getAllAccounts(db).then((accounts) => {
+        setAccountList(accounts);
+      });
+    });
+  }, []);
 
   return (
     <NativeBaseProvider>
@@ -57,11 +69,9 @@ const Account: React.FC = () => {
         </View>
         {/* List account */}
         <ScrollView>
-          <AccountGroup accountType="Cash" />
-
-          <AccountGroup accountType="Card" />
-
-          <AccountGroup accountType="Accounts" />
+          {AccountList.map((account) => (
+            <AccountGroup accountType={account.type}/>
+          ))}
         </ScrollView>
 
         {/* Show add, edit,... */}

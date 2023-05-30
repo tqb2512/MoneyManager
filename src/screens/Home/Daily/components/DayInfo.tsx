@@ -1,6 +1,6 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
-import {Transaction} from '../../../../models/transaction';
+import { Transaction } from '../../../../models/transaction';
 import { Category } from '../../../../models/category';
 
 import { getDBConnection, getCategoryById } from '../../../../services/db-services';
@@ -16,22 +16,22 @@ const DayInfo: React.FC<Transaction> = ({
   month,
   year
 }) => {
-  const [img_url, setImgUrl] = React.useState<string>('');
+  const [Category, setCategory] = React.useState<Category>();
 
   React.useEffect(() => {
     getDBConnection().then((db) => {
       getCategoryById(db, category).then((category) => {
-        setImgUrl(category.image);
+        setCategory(category);
       });
     });
   }, []);
-    
+
   return (
     <TouchableOpacity>
       <View style={{flexDirection: 'row', backgroundColor: 'white'}}>
         <View style={{width: 100,flexDirection: 'row', alignItems: 'center', padding: 8, marginLeft: 13}}>
           <Image
-            source={{uri: img_url}}
+            source={{ uri: category.image }}
             style={{
               borderRadius: 9999,
               width: 32,
@@ -40,9 +40,8 @@ const DayInfo: React.FC<Transaction> = ({
               borderWidth: 1,
             }}
           />
-          <Text style={{marginStart: 8}}>{category}</Text>
+          <Text style={{ marginStart: 8 }}>{category.name}</Text>
         </View>
-
         <View style={{flex: 1, marginStart: 20, justifyContent: 'center'}}>
           <Text style={{fontWeight: '700'}}>{note}</Text>
           <Text>{account}</Text>

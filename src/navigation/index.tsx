@@ -11,11 +11,17 @@ import AddAccount from '../screens/Account/AddAccount';
 import {NavigationContainer} from '@react-navigation/native';
 import AddTransaction from '../screens/AddTransaction';
 import DeleteAccount from '../screens/Account/DeleteAccount';
+import IncomeCategoryScreen from '../screens/ChangeCategory/IncomeCategoryScreen';
+import CategoryEditView from '../screens/ChangeCategory/components/CategoryEditView';
+import CategoryButton from '../screens/ChangeCategory/components/CategoryButton';
+import AccountSetting from '../screens/Account/AccountSetting';
+import AccountEditView from '../screens/Account/AccountSetting/components/AccountEditView';
 const BottomBar = createBottomTabNavigator();
 const TopTabNavigatior = createMaterialTopTabNavigator();
 
 
 const Stack = createNativeStackNavigator();
+const StackEdit = createNativeStackNavigator();
 
 export type RootStackParams = {
   Account: undefined
@@ -23,17 +29,27 @@ export type RootStackParams = {
   DeleteAccount: undefined
 };
 
+export type RootStackParams2 = {
+  Add: undefined
+  IncomeCategory: undefined
+  EditIncomeCategory: {categoryName: String}
+  CategoryButton: {categoryType: String, categoryName: String}
+  AccountSetting: undefined
+  AddAccount: undefined
+  EditAccountView: { accountGroup: String, accountName: String, accountAmount: String, accountDescription: String }
+};
+
 function BottomBarTabs() {
   return (
     <BottomBar.Navigator>
-      <BottomBar.Screen name="Home" component={Home} />
+      <BottomBar.Screen name="Home" component={Home} options={{headerShown: false}} />
       <BottomBar.Screen name="Stats" component={Stats} />
-      <BottomBar.Screen name="Add" component={AddTransaction} />
       <Stack.Screen
         name="Account"
         component={AppNavigation}
         options={{headerShown: false}}
       />
+      <Stack.Screen name="Add" component={StackEditNavigation} options={{headerShown: false}}/>
     </BottomBar.Navigator>
   );
 }
@@ -48,6 +64,21 @@ function AppNavigation() {
       </Stack.Navigator>
     </NavigationContainer>
   );
+}
+
+function StackEditNavigation () {
+  return (
+    <NavigationContainer independent={true}>
+      <StackEdit.Navigator>
+        <StackEdit.Screen name="Add" component={AddTransaction}/>
+        <StackEdit.Screen name="IncomeCategory" component={IncomeCategoryScreen} />
+        <StackEdit.Screen name="EditIncomeCategory" component={CategoryEditView} />
+        <StackEdit.Screen name="AccountSetting" component={AccountSetting} options={{headerShown: false}} />
+        <StackEdit.Screen name="AddAccount" component={AddAccount} />
+        <StackEdit.Screen name="EditAccountView" component={AccountEditView} />
+      </StackEdit.Navigator>
+    </NavigationContainer>
+  )
 }
 
 export default BottomBarTabs;
