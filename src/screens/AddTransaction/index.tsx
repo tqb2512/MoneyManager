@@ -546,8 +546,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     color: 'white',
-    borderBottomWidth: 0.4,
-    borderBottomColor: 'gray',
     flex: 1,
   },
 
@@ -555,8 +553,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     color: 'black',
-    borderBottomWidth: 0.4,
-    borderBottomColor: 'gray',
     flex: 1,
   },
 

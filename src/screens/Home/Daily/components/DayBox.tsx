@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#7DCEA0",
     fontWeight: "bold",
-    textAlign: "right"
+    textAlign: "right",
   },
   outContainer:{
     marginRight: 13,
