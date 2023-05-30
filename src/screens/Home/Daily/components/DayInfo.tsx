@@ -27,9 +27,9 @@ const DayInfo: React.FC<Transaction> = ({
   }, []);
 
   return (
-    <TouchableOpacity key={category.id}>
-      <View style={{ flexDirection: 'row', backgroundColor: 'white' }}>
-        <View style={{ width: 100, flexDirection: 'row', alignItems: 'center', padding: 8 }}>
+    <TouchableOpacity>
+      <View style={{flexDirection: 'row', backgroundColor: 'white'}}>
+        <View style={{width: 100,flexDirection: 'row', alignItems: 'center', padding: 8, marginLeft: 13}}>
           <Image
             source={{ uri: category.image }}
             style={{
@@ -42,18 +42,19 @@ const DayInfo: React.FC<Transaction> = ({
           />
           <Text style={{ marginStart: 8 }}>{category.name}</Text>
         </View>
-
-        <View style={{ flex: 1, marginStart: 32, justifyContent: 'center' }}>
-          <Text style={{ fontWeight: '700' }}>{note}</Text>
+        <View style={{flex: 1, marginStart: 20, justifyContent: 'center'}}>
+          <Text style={{fontWeight: '700'}}>{note}</Text>
           <Text>{account}</Text>
         </View>
         <Text
           style={{
             alignSelf: 'center',
-            marginEnd: 8,
-            color: type == 'income' ? '#2416CB' : '#FF914D',
+            marginRight: 21,
+            fontSize: 18,
+            fontWeight:'bold',
+            color: type === 'income' ? '#9FE2BF' : '#FF7F50',
           }}>
-          ${amount}
+          $ {amount}
         </Text>
       </View>
     </TouchableOpacity>

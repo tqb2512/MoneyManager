@@ -4,9 +4,9 @@ import DayInfo from './components/DayInfo';
 import DayBox from './components/DayBox';
 import { Transaction } from '../../../models/transaction';
 import { getDBConnection, getTransactions, createTable, importTestData, clearDatabase, getAllDatesListByMonth, dropDatabaseAndRecreate, logAllToConsole } from '../../../services/db-services';
+import { NativeBaseProvider, ScrollView } from 'native-base';
 import { useFocus } from 'native-base/lib/typescript/components/primitives';
 import { useIsFocused } from '@react-navigation/native';
-
 
 const Daily = () => {
 
@@ -49,18 +49,24 @@ const Daily = () => {
   }, [isFocused]);
 
   return (
-    <SafeAreaView>
-      {/* Income, expense, total, bar */}
-      {/* Show list view chi tiêt schi tiêu ngày */}
-      <ScrollView>
-        {DateList.map((date) => {
-          return (
-            <DayBox date={date} />
-          );
-        })
-        }
-      </ScrollView>
-    </SafeAreaView>
+
+    <NativeBaseProvider>
+        <SafeAreaView>
+        {/* Income, expense, total, bar */}
+        {/* Show list view chi tiêt schi tiêu ngày */}
+
+        <ScrollView>
+          {DateList.map((date) => {
+            return (
+              <DayBox date={date} />
+            );
+          })
+          }
+        </ScrollView>
+        
+      </SafeAreaView>
+    </NativeBaseProvider>
+
   );
 };
 
