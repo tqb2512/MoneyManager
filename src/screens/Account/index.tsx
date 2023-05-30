@@ -42,27 +42,31 @@ const Account: React.FC = () => {
         {/* Top bar */}
         <View style={{position: 'relative'}}>
           <View style={styles.firstTopBar}>
-            <Text style={{fontSize: 18}}>Accounts</Text>
-            <TouchableOpacity
-              onPress={() => setShowView(!showView)}
-              style={{alignItems: 'center', padding: 4}}>
-              <ThreeDotsIcon size="4" mt="0.5" color="#7A7986" />
-            </TouchableOpacity>
+            <View style={styles.titleHeader}>
+              <Text style={{fontSize: 20, fontWeight:'bold', color:'black', textAlign:'center'}}>Accounts</Text>
+            </View>
+            <View style={styles.threeDots}>
+              <TouchableOpacity
+                onPress={() => setShowView(!showView)}
+                style={{alignItems: 'center', padding: 4}}>
+                <ThreeDotsIcon size="4" mt="0.5" color="#7A7986" />
+              </TouchableOpacity>
+            </View>
           </View>
 
           <View style={styles.secondTopBar}>
             <View style={styles.totalCalc}>
               <Text style={styles.totalElement}>Assets</Text>
-              <Text style={{color: '#2416CB', alignSelf: 'center'}}>35.00</Text>
+              <Text style={{color: '#7DCEA0', alignSelf: 'center', fontSize: 18, fontWeight:'bold'}}>$ 35.00</Text>
             </View>
             <View style={styles.totalCalc}>
               <Text style={styles.totalElement}>Liabilities</Text>
-              <Text style={{color: '#FF914D', alignSelf: 'center'}}>35.00</Text>
+              <Text style={{color: '#F1948A', alignSelf: 'center', fontSize: 18, fontWeight:'bold'}}>$ 35.00</Text>
             </View>
             <View style={styles.totalCalc}>
               <Text style={styles.totalElement}>Total</Text>
-              <Text style={{fontWeight: '600', alignSelf: 'center'}}>
-                35.00
+              <Text style={{color: 'black', alignSelf: 'center', fontSize: 18, fontWeight:'bold'}}>
+                $ 35.00
               </Text>
             </View>
           </View>
@@ -109,10 +113,16 @@ const styles = StyleSheet.create({
   firstTopBar: {
     backgroundColor: 'white',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     padding: 8,
     paddingTop: 4,
     paddingBottom: 8,
+  },
+  titleHeader:{
+    width: "80%"
+  },
+  threeDots:{
+    width: "10%"
   },
   secondTopBar: {
     backgroundColor: 'white',
@@ -120,6 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 10,
     paddingBottom: 10,
+    paddingHorizontal: 20,
     borderWidth: 1,
     borderColor: 'rgba(229, 231, 235, 0.4)',
   },
@@ -131,6 +142,8 @@ const styles = StyleSheet.create({
 
   totalElement: {
     alignSelf: 'center',
+    fontSize: 16,
+    fontWeight: "600"
   },
 
   viewShow: {

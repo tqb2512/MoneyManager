@@ -35,10 +35,19 @@ const Categories: React.FC<Props> = ({categoryName, image_uri, onSelect, onClose
           source={{
             uri: image_uri,
           }}></Image>
-        <Text style={{textAlign: 'center'}}>{categoryName}</Text>
+        <Text style={styles.textStyle}>{categoryName}</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 export default Categories;
+
+const styles = StyleSheet.create({
+    textStyle:{
+      fontSize: 15,
+      color: "grey",
+      fontWeight: "500",
+      textAlign: "center"
+    },
+})

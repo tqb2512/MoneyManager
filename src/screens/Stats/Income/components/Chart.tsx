@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     },
     selectDropDownContainer:{
         borderRadius: 7,
-        backgroundColor: "#8FE7B0",
+        backgroundColor: "#7DCEA0",
         marginTop: 15,
         marginRight: 30,
         width: "25%",

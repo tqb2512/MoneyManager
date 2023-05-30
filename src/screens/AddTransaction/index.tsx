@@ -45,7 +45,7 @@ import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 const AddTransaction = () => {
   const navigation = useNavigation<NavigationProp<RootStackParams2>>();
 
-  const [incomeColor, setIncomeColor] = useState('#46CDCF');
+  const [incomeColor, setIncomeColor] = useState('#7DCEA0');
   const [expenseColor, setExpenseColor] = useState('black');
 
   const [budgetType, setBudgetType] = useState<any>('income');
@@ -136,7 +136,7 @@ const AddTransaction = () => {
               <View style={[styles.buttonContainer, {}]}>
                 <TouchableOpacity
                   onPress={() => {
-                    setIncomeColor('#46CDCF');
+                    setIncomeColor('#7DCEA0');
                     setExpenseColor('black');
                     setBudgetType('income');
                     setTransaction({ ...Transaction, type: 'income' })
@@ -150,7 +150,7 @@ const AddTransaction = () => {
 
                 <TouchableOpacity
                   onPress={() => {
-                    setExpenseColor('orange');
+                    setExpenseColor('#F1948A');
                     setIncomeColor('black');
                     setBudgetType('expense');
                     setTransaction({ ...Transaction, type: 'expense' })
@@ -174,11 +174,7 @@ const AddTransaction = () => {
               <View style={styles.input}>
                 <Text style={styles.inputLabel}>Date</Text>
                 <TextInput
-                  style={{
-                    flex: 1,
-                    borderBottomWidth: 0.4,
-                    borderBottomColor: 'gray',
-                  }}
+                  style={styles.infoText}
                   onPressIn={() => {
                     setIsDateClicked(true);
                     setIsCategoriesClicked(false);
@@ -203,11 +199,7 @@ const AddTransaction = () => {
               <View style={styles.input}>
                 <Text style={styles.inputLabel}>Time</Text>
                 <TextInput
-                  style={{
-                    flex: 1,
-                    borderBottomWidth: 0.4,
-                    borderBottomColor: 'gray',
-                  }}
+                  style={styles.infoText}
                   onPressIn={() => {
                     setIsDateClicked(false);
                     setIsCategoriesClicked(false);
@@ -227,11 +219,7 @@ const AddTransaction = () => {
               <View style={styles.input}>
                 <Text style={styles.inputLabel}>Category</Text>
                 <TextInput
-                  style={{
-                    flex: 1,
-                    borderBottomWidth: 0.4,
-                    borderBottomColor: 'gray',
-                  }}
+                  style={styles.infoText}
                   value={Transaction.category}
                   onChangeText={text =>
                     setTransaction({ ...Transaction, category: text })
@@ -255,11 +243,7 @@ const AddTransaction = () => {
               <View style={styles.input}>
                 <Text style={styles.inputLabel}>Account</Text>
                 <TextInput
-                  style={{
-                    flex: 1,
-                    borderBottomWidth: 0.4,
-                    borderBottomColor: 'gray',
-                  }}
+                  style={styles.infoText}
                   value={Transaction.account}
                   onChangeText={text =>
                     setTransaction({ ...Transaction, account: text })
@@ -285,11 +269,7 @@ const AddTransaction = () => {
                 <View style={styles.input}>
                   <Text style={styles.inputLabel}>Amount</Text>
                   <TextInput
-                    style={{
-                      flex: 1,
-                      borderBottomWidth: 0.4,
-                      borderBottomColor: 'gray',
-                    }}
+                    style={styles.infoText}
                     placeholder=""
                     keyboardType="number-pad"
                     onPressIn={() => {
@@ -308,11 +288,7 @@ const AddTransaction = () => {
               <View style={styles.input}>
                 <Text style={styles.inputLabel}>Note</Text>
                 <TextInput
-                  style={{
-                    flex: 1,
-                    borderBottomWidth: 0.4,
-                    borderBottomColor: 'gray',
-                  }}
+                  style={styles.infoText}
                   placeholder=""
                   onChangeText={text =>
                     setTransaction({ ...Transaction, note: text })
@@ -342,7 +318,7 @@ const AddTransaction = () => {
                     styles.saveButton,
                     {
                       backgroundColor:
-                        budgetType === 'income' ? '#46CDCF' : 'orange',
+                        budgetType === 'income' ? '#7DCEA0' : '#F1948A',
                     },
                   ]}
                   onPress={() => {
@@ -350,10 +326,10 @@ const AddTransaction = () => {
                     budgetType === 'income' ? setTransaction({ ...Transaction, type: 'income' }) : setTransaction({ ...Transaction, type: 'expense' })
                     saveTransaction(Transaction)
                   }}>
-                  <Text>Save</Text>
+                  <Text style={styles.saveButtonText}>Save</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.continueButton}>
-                  <Text>Continue</Text>
+                  <Text style={styles.continueButtonText}>Continue</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -521,7 +497,10 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     backgroundColor: 'white',
+    justifyContent: 'space-between',
     padding: 8,
+    paddingHorizontal: "15%",
+    marginTop: "3%"
   },
 
   typeButton: {
@@ -537,18 +516,48 @@ const styles = StyleSheet.create({
   },
   typeText: {
     fontWeight: 'bold',
+    fontSize: 16
   },
 
   input: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 16,
-    paddingRight: 16,
-    margin: 2,
+    paddingHorizontal: "5%",
+    marginVertical: "1%"
   },
   inputLabel: {
-    marginRight: 16,
-    width: 60,
+    fontSize: 16,
+    width: "20%",
+    fontWeight: "500",
+    color: 'grey'
+  },
+
+  infoText: {
+    fontSize: 16,
+    width: "20%",
+    fontWeight: "500",
+    color: 'black',
+    borderBottomWidth: 0.4,
+    borderBottomColor: 'gray',
+    flex: 1
+  },
+
+  saveButtonText: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: 'white',
+    borderBottomWidth: 0.4,
+    borderBottomColor: 'gray',
+    flex: 1,
+  },
+
+  continueButtonText: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: 'black',
+    borderBottomWidth: 0.4,
+    borderBottomColor: 'gray',
+    flex: 1,
   },
 
   bottomContainer: {
@@ -556,25 +565,24 @@ const styles = StyleSheet.create({
   },
 
   saveButton: {
-    backgroundColor: '#46CDCF',
+    backgroundColor: '#7DCEA0',
     borderRadius: 4,
-    padding: 10,
-    width: 220,
-    paddingLeft: 30,
-    paddingRight: 30,
-    marginRight: 12,
-    marginLeft: 6,
+    width: "60%",
+    height: "100%",
+    marginRight: "5%",
+    padding: "1%",
+    paddingTop: "2.5%",
     alignItems: 'center',
   },
 
   continueButton: {
-    borderWidth: 1,
+    backgroundColor: 'white',
+    borderWidth: 0.8,
+    width: "35%",
+    height: 40,
     borderRadius: 4,
-    padding: 10,
-    paddingLeft: 30,
-    paddingRight: 30,
-    marginRight: 10,
     alignItems: 'center',
+    paddingTop: "2%"
   },
 
   categoryAction: {
@@ -653,7 +661,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
     padding: 10,
-    // textAlign: 'center',
+    //textAlign: 'center',
   },
 
   textStyle: {

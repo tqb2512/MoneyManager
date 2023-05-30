@@ -52,7 +52,7 @@ const DayInfo: React.FC<Transaction> = ({
             marginRight: 21,
             fontSize: 18,
             fontWeight:'bold',
-            color: type === 'income' ? '#9FE2BF' : '#FF7F50',
+            color: type === 'income' ? '#7DCEA0' : '#F1948A',
           }}>
           $ {amount}
         </Text>
