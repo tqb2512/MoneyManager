@@ -16,22 +16,22 @@ const DayInfo: React.FC<Transaction> = ({
   month,
   year
 }) => {
-  const [img_url, setImgUrl] = React.useState<string>('');
+  const [Category, setCategory] = React.useState<Category>();
 
   React.useEffect(() => {
     getDBConnection().then((db) => {
       getCategoryById(db, category).then((category) => {
-        setImgUrl(category.image);
+        setCategory(category);
       });
     });
   }, []);
 
   return (
-    <TouchableOpacity>
+    <TouchableOpacity key={category.id}>
       <View style={{ flexDirection: 'row', backgroundColor: 'white' }}>
         <View style={{ width: 100, flexDirection: 'row', alignItems: 'center', padding: 8 }}>
           <Image
-            source={{ uri: img_url }}
+            source={{ uri: category.image }}
             style={{
               borderRadius: 9999,
               width: 32,
@@ -40,7 +40,7 @@ const DayInfo: React.FC<Transaction> = ({
               borderWidth: 1,
             }}
           />
-          <Text style={{ marginStart: 8 }}>{category}</Text>
+          <Text style={{ marginStart: 8 }}>{category.name}</Text>
         </View>
 
         <View style={{ flex: 1, marginStart: 32, justifyContent: 'center' }}>
@@ -51,7 +51,7 @@ const DayInfo: React.FC<Transaction> = ({
           style={{
             alignSelf: 'center',
             marginEnd: 8,
-            color: type === 'income' ? '#2416CB' : '#FF914D',
+            color: type == 'income' ? '#2416CB' : '#FF914D',
           }}>
           ${amount}
         </Text>

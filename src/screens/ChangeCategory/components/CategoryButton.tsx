@@ -36,7 +36,7 @@ const CategoryButton: React.FC<Props> = ({categoryType, categoryName}) => {
       }}>
 
         {/* Nút Edit category */}
-        <TouchableOpacity onPress={() => {navigation.navigate('EditIncomeCategory', {categoryName: 'Salary'})}} style={styles.icon}>
+        <TouchableOpacity onPress={() => {navigation.navigate('EditIncomeCategory', {categoryName: categoryName})}} style={styles.icon}>
           <PencilIcon size={16} color="black" />
         </TouchableOpacity>
 
