@@ -38,7 +38,7 @@ import {
 } from '../../services/db-services';
 
 import Accounts from './components/Accounts';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
 import { RootStackParams2 } from '../../navigation';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
@@ -48,7 +48,7 @@ const AddTransaction = () => {
   const [incomeColor, setIncomeColor] = useState('#46CDCF');
   const [expenseColor, setExpenseColor] = useState('black');
 
-  const [budgetType, setBudgetType] = useState<any>('');
+  const [budgetType, setBudgetType] = useState<any>('income');
   const [isCategoriesClicked, setIsCategoriesClicked] = useState(false);
   const [isAccountsClicked, setIsAccountsClicked] = useState(false);
   const [isDateClicked, setIsDateClicked] = useState(false);
@@ -63,6 +63,9 @@ const AddTransaction = () => {
 
   const [date, setDate] = useState(new Date());
   const timeNow = new Date();
+
+  const isFocused = useIsFocused();
+
 
   const onChange = (event: Event, selectedDate: Date) => {
     const currentDate = selectedDate || date;
@@ -88,9 +91,23 @@ const AddTransaction = () => {
   };
 
   useEffect(() => {
+
+    setBudgetType('income')
+
+    if (!isFocused)
+      return;
+
     setTransaction({ ...Transaction, type: budgetType })
 
     setDate(new Date());
+    
+    var tempDate = new Date();
+    setTransaction({
+      ...Transaction,
+      day: tempDate.getDate(),
+      month: tempDate.getMonth() + 1,
+      year: tempDate.getFullYear(),
+    });
 
     getDBConnection().then(db => {
       getAllCategories(db).then(categories => {
@@ -106,7 +123,7 @@ const AddTransaction = () => {
       });
     });
 
-  }, [])
+  }, [isFocused])
 
   return (
     <NativeBaseProvider>
@@ -122,7 +139,7 @@ const AddTransaction = () => {
                     setIncomeColor('#46CDCF');
                     setExpenseColor('black');
                     setBudgetType('income');
-                    setTransaction({ ...Transaction, type: budgetType })
+                    setTransaction({ ...Transaction, type: 'income' })
                   }}>
                   <View style={[styles.typeButton, { borderColor: incomeColor }]}>
                     <Text style={[styles.typeText, { color: incomeColor }]}>
@@ -136,7 +153,7 @@ const AddTransaction = () => {
                     setExpenseColor('orange');
                     setIncomeColor('black');
                     setBudgetType('expense');
-                    setTransaction({ ...Transaction, type: budgetType })
+                    setTransaction({ ...Transaction, type: 'expense' })
                   }}>
                   <View
                     style={[styles.typeButton, { borderColor: expenseColor }]}>
