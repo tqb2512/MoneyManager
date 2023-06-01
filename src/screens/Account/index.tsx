@@ -69,8 +69,8 @@ const Account: React.FC = () => {
         </View>
         {/* List account */}
         <ScrollView>
-          {AccountList.map((account) => (
-            <AccountGroup accountType={account.type}/>
+          {AccountList.map((account, index) => (
+            <AccountGroup key={index} accountType={account.type}/>
           ))}
         </ScrollView>
 
@@ -88,9 +88,12 @@ const Account: React.FC = () => {
               <Text>Add account</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-              onPress={() => { navigation.navigate('DeleteAccount')}}
+              onPress={() => { 
+                navigation.navigate('DeleteAccount')
+                setShowView(false)
+              }}
               style={styles.subViewButton}>
-              <Text>Delete account</Text>
+              <Text>Account Setting</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -145,7 +148,7 @@ const styles = StyleSheet.create({
   subView: {
     backgroundColor: 'white',
     position: 'absolute',
-    width: '30%',
+    width: '32%',
     top: 30,
     right: 0,
     zIndex: 100,

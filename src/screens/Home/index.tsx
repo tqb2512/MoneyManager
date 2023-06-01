@@ -7,6 +7,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import Daily from './Daily';
 import Monthly from './Monthly';
 import CalendarView from './Calendar';
+import { StackTransEditNavigation } from '../../navigation';
 
 
 const TopTabNavigatior = createMaterialTopTabNavigator();
@@ -17,7 +18,7 @@ const Home = () => {
     <TopTabNavigatior.Navigator style={{marginTop: insets.top}}>
       <TopTabNavigatior.Screen
         name="Daily"
-        component={Daily}
+        component={StackTransEditNavigation}
         options={{tabBarLabel: 'Daily'}}
       />
       <TopTabNavigatior.Screen

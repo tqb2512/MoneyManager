@@ -57,7 +57,7 @@ const AddTransaction = () => {
   const [isTimeClicked, setIsTimeClick] = useState(false);
   const [isAmountClicked, setIsAmountClicked] = useState(false);
   const [isNoteClicked, setIsNoteClicked] = useState(false);
-  const [isDescriptionClicked, setIsDescriptionClicked] = useState(false);
+
 
   const [Transaction, setTransaction] = useState<Transaction>({} as Transaction);
   const [CategoryList, setCategoryList] = useState<Category[]>([]);
@@ -194,7 +194,7 @@ const AddTransaction = () => {
                     setIsTimeClick(false);
                     setIsAmountClicked(false);
                     setIsNoteClicked(false);
-                    setIsDescriptionClicked(false);
+
                   }}
                   showSoftInputOnFocus={false}
                   value={
@@ -223,7 +223,6 @@ const AddTransaction = () => {
                     setIsTimeClick(true);
                     setIsAmountClicked(false);
                     setIsNoteClicked(false);
-                    setIsDescriptionClicked(false);
                   }}
                   showSoftInputOnFocus={false}
                   value={Transaction.time}
@@ -252,7 +251,6 @@ const AddTransaction = () => {
                     setIsTimeClick(false);
                     setIsAmountClicked(false);
                     setIsNoteClicked(false);
-                    setIsDescriptionClicked(false);
                   }}
                   showSoftInputOnFocus={false}
                   caretHidden={true}
@@ -280,7 +278,6 @@ const AddTransaction = () => {
                     setIsTimeClick(false);
                     setIsAmountClicked(false);
                     setIsNoteClicked(false);
-                    setIsDescriptionClicked(false);
                   }}
                   showSoftInputOnFocus={false}
                   caretHidden={true}
@@ -332,18 +329,6 @@ const AddTransaction = () => {
 
             {/* Description + Save button + Continue button */}
             <View style={styles.bottomContainer}>
-              <TextInput
-                style={{
-                  borderBottomWidth: 0.4,
-                  borderBottomColor: 'gray',
-                  marginLeft: 12,
-                  marginRight: 12,
-                }}
-                placeholder="Description"
-                onChangeText={text => { }}
-
-              />
-
               <View style={{ flexDirection: 'row', padding: 16, marginTop: 16 }}>
                 <TouchableOpacity
                   style={[
@@ -405,9 +390,9 @@ const AddTransaction = () => {
                 </View>
                 {/* Pressable cho giá trị của category */}
                 <View style={[styles.button]}>
-                  {CategoryList.map((item, index) => (
+                  {CategoryList.map((item) => (
                     <Categories
-                    key={index}
+                    key={item.id}
                     image_uri={item.image}
                     categoryName={item.name}
                     onSelect={(text) => setTransaction({ ...Transaction, category: text })}
@@ -453,15 +438,16 @@ const AddTransaction = () => {
                   </View>
                 </View>
                 {/* Pressable cho giá trị của group */}
-                <View style={[styles.buttonAccount]}>
+                {/* <View style={[styles.buttonAccount]}> */}
                   {AccountList.map((item, index) => (
                     <Accounts
+                    key={index}
                     accountName={item.name}
                     onSelect={text => setTransaction({ ...Transaction, account: text })}
                     onClose={() => setIsAccountsClicked(false)}
                     />))
                   }
-                </View>
+               {/* </View> */}
               </View>
             </View>
           </Modal>

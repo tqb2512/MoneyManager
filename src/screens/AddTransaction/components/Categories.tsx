@@ -34,7 +34,7 @@ const Categories: React.FC<Props> = ({categoryName, image_uri, onSelect, onClose
           }}
           source={{
             uri: image_uri,
-          }}></Image>
+          }} />
         <Text style={{textAlign: 'center'}}>{categoryName}</Text>
       </TouchableOpacity>
     </View>

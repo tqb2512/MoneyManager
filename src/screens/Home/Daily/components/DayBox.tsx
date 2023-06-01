@@ -1,10 +1,10 @@
-import {DatePickerIOSProps, StyleSheet, Text, View} from 'react-native';
+import {DatePickerIOSProps, StyleSheet, Text, View, GestureResponderEvent} from 'react-native';
 import React, { useEffect } from 'react';
 import DayInfo from './DayInfo';
 import { Transaction } from '../../../../models/transaction';
 import { getDBConnection, getTransactionsByDate } from '../../../../services/db-services';
 
-const DayBox = (props: {date: Date}) => {
+  const DayBox = (props: {date: Date}) => {
   const [transactionsList, setTransactionsList] = React.useState<Transaction[]>([]);
   const [income, setIncome] = React.useState<number>(0);
   const [expense, setExpense] = React.useState<number>(0);
@@ -68,8 +68,8 @@ const DayBox = (props: {date: Date}) => {
 
       </View>
       {/* Danh sách khoản thu chi */}
-      {transactionsList.map((transaction) => {
-        return <DayInfo {...transaction} />;
+      {transactionsList.map((transaction, index) => {
+        return <DayInfo key={index} {...transaction} />;
       })}
     </View>
   );

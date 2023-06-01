@@ -50,7 +50,7 @@ const AccountSetting = () => {
       {/* Render ra 1 list các loại account như pressable ở dưới */}
       <ScrollView>
         {AccountList.map( (item, index) => (
-          <Pressable onPress={() => {navigation.navigate('EditAccountView', {accountGroup: item.type, accountAmount: item.balance, accountName: item.name, accountDescription: item.note})}}>
+          <Pressable key={index} onPress={() => {navigation.navigate('EditAccountView', {accountGroup: item.type, accountAmount: item.balance, accountName: item.name, accountDescription: item.note})}}>
             <AccountContainer 
               key={index}
               onPress={() => {navigation.navigate('EditAccountView', {accountGroup: item.type, accountAmount: item.balance, accountName: item.name, accountDescription: item.note})}} 
