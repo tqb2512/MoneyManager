@@ -1,32 +1,56 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import { useState } from 'react'
+import { Account } from '../../../models/account'
+import { useEffect } from 'react'
+import { getAccountByType, getDBConnection } from '../../../services/db-services'
+import { useIsFocused } from '@react-navigation/native'
 
-export type Props = {
-    accountType: String
-}
 
-const AccountGroup:React.FC<Props> = ({ accountType }) => {
-  return (
-    <View style={styles.mainContainer}>
+const AccountGroup = (props: {type: string}) => {
 
-      <View style={styles.accountLabel}>
-         <Text style={styles.totalElement}>{accountType}</Text>
-         <Text style={styles.moneyText}>$ 35</Text>
-      </View>
-      
-    {/* list accounts */}
+    const [accountList, setAccountList] = useState<Account[]>([]);
+    const [total, setTotal] = useState<number>(0);
+    const isFocused = useIsFocused();
 
-        <TouchableOpacity style={styles.accountButton}>
-            <Text style={styles.accountText}>AccountName</Text>
-            <Text style={styles.moneyText}>$ 35</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.accountButton}>
-            <Text style={styles.accountText}>AccountName</Text>
-            <Text style={styles.moneyText}>$ 69</Text>
-        </TouchableOpacity>
+    useEffect(() => {
 
-      </View>
-  )
+        if (!isFocused) return;
+        getDBConnection().then((db) => {
+            getAccountByType(db, props.type).then((data) => {
+                setAccountList(data);
+            });
+        });
+
+        var total = 0;
+        for (let i = 0; i < accountList.length; i++) {
+            total += accountList[i].balance;
+        }
+        setTotal(total);
+    }, [isFocused]);
+
+    return (
+        <View style={styles.mainContainer}>
+
+            <View style={styles.accountLabel}>
+                <Text style={styles.totalElement}>{props.type}</Text>
+                {total > 0 ? <Text style={[styles.moneyText, {color: "#7DCEA0"}]}>$ {total}</Text> : <Text style={[styles.moneyText, {color: "#F1948A"}]}>$ {total}</Text>}
+            </View>
+
+            {/* list accounts */}
+
+            {accountList.map((account) => {
+                return (
+                    <TouchableOpacity style={styles.accountButton}>
+                        <Text style={styles.accountText}>{account.name}</Text>
+                        {account.balance > 0 ? <Text style={[styles.moneyText, {color: "#7DCEA0"}]}>$ {account.balance}</Text> : <Text style={[styles.moneyText, {color: "#7DCEA0"}]}>$ {account.balance}</Text>}
+                    </TouchableOpacity>
+                )
+            }
+            )}
+
+        </View>
+    )
 }
 
 export default AccountGroup
@@ -46,20 +70,20 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
     },
 
-    moneyText:{
-        color: 'black', 
-        alignSelf: 'center', 
-        fontSize: 18, 
-        fontWeight:'bold'
+    moneyText: {
+        color: 'black',
+        alignSelf: 'center',
+        fontSize: 18,
+        fontWeight: 'bold'
     },
 
     totalElement: {
         alignSelf: 'center',
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: "600"
     },
 
-    accountText:{
+    accountText: {
         alignSelf: 'center',
         fontSize: 16,
         fontWeight: "400",

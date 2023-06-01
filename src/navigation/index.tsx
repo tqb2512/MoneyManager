@@ -16,6 +16,7 @@ import CategoryEditView from '../screens/ChangeCategory/components/CategoryEditV
 import CategoryButton from '../screens/ChangeCategory/components/CategoryButton';
 import AccountSetting from '../screens/Account/AccountSetting';
 import AccountEditView from '../screens/Account/AccountSetting/components/AccountEditView';
+import { u } from 'react-native-big-calendar';
 const BottomBar = createBottomTabNavigator();
 const TopTabNavigatior = createMaterialTopTabNavigator();
 
@@ -40,6 +41,7 @@ export type RootStackParams2 = {
 };
 
 function BottomBarTabs() {
+
   return (
     <BottomBar.Navigator>
       <BottomBar.Screen name="Home" component={Home} options={{headerShown: false}} />

@@ -1,22 +1,20 @@
-import { View, Dimensions } from "react-native";
+import { View, Dimensions, ActivityIndicator } from "react-native";
 import { Text, StyleSheet, ScrollView } from "react-native";
 import { PieChart } from "react-native-gifted-charts";
 import { SafeAreaView } from "react-native-safe-area-context";
-import SelectDropdown from 'react-native-select-dropdown'
 import Category from "./Category";
-import { getDBConnection, getTransactionsFromLastMonth, getAllCategories} from "../../../../services/db-services";
+import SelectDropdown from "react-native-select-dropdown";
+import { getDBConnection, getTransactionsFromLastMonth, getTransactionsFromLastYear, getExistedCategoryByTransactionList, getPieData } from "../../../../services/db-services";
 import { Transaction } from "../../../../models/transaction";
 import { Category as CategoryModel } from "../../../../models/category";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useIsFocused } from "@react-navigation/native";
-
-export type Props = {
-    value: any,
-    total: any,
-    color: any,
-}
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { Skeleton, Spinner } from "native-base";
 
 export type PieData = {
+    name: string,
+    percentage: number,
     value: number,
     color: string,
 }
@@ -25,105 +23,98 @@ export default function Chart() {
 
     const isFocused = useIsFocused();
 
-    const [categories, setCategories] = useState<CategoryModel[]>([]);
-    const [transactionsList, setTransactionsList] = useState<Transaction[]>([]); // [Transaction, Transaction, Transaction
     const [pieData, setPieData] = useState<PieData[]>([]);
+    const [piePressValue, setPiePressValue] = useState<PieData>({} as PieData);
+
+    const timeOptions = ["Monthly", "Yearly"];
+
+
+
+    const updateChart = (time: any) => {
+        getDBConnection().then((db) => {
+            getPieData(db, time, "expense").then((data) => {
+                setPieData(data);
+                var total = 0;
+                for (let i = 0; i < data.length; i++) {
+                    total += data[i].value;
+                }
+                setPiePressValue({name: "Total", percentage: 100, value: total, color: "#000000"});
+            });
+        });
+    }
 
     useEffect(() => {
         
-        if (!isFocused) {
-            return;
-        }
+        updateChart("Monthly");
 
-        
-        getDBConnection().then((db) => {
-            getTransactionsFromLastMonth(db).then((transactions) => {
-                setTransactionsList(transactions);
-            });
-        });
+    }, []);
 
-        getDBConnection().then((db) => {
-            getAllCategories(db).then((categories) => {
-                setCategories(categories);
-            });
-        });
-
-        const pieData: PieData[] = [];
-        categories.forEach((category) => {
-            var total = 0;
-            transactionsList.forEach((transaction) => {
-                if (transaction.type == "expense") {
-                    if (transaction.category == category.id) {
-                        total += transaction.amount;
-                    }
-                }
-            });
-            pieData.push({
-                value: total,
-                color: category.color,
-            });
-        });
-        setPieData(pieData);
-    }, [isFocused]);
-
-
-    const time = ["Monthly", "Yearly"]
 
     return (
         <SafeAreaView>
             <View style={styles.datePicker}>
                 <SelectDropdown
-                    data={time}
-                    defaultButtonText="Daily"
+                    data={timeOptions}
+                    defaultButtonText="Monthly"
                     buttonTextStyle={styles.selectDropDownText}
                     buttonStyle={styles.selectDropDownContainer}
                     rowStyle={styles.rowContainer}
                     dropdownIconPosition="right"
                     onSelect={(selectedItem, index) => {
-                        console.log(selectedItem, index)
+                        updateChart(selectedItem);
                     }}
-                    buttonTextAfterSelection={(selectedItem, index) => {
-                        // text represented after item is selected
-                        // if data array is an array of objects then return selectedItem.property to render after item is selected
-                        return selectedItem
+                    buttonTextAfterSelection={(selectedItem) => {
+                        return selectedItem;
                     }}
-                    rowTextForSelection={(item, index) => {
-                        // text represented for each item in dropdown
-                        // if data array is an array of objects then return item.property to represent item in dropdown
-                        return item
+                    rowTextForSelection={(item) => {
+                        return item;
                     }}
                 />
             </View>
 
             <View style={styles.chartContainer}>
-                <PieChart
-                    data={pieData}
-                    showText
-                    textColor="white"
-                    strokeColor="white"
-                    strokeWidth={4}
-                    radius={150}
-                    textSize={26}
-                    focusOnPress
-                    onPress={() => {
-
-                    }}
-                    textBackgroundRadius={26}
-                    centerLabelComponent={() => {
-
-                        {/* thay 549 thành total */ }
-
-                        return <Text style={{ fontSize: 26 }}>$ 549</Text>;
-                    }}
-                />
+                    <PieChart
+                        data={pieData}
+                        showText
+                        textColor="white"
+                        strokeColor="white"
+                        strokeWidth={4}
+                        radius={150}
+                        textSize={26}
+                        focusOnPress
+                        onPress={(value: any) => {
+                            setPiePressValue(value);
+                        }}
+                        showValuesAsLabels={false}
+                        textBackgroundRadius={26}
+                        centerLabelComponent={() => {
+                            return (
+                                <View style={{ alignItems: "center" }}>
+                                    <Text style={{ color: "black", fontSize: 20, textAlign: "center" }}>
+                                        {piePressValue.name}{"\n"}
+                                        $ {piePressValue.value}
+                                    </Text>
+                                </View>
+                            )
+                        }}
+                    />
             </View>
 
             <ScrollView>
-                {pieData.map((item, index) => {
-                     return <Category key={index} name={item.value} cost={item.value} percentage={item.value} color={item.color}/>
+                {pieData.map((data, index) => {
+                    return (
+                        <Category
+                            key={index}
+                            cost={data.value}
+                            color={data.color}
+                            name={data.name}
+                            percentage={data.percentage * 100}
+                        />
+                    );
                 })}
                 <View style={{ width: '100%', height: 180 }}></View>
             </ScrollView>
+
         </SafeAreaView>
     )
 }

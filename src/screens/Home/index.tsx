@@ -1,7 +1,8 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { getDBConnection, dropDatabaseAndRecreate, clearDatabase, createTable, importTestData } from '../../services/db-services';
 
 
 import Daily from './Daily';
@@ -13,6 +14,26 @@ const TopTabNavigatior = createMaterialTopTabNavigator();
 
 const Home = () => {
   const insets = useSafeAreaInsets()
+
+  useEffect(() => {
+    getDBConnection().then((db) => {
+      /*dropDatabaseAndRecreate(db).then(() => {
+        console.log("Database dropped and recreated");
+      });*/
+
+      /*clearDatabase(db).then(() => {
+        console.log("Database cleared");
+      });*/
+      
+      createTable(db).then(() => {
+         //console.log("Table created");
+      });
+
+      /*importTestData(db).then(() => {
+          console.log("Test data imported");
+      });*/
+    });
+  }, []);
   return (
     <TopTabNavigatior.Navigator style={{marginTop: insets.top}}>
       <TopTabNavigatior.Screen

@@ -11,31 +11,34 @@ import {StyleSheet} from 'react-native';
 import AccountGroup from './components/AccountGroup';
 import {ThreeDotsIcon} from 'native-base';
 import {NativeBaseProvider} from 'native-base';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {NavigationProp, useIsFocused, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import { RootStackParams } from '../../navigation';
 import { Account as AccountModel } from '../../models/account';
-import { getDBConnection, getAllAccounts } from '../../services/db-services';
+import { getDBConnection, getExistedAccountType } from '../../services/db-services';
 
 const Account: React.FC = () => {
   const [showView, setShowView] = useState(false);
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
     // useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
-  const [AccountList, setAccountList] = useState<AccountModel[]>([]);
+  const [typeList, setTypeList] = useState<string[]>([]);
 
   const handlePress = () => {
     navigation.navigate('AddAccount');
   };
 
+  //refresh when back to this screen
+  const isFocused = useIsFocused();
+
   useEffect(() => {
     getDBConnection().then((db) => {
-      getAllAccounts(db).then((accounts) => {
-        setAccountList(accounts);
+      getExistedAccountType(db).then((data) => {
+        setTypeList(data);
       });
     });
-  }, []);
-
+  }, [isFocused]);
+    
   return (
     <NativeBaseProvider>
       <SafeAreaView style={styles.mainContainer}>
@@ -57,11 +60,15 @@ const Account: React.FC = () => {
           <View style={styles.secondTopBar}>
             <View style={styles.totalCalc}>
               <Text style={styles.totalElement}>Assets</Text>
-              <Text style={{color: '#7DCEA0', alignSelf: 'center', fontSize: 18, fontWeight:'bold'}}>$ 35.00</Text>
+              <Text style={{color: '#7DCEA0', alignSelf: 'center', fontSize: 18, fontWeight:'bold'}}>
+                $ 35.00
+              </Text>
             </View>
             <View style={styles.totalCalc}>
               <Text style={styles.totalElement}>Liabilities</Text>
-              <Text style={{color: '#F1948A', alignSelf: 'center', fontSize: 18, fontWeight:'bold'}}>$ 35.00</Text>
+              <Text style={{color: '#F1948A', alignSelf: 'center', fontSize: 18, fontWeight:'bold'}}>
+                $ 35.00
+              </Text>
             </View>
             <View style={styles.totalCalc}>
               <Text style={styles.totalElement}>Total</Text>
@@ -73,8 +80,8 @@ const Account: React.FC = () => {
         </View>
         {/* List account */}
         <ScrollView>
-          {AccountList.map((account) => (
-            <AccountGroup accountType={account.type}/>
+          {typeList.map((type) => (
+            <AccountGroup key={type} type={type} />
           ))}
         </ScrollView>
 

@@ -7,7 +7,7 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Button from './components/AccountGroupButton';
 import { Account } from '../../../models/account';
 import { getDBConnection, insertAccount } from '../../../services/db-services';
@@ -16,6 +16,8 @@ const AddAccount = () => {
   const [groupIsClicked, setGroupIsClicked] = useState(false);
   const [groupValue, setGroupValue] = useState<any | null>(null);
   const [Account, setAccount] = useState<Account>({} as Account);
+
+  const groupList = ["Cash", "Bank", "Credit Card", "Savings", "Loan", "Insurance", "E-Wallet", "Others"];
 
   const saveAccount = () => {
     console.log(Account);
@@ -27,7 +29,7 @@ const AddAccount = () => {
   };
 
   return (
-    <View style={{backgroundColor: 'white'}}>
+    <View style={{ backgroundColor: 'white' }}>
       {/* Group */}
       <View style={styles.input}>
         <Text style={styles.inputLabel}>Group</Text>
@@ -37,10 +39,10 @@ const AddAccount = () => {
           showSoftInputOnFocus={false}
           value={groupValue}
           onChangeText={(groupValue) => {
-            setAccount({...Account, type: groupValue});
+            setAccount({ ...Account, type: groupValue });
           }}
           caretHidden={true}
-          //  Đưa giá trị vô đây
+        //  Đưa giá trị vô đây
         />
       </View>
       {/* Name account */}
@@ -48,12 +50,12 @@ const AddAccount = () => {
         <Text style={styles.inputLabel}>Name</Text>
         <TextInput
           style={styles.infoText}
-          onPressIn={() => {}}
+          onPressIn={() => { }}
           showSoftInputOnFocus={false}
           onChangeText={(name) => {
-            setAccount({...Account, name: name});
+            setAccount({ ...Account, name: name });
           }}
-          //  Đưa giá trị vô đây
+        //  Đưa giá trị vô đây
         />
       </View>
       {/* Amount account */}
@@ -61,12 +63,12 @@ const AddAccount = () => {
         <Text style={styles.inputLabel}>Amount</Text>
         <TextInput
           style={styles.infoText}
-          onPressIn={() => {}}
+          onPressIn={() => { }}
           onChangeText={(amount) => {
-            setAccount({...Account, balance: amount});
+            setAccount({ ...Account, balance: amount });
           }}
           keyboardType="number-pad"
-          //  Đưa giá trị vô đây
+        //  Đưa giá trị vô đây
         />
       </View>
       {/* Description account */}
@@ -74,10 +76,10 @@ const AddAccount = () => {
         <Text style={styles.inputLabel}>Description</Text>
         <TextInput
           style={styles.infoText}
-          onPressIn={() => {}}
+          onPressIn={() => { }}
           showSoftInputOnFocus={false}
           onChangeText={(description) => {
-            setAccount({...Account, note: description});
+            setAccount({ ...Account, note: description });
           }}
         />
       </View>
@@ -101,16 +103,14 @@ const AddAccount = () => {
               </View>
               {/* Pressable cho giá trị của group */}
               <Pressable style={[styles.button]}>
-                <Button
-                  accountGroup="Cash"
-                  onSelect={text => setGroupValue(text)}
-                  onClose={() => setGroupIsClicked(!groupIsClicked)}
-                />
-                <Button
-                  accountGroup="Account"
-                  onSelect={text => setGroupValue(text)}
-                  onClose={() => setGroupIsClicked(!groupIsClicked)}
-                />
+                {groupList.map((item, index) => (
+                  <Button
+                    key={index}
+                    accountGroup={item}
+                    onSelect={text => {setGroupValue(text); setAccount({...Account, type: text})}}
+                    onClose={() => setGroupIsClicked(!groupIsClicked)}
+                  />
+                ))}
               </Pressable>
             </View>
           </Pressable>
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 
-  saveButton: {
+  /*saveButton: {
     backgroundColor: '#7DCEA0',
     borderRadius: 4,
     width: "100%",
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     padding: "1%",
     paddingTop: "2.5%",
     alignItems: 'center',
-  },
+  },*/
 
   blurLayout: {
     // backgroundColor: 'rgba(0,0,0, 0.3)',

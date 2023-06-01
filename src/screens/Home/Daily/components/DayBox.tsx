@@ -3,13 +3,17 @@ import React, { useEffect } from 'react';
 import DayInfo from './DayInfo';
 import { Transaction } from '../../../../models/transaction';
 import { getDBConnection, getTransactionsByDate } from '../../../../services/db-services';
+import { useIsFocused } from '@react-navigation/native';
 
 const DayBox = (props: {date: Date}) => {
   const [transactionsList, setTransactionsList] = React.useState<Transaction[]>([]);
   const [income, setIncome] = React.useState<number>(0);
   const [expense, setExpense] = React.useState<number>(0);
 
+  const isFocused = useIsFocused();
+
   useEffect(() => {
+    if (!isFocused) return;
     getDBConnection().then((db) => {
       getTransactionsByDate(db, props.date.getDate(), props.date.getMonth(), props.date.getFullYear()).then((transactions) => {
         setTransactionsList(transactions);
@@ -26,7 +30,7 @@ const DayBox = (props: {date: Date}) => {
         setExpense(expense);
       });
     });
-  }, []);
+  }, [isFocused]);
 
   const getDayOfWeek = (date: Date) => {
     var dayOfWeek = new Date(date).getDay();

@@ -34,7 +34,8 @@ import {
   insertTransaction,
   dropDatabaseAndRecreate,
   getAllCategories,
-  getAllAccounts
+  getAllAccounts,
+  getCategoryByName
 } from '../../services/db-services';
 
 import Accounts from './components/Accounts';
@@ -83,10 +84,13 @@ const AddTransaction = () => {
 
   const saveTransaction = (transaction: Transaction) => {
     getDBConnection().then(db => {
-      createTable(db).then(() => {
-        insertTransaction(db, transaction);
+      getCategoryByName(db, transaction.category).then(category => {
+        transaction.category = category.id;
+        insertTransaction(db, transaction).then(() => {
+        });
       });
     });
+
     console.log(transaction);
   };
 
@@ -94,13 +98,13 @@ const AddTransaction = () => {
 
     setBudgetType('income')
 
+    setTransaction({ ...Transaction, type: 'income' })
+
     if (!isFocused)
       return;
 
-    setTransaction({ ...Transaction, type: budgetType })
-
     setDate(new Date());
-    
+
     var tempDate = new Date();
     setTransaction({
       ...Transaction,
@@ -300,17 +304,6 @@ const AddTransaction = () => {
 
             {/* Description + Save button + Continue button */}
             <View style={styles.bottomContainer}>
-              <TextInput
-                style={{
-                  borderBottomWidth: 0.4,
-                  borderBottomColor: 'gray',
-                  marginLeft: 12,
-                  marginRight: 12,
-                }}
-                placeholder="Description"
-                onChangeText={text => { }}
-
-              />
 
               <View style={{ flexDirection: 'row', padding: 16, marginTop: 16 }}>
                 <TouchableOpacity
@@ -375,13 +368,13 @@ const AddTransaction = () => {
                 <View style={[styles.button]}>
                   {CategoryList.map((item, index) => (
                     <Categories
-                    key={index}
-                    image_uri={item.image}
-                    categoryName={item.name}
-                    onSelect={text => setTransaction({ ...Transaction, category: text })}
-                    onClose={() => setIsCategoriesClicked(false)}
-                  />))
-                }
+                      key={index}
+                      image_uri={item.image}
+                      categoryName={item.name}
+                      onSelect={text => setTransaction({ ...Transaction, category: text })}
+                      onClose={() => setIsCategoriesClicked(false)}
+                    />))
+                  }
                 </View>
               </View>
             </View>
@@ -424,9 +417,10 @@ const AddTransaction = () => {
                 <View style={[styles.buttonAccount]}>
                   {AccountList.map((item, index) => (
                     <Accounts
-                    accountName={item.name}
-                    onSelect={text => setTransaction({ ...Transaction, account: text })}
-                    onClose={() => setIsAccountsClicked(false)}
+                      key={index}
+                      accountName={item.name}
+                      onSelect={text => setTransaction({ ...Transaction, account: text })}
+                      onClose={() => setIsAccountsClicked(false)}
                     />))
                   }
                 </View>
