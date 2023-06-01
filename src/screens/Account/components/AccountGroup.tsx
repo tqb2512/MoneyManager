@@ -10,19 +10,19 @@ const AccountGroup:React.FC<Props> = ({ accountType }) => {
     <View style={styles.mainContainer}>
 
       <View style={styles.accountLabel}>
-         <Text style={{fontWeight: '600', fontSize: 16}}>{accountType}</Text>
-         <Text>$35</Text>
+         <Text style={styles.totalElement}>{accountType}</Text>
+         <Text style={styles.moneyText}>$ 35</Text>
       </View>
       
     {/* list accounts */}
 
         <TouchableOpacity style={styles.accountButton}>
-            <Text>AccountName</Text>
-            <Text>$35</Text>
+            <Text style={styles.accountText}>AccountName</Text>
+            <Text style={styles.moneyText}>$ 35</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.accountButton}>
-            <Text>AccountName</Text>
-            <Text>$69</Text>
+            <Text style={styles.accountText}>AccountName</Text>
+            <Text style={styles.moneyText}>$ 69</Text>
         </TouchableOpacity>
 
       </View>
@@ -31,7 +31,10 @@ const AccountGroup:React.FC<Props> = ({ accountType }) => {
 
 export default AccountGroup
 
+/* #7DCEA0 - green, #F1948A - red */
+
 const styles = StyleSheet.create({
+
     mainContainer: {
         marginTop: 16
     },
@@ -40,7 +43,27 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 4,
-        margin: 8,
+        paddingHorizontal: 16,
+    },
+
+    moneyText:{
+        color: 'black', 
+        alignSelf: 'center', 
+        fontSize: 18, 
+        fontWeight:'bold'
+    },
+
+    totalElement: {
+        alignSelf: 'center',
+        fontSize: 16,
+        fontWeight: "600"
+    },
+
+    accountText:{
+        alignSelf: 'center',
+        fontSize: 16,
+        fontWeight: "400",
+        color: 'black'
     },
 
     accountButton: {

@@ -42,7 +42,7 @@ const DayInfo: React.FC<Transaction> = ({
           />
           <Text style={{ marginStart: 8 }}>{Category.name}</Text>
         </View>
-        <View style={{flex: 1, marginStart: 20, justifyContent: 'center'}}>
+        <View style={{flex: 1, marginStart: "5%", justifyContent: 'center'}}>
           <Text style={{fontWeight: '700'}}>{note}</Text>
           <Text>{account}</Text>
         </View>
@@ -52,7 +52,7 @@ const DayInfo: React.FC<Transaction> = ({
             marginRight: 21,
             fontSize: 18,
             fontWeight:'bold',
-            color: type === 'income' ? '#9FE2BF' : '#FF7F50',
+            color: type === 'income' ? '#7DCEA0' : '#F1948A',
           }}>
           $ {amount}
         </Text>

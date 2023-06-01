@@ -28,8 +28,10 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
   },
-  textStyle: {
-    color: 'black',
-    // textAlign: 'center',
+  textStyle:{
+    fontSize: 15,
+    color: "grey",
+    fontWeight: "500",
+    textAlign: "center"
   },
 });
