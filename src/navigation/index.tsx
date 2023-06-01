@@ -11,9 +11,6 @@ import AddAccount from '../screens/Account/AddAccount';
 import {NavigationContainer} from '@react-navigation/native';
 import AddTransaction from '../screens/AddTransaction';
 import DeleteAccount from '../screens/Account/DeleteAccount';
-import IncomeCategoryScreen from '../screens/ChangeCategory/IncomeCategoryScreen';
-import CategoryEditView from '../screens/ChangeCategory/components/CategoryEditView';
-import CategoryButton from '../screens/ChangeCategory/components/CategoryButton';
 import AccountSetting from '../screens/Account/AccountSetting';
 import AccountEditView from '../screens/Account/AccountSetting/components/AccountEditView';
 import Daily from '../screens/Home/Daily';
@@ -82,8 +79,6 @@ function StackEditNavigation () {
     <NavigationContainer independent={true}>
       <StackEdit.Navigator>
         <StackEdit.Screen name="Add" component={AddTransaction}/>
-        <StackEdit.Screen name="IncomeCategory" component={IncomeCategoryScreen} />
-        <StackEdit.Screen name="EditIncomeCategory" component={CategoryEditView} />
         <StackEdit.Screen name="AccountSetting" component={AccountSetting} options={{headerShown: false}} />
         <StackEdit.Screen name="AddAccount" component={AddAccount} />
         <StackEdit.Screen name="EditAccountView" component={AccountEditView} />
@@ -97,7 +92,7 @@ export function StackTransEditNavigation () {
     <NavigationContainer independent={true}>
       <StackEdit.Navigator>
         <StackEdit.Screen name="Daily" component={Daily} />
-        <StackEdit.Screen name="EditTransaction" component={EditTransaction} options={{headerShown: false}} />
+        <StackEdit.Screen name="EditTransaction" component={EditTransaction} options={{headerShown: true}} />
         <StackEdit.Screen name="AccountSetting" component={AccountSetting} options={{headerShown: false}} />
       </StackEdit.Navigator>
     </NavigationContainer>

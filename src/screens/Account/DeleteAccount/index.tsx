@@ -53,7 +53,9 @@ const DeleteAccount = () => {
             <AccountContainer 
               key={index}
               onPress={() => {navigation.navigate('EditAccountView', {accountGroup: item.type, accountAmount: item.balance, accountName: item.name, accountDescription: item.note})}} 
-              accountName={item.name} />
+              accountName={item.name}
+              //pass ID account vao de xoa
+              accountId='' />
           </Pressable>
         ) )}
       </ScrollView>

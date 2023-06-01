@@ -241,7 +241,7 @@ const EditTransaction = () => {
           </View>
         </View>
 
-        {/* Description + Save button + Continue button */}
+        {/* (EDIT) Save button + Delete button */}
         <View style={styles.bottomContainer}>
 
           <View style={{ flexDirection: 'row', padding: 16, marginTop: 16 }}>
@@ -255,7 +255,7 @@ const EditTransaction = () => {
               onPress={() => {}}>
               <Text style={{fontWeight: '500'}}>Save</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.continueButton}>
+            <TouchableOpacity style={styles.deleteButton}>
               <Text style={{fontWeight: '500'}}>Delete</Text>
             </TouchableOpacity>
           </View>
@@ -419,10 +419,11 @@ const styles = StyleSheet.create({
     padding: 4,
     paddingLeft: 30,
     paddingRight: 30,
+    paddingBottom: 6,
     marginRight: 10,
     marginLeft: 10,
     textAlign: 'center',
-    verticalAlign: 'middle',
+    alignItems: 'center'
   },
   typeText: {
     fontWeight: 'bold',
@@ -456,7 +457,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  continueButton: {
+  deleteButton: {
     borderWidth: 1,
     borderRadius: 4,
     padding: 10,
@@ -464,6 +465,7 @@ const styles = StyleSheet.create({
     paddingRight: 40,
     marginRight: 10,
     alignItems: 'center',
+    textAlign: 'center'
   },
 
   categoryAction: {
