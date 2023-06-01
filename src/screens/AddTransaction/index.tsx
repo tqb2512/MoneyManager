@@ -34,7 +34,9 @@ import {
   insertTransaction,
   dropDatabaseAndRecreate,
   getAllCategories,
-  getAllAccounts
+  getAllAccounts,
+  getCategoryById,
+  getCategoryIdByName
 } from '../../services/db-services';
 
 import Accounts from './components/Accounts';
@@ -82,6 +84,12 @@ const AddTransaction = () => {
   };
 
   const saveTransaction = (transaction: Transaction) => {
+
+    getDBConnection().then(db => {
+      getCategoryIdByName(db, Transaction.category).then ((_category) =>
+        setTransaction({...Transaction, category: _category}))
+    })
+    
     getDBConnection().then(db => {
       createTable(db).then(() => {
         insertTransaction(db, transaction);
@@ -402,7 +410,7 @@ const AddTransaction = () => {
                     key={index}
                     image_uri={item.image}
                     categoryName={item.name}
-                    onSelect={text => setTransaction({ ...Transaction, category: text })}
+                    onSelect={(text) => setTransaction({ ...Transaction, category: text })}
                     onClose={() => setIsCategoriesClicked(false)}
                   />))
                 }

@@ -16,7 +16,7 @@ const DayInfo: React.FC<Transaction> = ({
   month,
   year
 }) => {
-  const [Category, setCategory] = React.useState<Category>();
+  const [Category, setCategory] = React.useState<Category>({} as Category);
 
   React.useEffect(() => {
     getDBConnection().then((db) => {
@@ -31,7 +31,7 @@ const DayInfo: React.FC<Transaction> = ({
       <View style={{flexDirection: 'row', backgroundColor: 'white'}}>
         <View style={{width: 100,flexDirection: 'row', alignItems: 'center', padding: 8, marginLeft: 13}}>
           <Image
-            source={{ uri: category.image }}
+            source={{ uri: Category.image }}
             style={{
               borderRadius: 9999,
               width: 32,
@@ -40,7 +40,7 @@ const DayInfo: React.FC<Transaction> = ({
               borderWidth: 1,
             }}
           />
-          <Text style={{ marginStart: 8 }}>{category.name}</Text>
+          <Text style={{ marginStart: 8 }}>{Category.name}</Text>
         </View>
         <View style={{flex: 1, marginStart: 20, justifyContent: 'center'}}>
           <Text style={{fontWeight: '700'}}>{note}</Text>
