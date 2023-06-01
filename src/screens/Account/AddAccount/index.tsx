@@ -27,16 +27,12 @@ const AddAccount = () => {
   };
 
   return (
-    <View style={{}}>
+    <View style={{backgroundColor: 'white'}}>
       {/* Group */}
       <View style={styles.input}>
         <Text style={styles.inputLabel}>Group</Text>
         <TextInput
-          style={{
-            flex: 1,
-            borderBottomWidth: 0.4,
-            borderBottomColor: 'gray',
-          }}
+          style={styles.infoText}
           onPressIn={() => setGroupIsClicked(!groupIsClicked)}
           showSoftInputOnFocus={false}
           value={groupValue}
@@ -51,11 +47,7 @@ const AddAccount = () => {
       <View style={styles.input}>
         <Text style={styles.inputLabel}>Name</Text>
         <TextInput
-          style={{
-            flex: 1,
-            borderBottomWidth: 0.4,
-            borderBottomColor: 'gray',
-          }}
+          style={styles.infoText}
           onPressIn={() => {}}
           showSoftInputOnFocus={false}
           onChangeText={(name) => {
@@ -68,11 +60,7 @@ const AddAccount = () => {
       <View style={styles.input}>
         <Text style={styles.inputLabel}>Amount</Text>
         <TextInput
-          style={{
-            flex: 1,
-            borderBottomWidth: 0.4,
-            borderBottomColor: 'gray',
-          }}
+          style={styles.infoText}
           onPressIn={() => {}}
           onChangeText={(amount) => {
             setAccount({...Account, balance: amount});
@@ -85,11 +73,7 @@ const AddAccount = () => {
       <View style={styles.input}>
         <Text style={styles.inputLabel}>Description</Text>
         <TextInput
-          style={{
-            flex: 1,
-            borderBottomWidth: 0.4,
-            borderBottomColor: 'gray',
-          }}
+          style={styles.infoText}
           onPressIn={() => {}}
           showSoftInputOnFocus={false}
           onChangeText={(description) => {
@@ -135,12 +119,9 @@ const AddAccount = () => {
 
       {/* Nút save account */}
       <TouchableOpacity
-        style={[
-          styles.saveButton,
-          {backgroundColor:'#46CDCF'},
-        ]}
+        style={styles.saveButton}
         onPress={() => saveAccount()}>
-        <Text style={{fontWeight: '600'}}>Save</Text>
+        <Text style={styles.saveButtonText}>Save</Text>
       </TouchableOpacity>
     </View>
   );
@@ -152,13 +133,33 @@ const styles = StyleSheet.create({
   input: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 16,
-    paddingRight: 16,
-    margin: 2,
+    paddingHorizontal: "5%",
+    marginVertical: "1%",
+    marginRight: "0%"
   },
   inputLabel: {
-    marginRight: 16,
-    width: '25%',
+    fontSize: 16,
+    width: "25%",
+    fontWeight: "500",
+    color: 'grey',
+    marginRight: "0%"
+  },
+
+  saveButtonText: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: 'white',
+  },
+
+  saveButton: {
+    backgroundColor: '#7DCEA0',
+    borderRadius: 4,
+    width: "100%",
+    height: "50%",
+    marginRight: "5%",
+    padding: "1%",
+    paddingTop: "2.5%",
+    alignItems: 'center',
   },
 
   blurLayout: {
@@ -202,9 +203,14 @@ const styles = StyleSheet.create({
     // textAlign: 'center',
   },
 
-  textStyle: {
+  infoText: {
+    fontSize: 16,
+    width: "20%",
+    fontWeight: "500",
     color: 'black',
-    // textAlign: 'center',
+    borderBottomWidth: 0.4,
+    borderBottomColor: 'gray',
+    flex: 1
   },
 
   saveButton: {
