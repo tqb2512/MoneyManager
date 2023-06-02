@@ -14,15 +14,15 @@ import { getDBConnection,
     getCategoryById, } from '../../../services/db-services';
 import { Category } from '../../../models/category';
 import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { RootStackParams2, RootStackParams3 } from '../../../navigation';
+import { RootStackParams,  } from '../../../navigation';
 import { Transaction } from '../../../models/transaction';
 import { Account } from '../../../models/account';
 
 const EditTransaction = () => {
 
-    const navigation = useNavigation<NavigationProp<RootStackParams2>>();
+    const navigation = useNavigation<NavigationProp<RootStackParams>>();
     
-    const route = useRoute<RouteProp<RootStackParams3, 'EditTransaction'>>();
+    const route = useRoute<RouteProp<RootStackParams, 'EditTransaction'>>();
 
     const [CategoryList, setCategoryList] = useState<Category[]>([]);
     //const [Transaction, setTransaction] = useState<Transaction>({} as Transaction);

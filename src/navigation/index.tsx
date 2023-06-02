@@ -119,7 +119,12 @@ function AppNavigation() {
         <Stack.Screen name="Account" component={Account} options={{headerShown: false}} />
         <Stack.Screen name="AddAccount" component={AddAccount} />
         <Stack.Screen name="DeleteAccount" component={DeleteAccount} options={{headerShown: false}} />
-        <StackEdit.Screen name="EditAccountView" component={AccountEditView} />
+        <Stack.Screen name="EditAccountView" component={AccountEditView} />
+        <Stack.Screen name="Add" component={AddTransaction}/>
+        <Stack.Screen name="AccountSetting" component={AccountSetting} options={{headerShown: false}} />
+        <Stack.Screen name="Daily" component={Daily} />
+        <Stack.Screen name="EditTransaction" component={EditTransaction} options={{headerShown: true}} />
+        <Stack.Screen name="Calendar" component={CalendarView} />
       </Stack.Navigator>
     </NavigationContainer>
   );
