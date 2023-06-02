@@ -135,18 +135,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: "5%",
     marginVertical: "1%",
-    marginRight: "0%"
   },
   inputLabel: {
-    fontSize: 16,
-    width: "25%",
+    fontSize: 18,
+    width: "30%",
     fontWeight: "500",
     color: 'grey',
     marginRight: "0%"
   },
 
   saveButtonText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "500",
     color: 'white',
   },
@@ -204,13 +203,14 @@ const styles = StyleSheet.create({
   },
 
   infoText: {
-    fontSize: 16,
+    fontSize: 18,
     width: "20%",
     fontWeight: "500",
     color: 'black',
     borderBottomWidth: 0.4,
     borderBottomColor: 'gray',
-    flex: 1
+    flex: 1,
+    marginLeft: "5%"
   },
 
   saveButton: {

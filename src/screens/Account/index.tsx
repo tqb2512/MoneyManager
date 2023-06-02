@@ -46,7 +46,7 @@ const Account: React.FC = () => {
         <View style={{position: 'relative'}}>
           <View style={styles.firstTopBar}>
             <View style={styles.titleHeader}>
-              <Text style={{fontSize: 20, fontWeight:'bold', color:'black', textAlign:'center'}}>Accounts</Text>
+              <Text style={{fontSize: 20, fontWeight:'bold', color:'grey', textAlign:'center'}}>Accounts</Text>
             </View>
             <View style={styles.threeDots}>
               <TouchableOpacity
@@ -60,19 +60,19 @@ const Account: React.FC = () => {
           <View style={styles.secondTopBar}>
             <View style={styles.totalCalc}>
               <Text style={styles.totalElement}>Assets</Text>
-              <Text style={{color: '#7DCEA0', alignSelf: 'center', fontSize: 18, fontWeight:'bold'}}>
+              <Text style={{color: '#7DCEA0', alignSelf: 'center', fontSize: 20, fontWeight:'bold'}}>
                 $ 35.00
               </Text>
             </View>
             <View style={styles.totalCalc}>
               <Text style={styles.totalElement}>Liabilities</Text>
-              <Text style={{color: '#F1948A', alignSelf: 'center', fontSize: 18, fontWeight:'bold'}}>
+              <Text style={{color: '#F1948A', alignSelf: 'center', fontSize: 20, fontWeight:'bold'}}>
                 $ 35.00
               </Text>
             </View>
             <View style={styles.totalCalc}>
               <Text style={styles.totalElement}>Total</Text>
-              <Text style={{color: 'black', alignSelf: 'center', fontSize: 18, fontWeight:'bold'}}>
+              <Text style={{color: 'grey', alignSelf: 'center', fontSize: 20, fontWeight:'bold'}}>
                 $ 35.00
               </Text>
             </View>
@@ -149,13 +149,13 @@ const styles = StyleSheet.create({
 
   totalElement: {
     alignSelf: 'center',
-    fontSize: 16,
-    fontWeight: "600"
+    fontSize: 18,
+    fontWeight: "600",
   },
 
   threeDotsText: {
     alignSelf: 'center',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "600"
   },
 

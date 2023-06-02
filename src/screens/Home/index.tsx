@@ -45,7 +45,7 @@ const Home = () => {
             tabBarOptions={{
               activeTintColor: '#000000',
               inactiveTintColor: '#000000',
-              labelStyle: { fontSize: 12, fontWeight: 'bold' },
+              labelStyle: { fontSize: 16, fontWeight: 'bold', color: 'grey' },
               indicatorStyle: { backgroundColor: '#000000' },
               style: { backgroundColor: '#fff' },
             }}

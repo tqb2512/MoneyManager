@@ -73,21 +73,22 @@ const styles = StyleSheet.create({
     moneyText: {
         color: 'black',
         alignSelf: 'center',
-        fontSize: 18,
-        fontWeight: 'bold'
+        fontSize: 20,
+        fontWeight: 'bold',
     },
 
     totalElement: {
         alignSelf: 'center',
         fontSize: 18,
-        fontWeight: "600"
+        fontWeight: "600",
+        color: 'black'
     },
 
     accountText: {
         alignSelf: 'center',
-        fontSize: 16,
-        fontWeight: "400",
-        color: 'black'
+        fontSize: 18,
+        fontWeight: "500",
+        color: 'grey',
     },
 
     accountButton: {

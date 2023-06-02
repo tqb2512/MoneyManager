@@ -15,7 +15,7 @@ export default function Category({percentage, name, cost, color}: Props) {
         <TouchableOpacity style={styles.container}>
             <View style={styles.percentageNameContainer}>
                 <Text style={{
-                    fontSize: 16, 
+                    fontSize: 18, 
                     paddingHorizontal: 10, 
                     borderRadius: 3,
                     color: 'white',
@@ -48,19 +48,21 @@ const styles = StyleSheet.create({
         flexDirection:'row',
     },
     percentageText:{
-        fontSize: 16,
+        fontSize: 18,
         paddingHorizontal: 10,
         borderWidth: 0.5,
         borderRadius: 3
     },
     costText:{
-        fontSize: 16,
-        color: 'black',
+        fontSize: 18,
+        color: 'grey',
+        fontWeight: '500',
         paddingRight: 15
     },
     nameText:{
-        fontSize: 16,
-        color: 'black',
+        fontSize: 18,
+        color: 'grey',
+        fontWeight: '500',
         paddingLeft: 15
     }
 })

@@ -23,7 +23,7 @@ const Categories: React.FC<Props> = ({categoryName, image_uri, onSelect, onClose
           onSelect(categoryName);
           onClose(false);
         }}
-        style={{marginLeft: 16, marginRight: 16, marginTop: 16, width: 68}}>
+        style={{marginLeft: 14, marginRight: 14, marginTop: 14, width: 68}}>
         <Image
           style={{
             height: 32,

@@ -15,7 +15,15 @@ export default function Stats() {
 
     return (
         <NativeBaseProvider>
-            <TopTabNavigator.Navigator style={{ marginTop: insets.top }}>
+            <TopTabNavigator.Navigator 
+            style={{ marginTop: insets.top }}
+            tabBarOptions={{
+                activeTintColor: '#000000',
+                inactiveTintColor: '#000000',
+                labelStyle: { fontSize: 16, fontWeight: 'bold', color: 'grey' },
+                indicatorStyle: { backgroundColor: '#000000' },
+                style: { backgroundColor: '#fff' },
+              }}>
                 <TopTabNavigator.Screen name="Expense" component={Expense} options={{ tabBarLabel: 'Expense' }} />
                 <TopTabNavigator.Screen name="Income" component={Income} options={{ tabBarLabel: 'Income' }} />
             </TopTabNavigator.Navigator>

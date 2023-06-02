@@ -44,7 +44,7 @@ const DayInfo: React.FC<Transaction> = ({
         </View>
         <View style={{flex: 1, marginStart: "5%", justifyContent: 'center'}}>
           <Text style={{fontSize: 16, fontWeight: 'bold'}}>{note}</Text>
-          <Text style={{fontSize: 12, color: '#A6ACAF'}}>{account}</Text>
+          <Text style={{fontSize: 14, color: '#A6ACAF'}}>{account}</Text>
         </View>
         <Text
           style={{
