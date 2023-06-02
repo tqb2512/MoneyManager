@@ -1,4 +1,4 @@
-import {DatePickerIOSProps, StyleSheet, Text, View, GestureResponderEvent} from 'react-native';
+import {DatePickerIOSProps, StyleSheet, Text, View, GestureResponderEvent, ScrollView} from 'react-native';
 import React, { useEffect } from 'react';
 import DayInfo from './DayInfo';
 import { Transaction } from '../../../../models/transaction';
@@ -68,9 +68,11 @@ import { getDBConnection, getTransactionsByDate } from '../../../../services/db-
 
       </View>
       {/* Danh sách khoản thu chi */}
-      {transactionsList.map((transaction, index) => {
-        return <DayInfo key={index} {...transaction} />;
-      })}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {transactionsList.map((transaction, index) => {
+          return <DayInfo key={index} {...transaction} />;
+        })}
+      </ScrollView>
     </View>
   );
 };
@@ -80,6 +82,7 @@ export default DayBox;
 const styles = StyleSheet.create({
   mainContainer: {
     marginTop : 12,
+    paddingBottom: 16,
   },
 
   header: {

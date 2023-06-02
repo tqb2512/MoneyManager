@@ -281,6 +281,7 @@ const AddTransaction = () => {
                   }}
                   showSoftInputOnFocus={false}
                   caretHidden={true}
+
                 />
               </View>
 

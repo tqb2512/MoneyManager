@@ -95,7 +95,7 @@ const EditTransaction = () => {
                 </TouchableOpacity>
             </View>
 
-            <TouchableOpacity onPress={() => navigation.goBack()} style={{ alignSelf: 'center', paddingTop: 2, marginEnd: 6 }}>
+            <TouchableOpacity onPress={() => navigation.canGoBack() ? navigation.goBack() : null} style={{ alignSelf: 'center', paddingTop: 2, marginEnd: 6 }}>
                 <XMarkIcon size={24} color='black' />
             </TouchableOpacity>
           </View>

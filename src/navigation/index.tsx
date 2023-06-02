@@ -15,9 +15,8 @@ import AccountSetting from '../screens/Account/AccountSetting';
 import AccountEditView from '../screens/Account/AccountSetting/components/AccountEditView';
 import Daily from '../screens/Home/Daily';
 import EditTransaction from '../screens/AddTransaction/components/EditTransaction';
+import CalendarView from '../screens/Home/Calendar';
 const BottomBar = createBottomTabNavigator();
-const TopTabNavigatior = createMaterialTopTabNavigator();
-
 
 const Stack = createNativeStackNavigator();
 const StackEdit = createNativeStackNavigator();
@@ -94,6 +93,18 @@ export function StackTransEditNavigation () {
         <StackEdit.Screen name="Daily" component={Daily} />
         <StackEdit.Screen name="EditTransaction" component={EditTransaction} options={{headerShown: true}} />
         <StackEdit.Screen name="AccountSetting" component={AccountSetting} options={{headerShown: false}} />
+      </StackEdit.Navigator>
+    </NavigationContainer>
+  )
+}
+
+export function CalendarStackNavigation () {
+  return (
+    <NavigationContainer independent={true}>
+      <StackEdit.Navigator>
+        <StackEdit.Screen name="Calendar" component={CalendarView} />
+        <StackEdit.Screen name="EditTransaction" component={EditTransaction} options={{headerShown: false}} />
+        {/* <StackEdit.Screen name="AccountSetting" component={AccountSetting} options={{headerShown: false}} /> */}
       </StackEdit.Navigator>
     </NavigationContainer>
   )

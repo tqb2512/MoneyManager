@@ -7,7 +7,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import Daily from './Daily';
 import Monthly from './Monthly';
 import CalendarView from './Calendar';
-import { StackTransEditNavigation } from '../../navigation';
+import { CalendarStackNavigation, StackTransEditNavigation } from '../../navigation';
 
 
 const TopTabNavigatior = createMaterialTopTabNavigator();
@@ -28,7 +28,7 @@ const Home = () => {
       />
       <TopTabNavigatior.Screen 
         name="Calendar"
-        component={CalendarView}
+        component={CalendarStackNavigation}
         options={{tabBarLabel: 'Calendar', swipeEnabled: false}}
       />
     </TopTabNavigatior.Navigator>
