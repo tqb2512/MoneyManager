@@ -16,10 +16,12 @@ import {
 
 export type Prop = {
   accountName: String;
+  // ID account de xoa
+  accountId: any
   onPress: (event:GestureResponderEvent) => void
 };
 
-const AccountContainer: React.FC<Prop> = ({accountName, onPress}) => {
+const AccountContainer: React.FC<Prop> = ({accountId, accountName, onPress}) => {
   return (
     <View>
       {/* <Text style={{fontWeight: '500', fontSize: 16, margin: 4, marginTop: 12}}>
@@ -49,6 +51,7 @@ const AccountContainer: React.FC<Prop> = ({accountName, onPress}) => {
             />
           </TouchableOpacity>
 
+          {/* Delete account */}
           <TouchableOpacity>
             <TrashIcon style={{marginEnd: 0}} size={16} color="black" />
           </TouchableOpacity>

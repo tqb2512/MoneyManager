@@ -1,3 +1,4 @@
+
 import { SafeAreaView, ScrollView as ScrollViewRN, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect } from 'react';
 import DayInfo from './components/DayInfo';
@@ -6,17 +7,17 @@ import { Transaction } from '../../../models/transaction';
 import { getDBConnection,  getAllDatesListByMonth} from '../../../services/db-services';
 import { NativeBaseProvider, ScrollView } from 'native-base';
 import { useFocus } from 'native-base/lib/typescript/components/primitives';
-import { useIsFocused } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
+import { NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
+import { RootStackParams2 } from '../../../navigation';
 
 const Daily = () => {
+
+  const navigation = useNavigation<NavigationProp<RootStackParams2>>();
 
   const [DateList, setDateList] = React.useState<Date[]>([]);
   const [isSort, setIsSort] = React.useState<boolean>(false);
 
   const isFocused = useIsFocused();
-
-  const navigation = useNavigation();
 
   useEffect(() => {
 
@@ -57,24 +58,18 @@ const Daily = () => {
   }
 
   return (
-
     <NativeBaseProvider>
       <SafeAreaView>
         {/* Income, expense, total, bar */}
         {/* Show list view chi tiêt schi tiêu ngày */}
 
         <ScrollView>
-          {DateList.map((date) => {
-            return (
-              <DayBox date={date} />
-            );
-          })
-          }
+          {DateList.map((date, index) => {
+            return <DayBox key={index} date={date} />;
+          })}
         </ScrollView>
-
       </SafeAreaView>
     </NativeBaseProvider>
-
   );
 };
 

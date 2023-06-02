@@ -1,11 +1,11 @@
-import {DatePickerIOSProps, StyleSheet, Text, View} from 'react-native';
+import {DatePickerIOSProps, StyleSheet, Text, View, GestureResponderEvent, ScrollView} from 'react-native';
 import React, { useEffect } from 'react';
 import DayInfo from './DayInfo';
 import { Transaction } from '../../../../models/transaction';
 import { getDBConnection, getTransactionsByDate } from '../../../../services/db-services';
 import { useIsFocused } from '@react-navigation/native';
 
-const DayBox = (props: {date: Date}) => {
+  const DayBox = (props: {date: Date}) => {
   const [transactionsList, setTransactionsList] = React.useState<Transaction[]>([]);
   const [income, setIncome] = React.useState<number>(0);
   const [expense, setExpense] = React.useState<number>(0);
@@ -30,7 +30,7 @@ const DayBox = (props: {date: Date}) => {
         setExpense(expense);
       });
     });
-  }, [isFocused]);
+  }, [props.date]);
 
   const getDayOfWeek = (date: Date) => {
     var dayOfWeek = new Date(date).getDay();
@@ -72,9 +72,11 @@ const DayBox = (props: {date: Date}) => {
 
       </View>
       {/* Danh sách khoản thu chi */}
-      {transactionsList.map((transaction) => {
-        return <DayInfo {...transaction} />;
-      })}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {transactionsList.map((transaction, index) => {
+          return <DayInfo key={index} {...transaction} />;
+        })}
+      </ScrollView>
     </View>
   );
 };
@@ -84,6 +86,7 @@ export default DayBox;
 const styles = StyleSheet.create({
   mainContainer: {
     marginTop : 12,
+    paddingBottom: 16,
   },
 
   header: {

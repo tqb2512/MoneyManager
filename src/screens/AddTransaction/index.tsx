@@ -35,7 +35,9 @@ import {
   dropDatabaseAndRecreate,
   getAllCategories,
   getAllAccounts,
-  getCategoryByName
+  getCategoryByName,
+  getCategoryById,
+  getCategoryIdByName
 } from '../../services/db-services';
 
 import Accounts from './components/Accounts';
@@ -56,7 +58,7 @@ const AddTransaction = () => {
   const [isTimeClicked, setIsTimeClick] = useState(false);
   const [isAmountClicked, setIsAmountClicked] = useState(false);
   const [isNoteClicked, setIsNoteClicked] = useState(false);
-  const [isDescriptionClicked, setIsDescriptionClicked] = useState(false);
+
 
   const [Transaction, setTransaction] = useState<Transaction>({} as Transaction);
   const [CategoryList, setCategoryList] = useState<Category[]>([]);
@@ -83,6 +85,12 @@ const AddTransaction = () => {
   };
 
   const saveTransaction = (transaction: Transaction) => {
+
+    getDBConnection().then(db => {
+      getCategoryIdByName(db, Transaction.category).then ((_category) =>
+        setTransaction({...Transaction, category: _category}))
+    })
+    
     getDBConnection().then(db => {
       getCategoryByName(db, transaction.category).then(category => {
         transaction.category = category.id;
@@ -186,7 +194,7 @@ const AddTransaction = () => {
                     setIsTimeClick(false);
                     setIsAmountClicked(false);
                     setIsNoteClicked(false);
-                    setIsDescriptionClicked(false);
+
                   }}
                   showSoftInputOnFocus={false}
                   value={
@@ -211,7 +219,6 @@ const AddTransaction = () => {
                     setIsTimeClick(true);
                     setIsAmountClicked(false);
                     setIsNoteClicked(false);
-                    setIsDescriptionClicked(false);
                   }}
                   showSoftInputOnFocus={false}
                   value={Transaction.time}
@@ -236,7 +243,6 @@ const AddTransaction = () => {
                     setIsTimeClick(false);
                     setIsAmountClicked(false);
                     setIsNoteClicked(false);
-                    setIsDescriptionClicked(false);
                   }}
                   showSoftInputOnFocus={false}
                   caretHidden={true}
@@ -260,10 +266,10 @@ const AddTransaction = () => {
                     setIsTimeClick(false);
                     setIsAmountClicked(false);
                     setIsNoteClicked(false);
-                    setIsDescriptionClicked(false);
                   }}
                   showSoftInputOnFocus={false}
                   caretHidden={true}
+
                 />
               </View>
 
@@ -304,7 +310,6 @@ const AddTransaction = () => {
 
             {/* Description + Save button + Continue button */}
             <View style={styles.bottomContainer}>
-
               <View style={{ flexDirection: 'row', padding: 16, marginTop: 16 }}>
                 <TouchableOpacity
                   style={[
@@ -414,7 +419,7 @@ const AddTransaction = () => {
                   </View>
                 </View>
                 {/* Pressable cho giá trị của group */}
-                <View style={[styles.buttonAccount]}>
+                {/* <View style={[styles.buttonAccount]}> */}
                   {AccountList.map((item, index) => (
                     <Accounts
                       key={index}
@@ -423,7 +428,7 @@ const AddTransaction = () => {
                       onClose={() => setIsAccountsClicked(false)}
                     />))
                   }
-                </View>
+               {/* </View> */}
               </View>
             </View>
           </Modal>
@@ -501,6 +506,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
     padding: 4,
+    paddingBottom: 6,
     paddingLeft: 30,
     paddingRight: 30,
     marginRight: 10,

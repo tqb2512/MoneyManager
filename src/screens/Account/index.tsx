@@ -99,9 +99,12 @@ const Account: React.FC = () => {
               <Text style={styles.threeDotsText}>Add</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-              onPress={() => { navigation.navigate('DeleteAccount')}}
-              style={styles.deleteThreeDotsContainer}>
-              <Text style={styles.threeDotsText}>Delete</Text>
+              onPress={() => { 
+                navigation.navigate('DeleteAccount')
+                setShowView(false)
+              }}
+              style={styles.subViewButton}>
+              <Text>Account Setting</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -171,7 +174,7 @@ const styles = StyleSheet.create({
   subView: {
     backgroundColor: 'white',
     position: 'absolute',
-    width: '30%',
+    width: '32%',
     top: 30,
     right: 0,
     zIndex: 100,

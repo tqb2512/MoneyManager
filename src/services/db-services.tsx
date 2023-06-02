@@ -178,6 +178,17 @@ export const insertCategory = async (db: SQLiteDatabase, category: Category): Pr
     ]);
 }
 
+export const getCategoryIdByName = async (db: SQLiteDatabase, name: String): Promise<Category> => {
+    const [results] = await db.executeSql(`SELECT * FROM categories WHERE NAME =  ?`, [name])
+    const row = results.rows.item(0);
+    return {
+        id: row.id,
+        name: row.name,
+        image: row.image,
+        color: row.color
+    };
+}
+
 export const getCategoryById = async (db: SQLiteDatabase, id: number): Promise<Category> => {
     const [results] = await db.executeSql(`SELECT * FROM categories WHERE id = ?`, [id]);
     const row = results.rows.item(0);

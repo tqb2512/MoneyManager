@@ -8,7 +8,10 @@ import { getDBConnection, dropDatabaseAndRecreate, clearDatabase, createTable, i
 import Daily from './Daily';
 import Monthly from './Monthly';
 import CalendarView from './Calendar';
+
 import { NavigationContainer } from '@react-navigation/native';
+import { CalendarStackNavigation, StackTransEditNavigation } from '../../navigation';
+
 
 
 const TopTabNavigatior = createMaterialTopTabNavigator();
@@ -63,9 +66,6 @@ const Home = () => {
         </View>
       </SafeAreaView>
     </View>
-
-      
-
   );
 };
 
