@@ -35,20 +35,6 @@ const CalendarView = () => {
 
   const isFocused = useIsFocused();
 
-  useEffect(() => {
-    setDayClicked(false)
-    // setDateValue(dateValue);
-
-    getDBConnection().then(db => {});
-
-    if (!isFocused) return;
-
-    // getDBConnection().then((db) => {
-    //   getAllDatesList(db, month, year).then((dates) => {
-    //     setDateList(dates);
-    //   });
-    // });
-  }, [isFocused]);
 
   return (
     <View>

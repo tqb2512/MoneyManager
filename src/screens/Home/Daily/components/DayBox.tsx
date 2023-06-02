@@ -26,7 +26,7 @@ import { getDBConnection, getTransactionsByDate } from '../../../../services/db-
         setExpense(expense);
       });
     });
-  }, []);
+  }, [props.date]);
 
   const getDayOfWeek = (date: Date) => {
     var dayOfWeek = new Date(date).getDay();
