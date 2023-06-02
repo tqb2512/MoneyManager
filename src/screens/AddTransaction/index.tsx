@@ -457,6 +457,7 @@ const AddTransaction = () => {
             testID="dateTimePicker"
             value={date}
             mode={'date'}
+            style={styles.dateTimePicker}
             onChange={(event, selectedDate) => {
               setIsDateClicked(false);
               const currentDate = selectedDate || date;
@@ -681,4 +682,13 @@ const styles = StyleSheet.create({
     color: 'black',
     // textAlign: 'center',
   },
+
+  dateTimePicker:{
+    backgroundColor: 'white',
+    borderRadius: 5,
+    borderColor: '#C5C5C5',
+    borderWidth: 1,
+    marginVertical: 10,
+    height: 43,
+  }
 });

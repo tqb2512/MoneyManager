@@ -4,6 +4,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { getDBConnection, dropDatabaseAndRecreate, clearDatabase, createTable, importTestData } from '../../services/db-services';
 
+import Icon from 'react-native-vector-icons/FontAwesome5'
 
 import Daily from './Daily';
 import Monthly from './Monthly';
@@ -57,8 +58,8 @@ const Home = () => {
         </NavigationContainer>
         {/*Floating button*/}
         <View style={{ position: 'absolute', bottom: 20, right: 20 }}>
-          <View style={{ width: 60, height: 60, borderRadius: 30, backgroundColor: '#000000', justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ fontSize: 40, color: '#fff' }}>+</Text>
+          <View style={{ width: 60, height: 60, borderRadius: 30, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
+            <Icon name='home' size={30}/>
           </View>
         </View>
       </SafeAreaView>
