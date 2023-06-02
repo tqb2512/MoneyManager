@@ -17,6 +17,9 @@ import CategoryButton from '../screens/ChangeCategory/components/CategoryButton'
 import AccountSetting from '../screens/Account/AccountSetting';
 import AccountEditView from '../screens/Account/AccountSetting/components/AccountEditView';
 import { u } from 'react-native-big-calendar';
+import Daily from '../screens/Home/Daily';
+import EditTransaction from '../screens/AddTransaction/components/EditTransaction';
+import CalendarView from '../screens/Home/Calendar';
 const BottomBar = createBottomTabNavigator();
 const TopTabNavigatior = createMaterialTopTabNavigator();
 
@@ -40,19 +43,24 @@ export type RootStackParams2 = {
   EditAccountView: { accountGroup: String, accountName: String, accountAmount: String, accountDescription: String }
 };
 
+export type RootStackParams3 = {
+  Daily: undefined
+  EditTransaction: { _id: any, _type: any, _category: any, _account: any, _amount: any, _note: any, _day: any, _month: any, _year: any, _time: any }
+}
+
 function BottomBarTabs() {
 
   return (
     <BottomBar.Navigator>
-      <BottomBar.Screen name="Home" component={Home} options={{headerShown: false}} />
-      <BottomBar.Screen name="Stats" component={Stats} />
-      <Stack.Screen
-        name="Account"
-        component={AppNavigation}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen name="Add" component={StackEditNavigation} options={{headerShown: false}}/>
-    </BottomBar.Navigator>
+    <BottomBar.Screen name="Home" component={Home} options={{headerShown: false}} />
+    <BottomBar.Screen name="Stats" component={Stats} />
+    <Stack.Screen
+      name="Account"
+      component={AppNavigation}
+      options={{headerShown: false}}
+    />
+    <Stack.Screen name="Add" component={StackEditNavigation} options={{headerShown: false}}/>
+  </BottomBar.Navigator>
   );
 }
 
@@ -62,7 +70,8 @@ function AppNavigation() {
       <Stack.Navigator>
         <Stack.Screen name="Account" component={Account} options={{headerShown: false}} />
         <Stack.Screen name="AddAccount" component={AddAccount} />
-        <Stack.Screen name="DeleteAccount" component={DeleteAccount} />
+        <Stack.Screen name="DeleteAccount" component={DeleteAccount} options={{headerShown: false}} />
+        <StackEdit.Screen name="EditAccountView" component={AccountEditView} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -73,11 +82,33 @@ function StackEditNavigation () {
     <NavigationContainer independent={true}>
       <StackEdit.Navigator>
         <StackEdit.Screen name="Add" component={AddTransaction}/>
-        <StackEdit.Screen name="IncomeCategory" component={IncomeCategoryScreen} />
-        <StackEdit.Screen name="EditIncomeCategory" component={CategoryEditView} />
         <StackEdit.Screen name="AccountSetting" component={AccountSetting} options={{headerShown: false}} />
         <StackEdit.Screen name="AddAccount" component={AddAccount} />
         <StackEdit.Screen name="EditAccountView" component={AccountEditView} />
+      </StackEdit.Navigator>
+    </NavigationContainer>
+  )
+}
+
+export function StackTransEditNavigation () {
+  return (
+    <NavigationContainer independent={true}>
+      <StackEdit.Navigator>
+        <StackEdit.Screen name="Daily" component={Daily} />
+        <StackEdit.Screen name="EditTransaction" component={EditTransaction} options={{headerShown: true}} />
+        <StackEdit.Screen name="AccountSetting" component={AccountSetting} options={{headerShown: false}} />
+      </StackEdit.Navigator>
+    </NavigationContainer>
+  )
+}
+
+export function CalendarStackNavigation () {
+  return (
+    <NavigationContainer independent={true}>
+      <StackEdit.Navigator>
+        <StackEdit.Screen name="Calendar" component={CalendarView} />
+        <StackEdit.Screen name="EditTransaction" component={EditTransaction} options={{headerShown: false}} />
+        {/* <StackEdit.Screen name="AccountSetting" component={AccountSetting} options={{headerShown: false}} /> */}
       </StackEdit.Navigator>
     </NavigationContainer>
   )

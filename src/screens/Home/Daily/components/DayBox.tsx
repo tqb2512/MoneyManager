@@ -1,4 +1,4 @@
-import {DatePickerIOSProps, StyleSheet, Text, View} from 'react-native';
+import {DatePickerIOSProps, StyleSheet, Text, View, ScrollView} from 'react-native';
 import React, { useEffect } from 'react';
 import DayInfo from './DayInfo';
 import { Transaction } from '../../../../models/transaction';
@@ -72,9 +72,11 @@ const DayBox = (props: {date: Date}) => {
 
       </View>
       {/* Danh sách khoản thu chi */}
-      {transactionsList.map((transaction) => {
-        return <DayInfo {...transaction} />;
-      })}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {transactionsList.map((transaction) => {
+          return <DayInfo {...transaction} />;
+        })}
+      </ScrollView>
     </View>
   );
 };
