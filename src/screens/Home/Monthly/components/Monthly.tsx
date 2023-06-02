@@ -38,6 +38,7 @@ const Monthly: React.FC<Props> = ({
         </View>
       </View>
 
+
       {/* List daily */}
       <ScrollView>
         <View style={{width: '100%', height: 180}}></View>

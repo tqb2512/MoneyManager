@@ -47,7 +47,9 @@ const AddTransaction = () => {
   const navigation = useNavigation<NavigationProp<RootStackParams2>>();
 
   const [incomeColor, setIncomeColor] = useState('#7DCEA0');
-  const [expenseColor, setExpenseColor] = useState('black');
+  const [expenseColor, setExpenseColor] = useState('grey');
+
+  const [isIncome, setIsIncome] = useState(true);
 
   const [budgetType, setBudgetType] = useState<any>('income');
   const [isCategoriesClicked, setIsCategoriesClicked] = useState(false);
@@ -141,8 +143,9 @@ const AddTransaction = () => {
                 <TouchableOpacity
                   onPress={() => {
                     setIncomeColor('#7DCEA0');
-                    setExpenseColor('black');
+                    setExpenseColor('grey');
                     setBudgetType('income');
+                    setIsIncome(true);
                     setTransaction({ ...Transaction, type: 'income' })
                   }}>
                   <View style={[styles.typeButton, { borderColor: incomeColor }]}>
@@ -155,8 +158,9 @@ const AddTransaction = () => {
                 <TouchableOpacity
                   onPress={() => {
                     setExpenseColor('#F1948A');
-                    setIncomeColor('black');
+                    setIncomeColor('grey');
                     setBudgetType('expense');
+                    setIsIncome(false);
                     setTransaction({ ...Transaction, type: 'expense' })
                   }}>
                   <View
@@ -188,6 +192,7 @@ const AddTransaction = () => {
                     setIsNoteClicked(false);
                     setIsDescriptionClicked(false);
                   }}
+                  underlineColorAndroid={isIncome ? isDateClicked ? '#7DCEA0' : '#EAECEE' : isDateClicked ? '#F1948A' : '#EAECEE'}
                   showSoftInputOnFocus={false}
                   value={
                     Transaction.day +
@@ -213,6 +218,7 @@ const AddTransaction = () => {
                     setIsNoteClicked(false);
                     setIsDescriptionClicked(false);
                   }}
+                  underlineColorAndroid={isIncome ? isTimeClicked ? '#7DCEA0' : '#EAECEE' : isTimeClicked ? '#F1948A' : '#EAECEE'}
                   showSoftInputOnFocus={false}
                   value={Transaction.time}
                   caretHidden={true}
@@ -225,6 +231,7 @@ const AddTransaction = () => {
                 <TextInput
                   style={styles.infoText}
                   value={Transaction.category}
+                  underlineColorAndroid={isIncome ? isCategoriesClicked ? '#7DCEA0' : '#EAECEE' : isCategoriesClicked ? '#F1948A' : '#EAECEE'}
                   onChangeText={text =>
                     setTransaction({ ...Transaction, category: text })
                   }
@@ -249,6 +256,7 @@ const AddTransaction = () => {
                 <TextInput
                   style={styles.infoText}
                   value={Transaction.account}
+                  underlineColorAndroid={isIncome ? isAccountsClicked ? '#7DCEA0' : '#EAECEE' : isAccountsClicked ? '#F1948A' : '#EAECEE'}
                   onChangeText={text =>
                     setTransaction({ ...Transaction, account: text })
                   }
@@ -276,11 +284,15 @@ const AddTransaction = () => {
                     style={styles.infoText}
                     placeholder=""
                     keyboardType="number-pad"
+                    underlineColorAndroid={isIncome ? isAmountClicked ? '#7DCEA0' : '#EAECEE' : isAmountClicked ? '#F1948A' : '#EAECEE'}
                     onPressIn={() => {
                       setIsDateClicked(false);
                       setIsCategoriesClicked(false);
                       setIsAccountsClicked(false);
                       setIsTimeClick(false);
+                      setIsAmountClicked(true);
+                      setIsNoteClicked(false);
+                      setIsDescriptionClicked(false);
                     }}
                     onChangeText={(text) =>
                       setTransaction({ ...Transaction, amount: text })
@@ -293,6 +305,16 @@ const AddTransaction = () => {
                 <Text style={styles.inputLabel}>Note</Text>
                 <TextInput
                   style={styles.infoText}
+                  underlineColorAndroid={isIncome ? isNoteClicked ? '#7DCEA0' : '#EAECEE' : isNoteClicked ? '#F1948A' : '#EAECEE'}
+                  onPressIn={() => {
+                    setIsDateClicked(false);
+                    setIsCategoriesClicked(false);
+                    setIsAccountsClicked(false);
+                    setIsTimeClick(false);
+                    setIsAmountClicked(false);
+                    setIsNoteClicked(true);
+                    setIsDescriptionClicked(false);
+                  }}
                   placeholder=""
                   onChangeText={text =>
                     setTransaction({ ...Transaction, note: text })
@@ -305,7 +327,7 @@ const AddTransaction = () => {
             {/* Description + Save button + Continue button */}
             <View style={styles.bottomContainer}>
 
-              <View style={{ flexDirection: 'row', padding: 16, marginTop: 16 }}>
+              <View style={{ flexDirection: 'row', padding: "4%", marginTop: "1%" }}>
                 <TouchableOpacity
                   style={[
                     styles.saveButton,
@@ -435,6 +457,7 @@ const AddTransaction = () => {
             testID="dateTimePicker"
             value={date}
             mode={'date'}
+            style={styles.dateTimePicker}
             onChange={(event, selectedDate) => {
               setIsDateClicked(false);
               const currentDate = selectedDate || date;
@@ -510,43 +533,43 @@ const styles = StyleSheet.create({
   },
   typeText: {
     fontWeight: 'bold',
-    fontSize: 16
+    fontSize: 18,
+    fontFamily: 'Montserrat'
   },
 
   input: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: "5%",
-    marginVertical: "1%"
+    marginVertical: "1%",
   },
   inputLabel: {
-    fontSize: 16,
+    fontSize: 18,
     width: "20%",
     fontWeight: "500",
-    color: 'grey'
+    color: 'grey',
   },
 
   infoText: {
-    fontSize: 16,
+    fontSize: 18,
     width: "20%",
-    fontWeight: "500",
-    color: 'black',
-    borderBottomWidth: 0.4,
-    borderBottomColor: 'gray',
-    flex: 1
+    fontWeight: "bold",
+    color: '#2C3E50',
+    flex: 1,
+    marginLeft: "5%"
   },
 
   saveButtonText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "500",
     color: 'white',
     flex: 1,
   },
 
   continueButtonText: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: 'black',
+    fontSize: 18,
+    fontWeight: "bold",
+    color: 'grey',
     flex: 1,
   },
 
@@ -561,13 +584,14 @@ const styles = StyleSheet.create({
     height: "100%",
     marginRight: "5%",
     padding: "1%",
-    paddingTop: "2.5%",
+    paddingTop: "2%",
     alignItems: 'center',
   },
 
   continueButton: {
     backgroundColor: 'white',
     borderWidth: 0.8,
+    borderColor: 'grey',
     width: "35%",
     height: 40,
     borderRadius: 4,
@@ -658,4 +682,13 @@ const styles = StyleSheet.create({
     color: 'black',
     // textAlign: 'center',
   },
+
+  dateTimePicker:{
+    backgroundColor: 'white',
+    borderRadius: 5,
+    borderColor: '#C5C5C5',
+    borderWidth: 1,
+    marginVertical: 10,
+    height: 43,
+  }
 });

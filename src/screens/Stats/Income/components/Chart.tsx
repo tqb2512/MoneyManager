@@ -91,7 +91,7 @@ export default function Chart() {
                         centerLabelComponent={() => {
                             return (
                                 <View style={{ alignItems: "center" }}>
-                                    <Text style={{ color: "black", fontSize: 20, textAlign: "center" }}>
+                                    <Text style={{ color: "grey", fontWeight:'bold', fontSize: 20, textAlign: "center" }}>
                                         {piePressValue.name}{"\n"}
                                         $ {piePressValue.value}
                                     </Text>
@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
     },
     selectDropDownText: {
         fontSize: 18,
+        fontWeight: '500',
         color: 'white',
     },
     selectDropDownContainer: {
