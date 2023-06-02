@@ -11,66 +11,77 @@ import {StyleSheet} from 'react-native';
 import AccountGroup from './components/AccountGroup';
 import {ThreeDotsIcon} from 'native-base';
 import {NativeBaseProvider} from 'native-base';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {NavigationProp, useIsFocused, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import { RootStackParams } from '../../navigation';
 import { Account as AccountModel } from '../../models/account';
-import { getDBConnection, getAllAccounts } from '../../services/db-services';
+import { getDBConnection, getExistedAccountType } from '../../services/db-services';
 
 const Account: React.FC = () => {
   const [showView, setShowView] = useState(false);
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
     // useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
-  const [AccountList, setAccountList] = useState<AccountModel[]>([]);
+  const [typeList, setTypeList] = useState<string[]>([]);
 
   const handlePress = () => {
     navigation.navigate('AddAccount');
   };
 
+  //refresh when back to this screen
+  const isFocused = useIsFocused();
+
   useEffect(() => {
     getDBConnection().then((db) => {
-      getAllAccounts(db).then((accounts) => {
-        setAccountList(accounts);
+      getExistedAccountType(db).then((data) => {
+        setTypeList(data);
       });
     });
-  }, []);
-
+  }, [isFocused]);
+    
   return (
     <NativeBaseProvider>
       <SafeAreaView style={styles.mainContainer}>
         {/* Top bar */}
         <View style={{position: 'relative'}}>
           <View style={styles.firstTopBar}>
-            <Text style={{fontSize: 18}}>Accounts</Text>
-            <TouchableOpacity
-              onPress={() => setShowView(!showView)}
-              style={{alignItems: 'center', padding: 4}}>
-              <ThreeDotsIcon size="4" mt="0.5" color="#7A7986" />
-            </TouchableOpacity>
+            <View style={styles.titleHeader}>
+              <Text style={{fontSize: 20, fontWeight:'bold', color:'black', textAlign:'center'}}>Accounts</Text>
+            </View>
+            <View style={styles.threeDots}>
+              <TouchableOpacity
+                onPress={() => setShowView(!showView)}
+                style={{alignItems: 'center', padding: 4}}>
+                <ThreeDotsIcon size="4" mt="0.5" color="#7A7986" />
+              </TouchableOpacity>
+            </View>
           </View>
 
           <View style={styles.secondTopBar}>
             <View style={styles.totalCalc}>
               <Text style={styles.totalElement}>Assets</Text>
-              <Text style={{color: '#2416CB', alignSelf: 'center'}}>35.00</Text>
+              <Text style={{color: '#7DCEA0', alignSelf: 'center', fontSize: 18, fontWeight:'bold'}}>
+                $ 35.00
+              </Text>
             </View>
             <View style={styles.totalCalc}>
               <Text style={styles.totalElement}>Liabilities</Text>
-              <Text style={{color: '#FF914D', alignSelf: 'center'}}>35.00</Text>
+              <Text style={{color: '#F1948A', alignSelf: 'center', fontSize: 18, fontWeight:'bold'}}>
+                $ 35.00
+              </Text>
             </View>
             <View style={styles.totalCalc}>
               <Text style={styles.totalElement}>Total</Text>
-              <Text style={{fontWeight: '600', alignSelf: 'center'}}>
-                35.00
+              <Text style={{color: 'black', alignSelf: 'center', fontSize: 18, fontWeight:'bold'}}>
+                $ 35.00
               </Text>
             </View>
           </View>
         </View>
         {/* List account */}
         <ScrollView>
-          {AccountList.map((account, index) => (
-            <AccountGroup key={index} accountType={account.type}/>
+          {typeList.map((type) => (
+            <AccountGroup key={type} type={type} />
           ))}
         </ScrollView>
 
@@ -80,20 +91,17 @@ const Account: React.FC = () => {
         {showView && (
           <View style={styles.subView}>
             <TouchableOpacity
-              style={styles.subViewButton}
+              style={styles.addThreeDotsContainer}
               onPress={() => { 
                 navigation.navigate('AddAccount')
                 setShowView(false)
                }}>
-              <Text>Add account</Text>
+              <Text style={styles.threeDotsText}>Add</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-              onPress={() => { 
-                navigation.navigate('DeleteAccount')
-                setShowView(false)
-              }}
-              style={styles.subViewButton}>
-              <Text>Account Setting</Text>
+              onPress={() => { navigation.navigate('DeleteAccount')}}
+              style={styles.deleteThreeDotsContainer}>
+              <Text style={styles.threeDotsText}>Delete</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -112,10 +120,16 @@ const styles = StyleSheet.create({
   firstTopBar: {
     backgroundColor: 'white',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     padding: 8,
     paddingTop: 4,
     paddingBottom: 8,
+  },
+  titleHeader:{
+    width: "80%"
+  },
+  threeDots:{
+    width: "10%"
   },
   secondTopBar: {
     backgroundColor: 'white',
@@ -123,6 +137,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 10,
     paddingBottom: 10,
+    paddingHorizontal: 20,
     borderWidth: 1,
     borderColor: 'rgba(229, 231, 235, 0.4)',
   },
@@ -134,6 +149,14 @@ const styles = StyleSheet.create({
 
   totalElement: {
     alignSelf: 'center',
+    fontSize: 16,
+    fontWeight: "600"
+  },
+
+  threeDotsText: {
+    alignSelf: 'center',
+    fontSize: 16,
+    fontWeight: "600"
   },
 
   viewShow: {
@@ -159,8 +182,13 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
 
-  subViewButton: {
+  deleteThreeDotsContainer: {
     borderColor: 'rgba(229, 231, 235, 1)',
+    padding: 8,
+  },
+  addThreeDotsContainer: {
+    borderColor: 'rgba(229, 231, 235, 1)',
+    borderBottomWidth: 0.4,
     padding: 8,
   },
 });

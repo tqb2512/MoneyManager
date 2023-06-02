@@ -3,13 +3,17 @@ import React, { useEffect } from 'react';
 import DayInfo from './DayInfo';
 import { Transaction } from '../../../../models/transaction';
 import { getDBConnection, getTransactionsByDate } from '../../../../services/db-services';
+import { useIsFocused } from '@react-navigation/native';
 
   const DayBox = (props: {date: Date}) => {
   const [transactionsList, setTransactionsList] = React.useState<Transaction[]>([]);
   const [income, setIncome] = React.useState<number>(0);
   const [expense, setExpense] = React.useState<number>(0);
 
+  const isFocused = useIsFocused();
+
   useEffect(() => {
+    if (!isFocused) return;
     getDBConnection().then((db) => {
       getTransactionsByDate(db, props.date.getDate(), props.date.getMonth(), props.date.getFullYear()).then((transactions) => {
         setTransactionsList(transactions);
@@ -27,6 +31,7 @@ import { getDBConnection, getTransactionsByDate } from '../../../../services/db-
       });
     });
   }, [props.date]);
+
 
   const getDayOfWeek = (date: Date) => {
     var dayOfWeek = new Date(date).getDay();
@@ -119,9 +124,9 @@ const styles = StyleSheet.create({
   },
   inText:{
     fontSize: 18,
-    color: "#9FE2BF",
+    color: "#7DCEA0",
     fontWeight: "bold",
-    textAlign: "right"
+    textAlign: "right",
   },
   outContainer:{
     marginRight: 13,
@@ -130,7 +135,7 @@ const styles = StyleSheet.create({
   },
   outText:{
     fontSize: 18,
-    color: "#FF7F50",
+    color: "#F1948A",
     fontWeight: "bold",
     textAlign: "right"
   }

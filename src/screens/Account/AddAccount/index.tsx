@@ -7,7 +7,7 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Button from './components/AccountGroupButton';
 import { Account } from '../../../models/account';
 import { getDBConnection, insertAccount } from '../../../services/db-services';
@@ -16,6 +16,8 @@ const AddAccount = () => {
   const [groupIsClicked, setGroupIsClicked] = useState(false);
   const [groupValue, setGroupValue] = useState<any | null>(null);
   const [Account, setAccount] = useState<Account>({} as Account);
+
+  const groupList = ["Cash", "Bank", "Credit Card", "Savings", "Loan", "Insurance", "E-Wallet", "Others"];
 
   const saveAccount = () => {
     console.log(Account);
@@ -27,73 +29,57 @@ const AddAccount = () => {
   };
 
   return (
-    <View style={{}}>
+    <View style={{ backgroundColor: 'white' }}>
       {/* Group */}
       <View style={styles.input}>
         <Text style={styles.inputLabel}>Group</Text>
         <TextInput
-          style={{
-            flex: 1,
-            borderBottomWidth: 0.4,
-            borderBottomColor: 'gray',
-          }}
+          style={styles.infoText}
           onPressIn={() => setGroupIsClicked(!groupIsClicked)}
           showSoftInputOnFocus={false}
           value={groupValue}
           onChangeText={(groupValue) => {
-            setAccount({...Account, type: groupValue});
+            setAccount({ ...Account, type: groupValue });
           }}
           caretHidden={true}
-          //  Đưa giá trị vô đây
+        //  Đưa giá trị vô đây
         />
       </View>
       {/* Name account */}
       <View style={styles.input}>
         <Text style={styles.inputLabel}>Name</Text>
         <TextInput
-          style={{
-            flex: 1,
-            borderBottomWidth: 0.4,
-            borderBottomColor: 'gray',
-          }}
-          onPressIn={() => {}}
+          style={styles.infoText}
+          onPressIn={() => { }}
           showSoftInputOnFocus={false}
           onChangeText={(name) => {
-            setAccount({...Account, name: name});
+            setAccount({ ...Account, name: name });
           }}
-          //  Đưa giá trị vô đây
+        //  Đưa giá trị vô đây
         />
       </View>
       {/* Amount account */}
       <View style={styles.input}>
         <Text style={styles.inputLabel}>Amount</Text>
         <TextInput
-          style={{
-            flex: 1,
-            borderBottomWidth: 0.4,
-            borderBottomColor: 'gray',
-          }}
-          onPressIn={() => {}}
+          style={styles.infoText}
+          onPressIn={() => { }}
           onChangeText={(amount) => {
-            setAccount({...Account, balance: amount});
+            setAccount({ ...Account, balance: amount });
           }}
           keyboardType="number-pad"
-          //  Đưa giá trị vô đây
+        //  Đưa giá trị vô đây
         />
       </View>
       {/* Description account */}
       <View style={styles.input}>
         <Text style={styles.inputLabel}>Description</Text>
         <TextInput
-          style={{
-            flex: 1,
-            borderBottomWidth: 0.4,
-            borderBottomColor: 'gray',
-          }}
-          onPressIn={() => {}}
+          style={styles.infoText}
+          onPressIn={() => { }}
           showSoftInputOnFocus={false}
           onChangeText={(description) => {
-            setAccount({...Account, note: description});
+            setAccount({ ...Account, note: description });
           }}
         />
       </View>
@@ -117,16 +103,14 @@ const AddAccount = () => {
               </View>
               {/* Pressable cho giá trị của group */}
               <Pressable style={[styles.button]}>
-                <Button
-                  accountGroup="Cash"
-                  onSelect={text => setGroupValue(text)}
-                  onClose={() => setGroupIsClicked(!groupIsClicked)}
-                />
-                <Button
-                  accountGroup="Account"
-                  onSelect={text => setGroupValue(text)}
-                  onClose={() => setGroupIsClicked(!groupIsClicked)}
-                />
+                {groupList.map((item, index) => (
+                  <Button
+                    key={index}
+                    accountGroup={item}
+                    onSelect={text => {setGroupValue(text); setAccount({...Account, type: text})}}
+                    onClose={() => setGroupIsClicked(!groupIsClicked)}
+                  />
+                ))}
               </Pressable>
             </View>
           </Pressable>
@@ -135,12 +119,9 @@ const AddAccount = () => {
 
       {/* Nút save account */}
       <TouchableOpacity
-        style={[
-          styles.saveButton,
-          {backgroundColor:'#46CDCF'},
-        ]}
+        style={styles.saveButton}
         onPress={() => saveAccount()}>
-        <Text style={{fontWeight: '600'}}>Save</Text>
+        <Text style={styles.saveButtonText}>Save</Text>
       </TouchableOpacity>
     </View>
   );
@@ -152,14 +133,34 @@ const styles = StyleSheet.create({
   input: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 16,
-    paddingRight: 16,
-    margin: 2,
+    paddingHorizontal: "5%",
+    marginVertical: "1%",
+    marginRight: "0%"
   },
   inputLabel: {
-    marginRight: 16,
-    width: '25%',
+    fontSize: 16,
+    width: "25%",
+    fontWeight: "500",
+    color: 'grey',
+    marginRight: "0%"
   },
+
+  saveButtonText: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: 'white',
+  },
+
+  /*saveButton: {
+    backgroundColor: '#7DCEA0',
+    borderRadius: 4,
+    width: "100%",
+    height: "50%",
+    marginRight: "5%",
+    padding: "1%",
+    paddingTop: "2.5%",
+    alignItems: 'center',
+  },*/
 
   blurLayout: {
     // backgroundColor: 'rgba(0,0,0, 0.3)',
@@ -202,9 +203,14 @@ const styles = StyleSheet.create({
     // textAlign: 'center',
   },
 
-  textStyle: {
+  infoText: {
+    fontSize: 16,
+    width: "20%",
+    fontWeight: "500",
     color: 'black',
-    // textAlign: 'center',
+    borderBottomWidth: 0.4,
+    borderBottomColor: 'gray',
+    flex: 1
   },
 
   saveButton: {

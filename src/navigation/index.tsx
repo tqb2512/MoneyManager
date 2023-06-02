@@ -46,6 +46,7 @@ export type RootStackParams3 = {
 
 
 function BottomBarTabs() {
+
   return (
     <BottomBar.Navigator>
       <BottomBar.Screen name="Home" component={Home} options={{headerShown: false}} />

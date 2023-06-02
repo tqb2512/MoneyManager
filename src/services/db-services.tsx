@@ -6,6 +6,13 @@ import { Account } from '../models/account';
 
 enablePromise(true);
 
+export type PieData = {
+    name: string,
+    percentage: number,
+    value: number,
+    color: string,
+}
+
 const tableName = 'transactions';
 
 export const getDBConnection = async (): Promise<SQLiteDatabase> => {
@@ -141,6 +148,28 @@ export const getTransactionsFromLastMonth = async (db: SQLiteDatabase): Promise<
     return transactions;
 }
 
+export const getTransactionsFromLastYear = async (db: SQLiteDatabase): Promise<Transaction[]> => {
+    const [results] = await db.executeSql(`SELECT * FROM ${tableName} WHERE year = ?`, [new Date().getFullYear()]);
+    const transactions: Transaction[] = [];
+    for (let i = 0; i < results.rows.length; i++) {
+        const row = results.rows.item(i);
+        transactions.push({
+            id: row.id,
+            type: row.type,
+            category: row.category,
+            account: row.account,
+            amount: row.amount,
+            note: row.note,
+            day: row.day,
+            month: row.month,
+            year: row.year,
+            time: row.time
+        });
+    }
+    return transactions;
+}
+
+
 export const insertCategory = async (db: SQLiteDatabase, category: Category): Promise<void> => {
     await db.executeSql(`INSERT INTO categories (name, image, color) VALUES (?, ?, ?)`, [
         category.name,
@@ -169,6 +198,39 @@ export const getCategoryById = async (db: SQLiteDatabase, id: number): Promise<C
         image: row.image,
         color: row.color
     };
+}
+
+export const getCategoryByName = async (db: SQLiteDatabase, name: string): Promise<Category> => {
+    const [results] = await db.executeSql(`SELECT * FROM categories WHERE name = ?`, [name]);
+    const row = results.rows.item(0);
+    return {
+        id: row.id,
+        name: row.name,
+        image: row.image,
+        color: row.color
+    };
+}
+
+export const getExistedCategoryByDate = async (db: SQLiteDatabase, fromMonth: number, fromYear: number, toMonth: number, toYear: number): Promise<Category[]> => {
+    const [results] = await db.executeSql(`SELECT DISTINCT category FROM ${tableName} WHERE (month >= ? AND year = ?) AND (month <= ? AND year = ?)`, [fromMonth, fromYear, toMonth, toYear]);
+    const categories: Category[] = [];
+    for (let i = 0; i < results.rows.length; i++) {
+        const row = results.rows.item(i);
+        categories.push(await getCategoryById(db, row.category));
+    }
+    return categories;
+}
+
+export const getExistedCategoryByTransactionList = async (db: SQLiteDatabase, transactions: Transaction[]): Promise<Category[]> => {
+    const categories: Category[] = [];
+    for (let i = 0; i < transactions.length; i++) {
+        const transaction = transactions[i];
+        const category = await getCategoryById(db, transaction.category);
+        if (!categories.find(c => c.id === category.id)) {
+            categories.push(category);
+        }
+    }
+    return categories;
 }
 
 export const getAllCategories = async (db: SQLiteDatabase): Promise<Category[]> => {
@@ -211,6 +273,32 @@ export const getAllAccounts = async (db: SQLiteDatabase): Promise<Account[]> => 
     return accounts;
 }
 
+export const getAccountByType = async (db: SQLiteDatabase, type: String): Promise<Account[]> => {
+    const [results] = await db.executeSql(`SELECT * FROM accounts WHERE type = ?`, [type]);
+    const accounts: Account[] = [];
+    for (let i = 0; i < results.rows.length; i++) {
+        const row = results.rows.item(i);
+        accounts.push({
+            id: row.id,
+            name: row.name,
+            balance: row.balance,
+            type: row.type,
+            note: row.note
+        });
+    }
+    return accounts;
+}
+
+export const getExistedAccountType = async (db: SQLiteDatabase): Promise<string[]> => {
+    const [results] = await db.executeSql(`SELECT DISTINCT type FROM accounts`);
+    const accounts: string[] = [];
+    for (let i = 0; i < results.rows.length; i++) {
+        const row = results.rows.item(i);
+        accounts.push(row.type);
+    }
+    return accounts;
+}
+
 export const getAllDatesList = async (db: SQLiteDatabase): Promise<number[]> => {
     const [results] = await db.executeSql(`SELECT DISTINCT day FROM ${tableName}`);
     const dates: number[] = [];
@@ -219,11 +307,11 @@ export const getAllDatesList = async (db: SQLiteDatabase): Promise<number[]> => 
         dates.push(row.day);
     }
     return dates;
-    
+
 }
 
 export const getAllDatesListByMonth = async (db: SQLiteDatabase, month: number, year: number): Promise<Date[]> => {
-    const [results] = await db.executeSql(`SELECT DISTINCT day FROM ${tableName} WHERE month = ? AND year = ?`, [month, year]);
+    const [results] = await db.executeSql(`SELECT DISTINCT day FROM ${tableName} WHERE month = ? AND year = ? ORDER BY day DESC`, [month, year]);
     const dates: Date[] = [];
     for (let i = 0; i < results.rows.length; i++) {
         const row = results.rows.item(i);
@@ -235,14 +323,14 @@ export const getAllDatesListByMonth = async (db: SQLiteDatabase, month: number, 
 
 export const importTestData = async (db: SQLiteDatabase): Promise<void> => {
     const categories: Category[] = [
-        { id: 1, name: 'Food', image: 'https://cdn-icons-png.flaticon.com/512/2922/2922506.png', color: '#FF0000'},
-        { id: 2, name: 'Transport', image: 'https://cdn-icons-png.flaticon.com/512/2922/2922506.png', color: '#00FF00'},
-        { id: 3, name: 'Shopping', image: 'https://cdn-icons-png.flaticon.com/512/2922/2922506.png', color: '#0000FF'}
+        { id: 1, name: 'Food', image: 'https://cdn-icons-png.flaticon.com/512/2922/2922506.png', color: '#FF0000' },
+        { id: 2, name: 'Transport', image: 'https://cdn-icons-png.flaticon.com/512/2922/2922506.png', color: '#00FF00' },
+        { id: 3, name: 'Shopping', image: 'https://cdn-icons-png.flaticon.com/512/2922/2922506.png', color: '#0000FF' }
     ];
 
     const accounts: Account[] = [
-        { id: 1, name: 'Cash', balance: 1000000, type: 'cash', note: '' },
-        { id: 2, name: 'Bank', balance: 1000000, type: 'bank', note: '' }
+        { id: 1, name: 'Tiền mặt', balance: 75, type: 'Cash', note: '' },
+        { id: 2, name: 'MBBank', balance: 10000, type: 'Bank', note: '' }
     ];
 
     var date = new Date();
@@ -251,7 +339,7 @@ export const importTestData = async (db: SQLiteDatabase): Promise<void> => {
     var year = date.getFullYear();
 
     const transactions: Transaction[] = [
-  
+
         { id: 1, type: 'expense', category: 1, account: 1, amount: 100000, note: 'Mua thịt', day: day, month: month, year: year, time: date.getTime() },
         { id: 2, type: 'expense', category: 2, account: 1, amount: 200000, note: 'Mua xăng', day: day, month: month, year: year, time: date.getTime() },
         { id: 3, type: 'expense', category: 3, account: 1, amount: 300000, note: 'Mua quần áo', day: day, month: month, year: year, time: date.getTime() },
@@ -265,9 +353,48 @@ export const importTestData = async (db: SQLiteDatabase): Promise<void> => {
         await insertAccount(db, account);
     }
 
-    for (const transaction of transactions) {
+    /*for (const transaction of transactions) {
         await insertTransaction(db, transaction);
+    }*/
+}
+
+export const getPieData = async (db: SQLiteDatabase, time: string, type: string): Promise<PieData[]> => {
+    var transactionsList: Transaction[] = [];
+    var categoriesList: Category[] = [];
+
+    switch (time) {
+        case "Monthly":
+            transactionsList = await getTransactionsFromLastMonth(db);
+            categoriesList = await getExistedCategoryByTransactionList(db, transactionsList);
+            break;
+        case "Yearly":
+            transactionsList = await getTransactionsFromLastYear(db);
+            categoriesList = await getExistedCategoryByTransactionList(db, transactionsList);
+            break;
     }
+
+    const pieData: PieData[] = [];
+    var total = 0;
+    categoriesList.forEach((category) => {
+        var sum = 0;
+        transactionsList.forEach((transaction) => {
+            if (transaction.category == category.id && transaction.type == type) {
+                sum += transaction.amount;
+            }
+        });
+        total += sum;
+        if (sum > 0)
+            pieData.push({
+                name: category.name,
+                percentage: 0,
+                value: sum,
+                color: category.color,
+            });
+    });
+    pieData.forEach((data) => {
+        data.percentage = data.value / total;
+    });
+    return pieData;
 }
 
 export const clearDatabase = async (db: SQLiteDatabase): Promise<void> => {
