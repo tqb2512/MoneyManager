@@ -4,6 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSelector} from 'react-redux';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import SelectDropdown from 'react-native-select-dropdown';
 
 import Home from '../screens/Home';
 import Stats from '../screens/Stats';
@@ -41,6 +42,8 @@ export type RootStackParams2 = {
   EditAccountView: { accountGroup: String, accountName: String, accountAmount: String, accountDescription: String }
 };
 
+const timeOptions = ["Monthly", "Yearly"];
+
 function BottomBarTabs() {
 
   return (
@@ -56,7 +59,7 @@ function BottomBarTabs() {
         tabBarItemStyle:{
           alignItems: 'center',
           justifyContent: 'center'
-        }
+        },
       }}
     >
       <BottomBar.Screen 

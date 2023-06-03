@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { getDBConnection, dropDatabaseAndRecreate, clearDatabase, createTable, importTestData } from '../../services/db-services';
+import Header from './Header';
 
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
@@ -39,7 +40,7 @@ const Home = () => {
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <SafeAreaView style={{ flex: 1, backgroundColor: '#fff', paddingTop: insets.top }}>
-        <Text style={{ fontSize: 30, fontWeight: 'bold', marginLeft: 20 }}>Home</Text>
+        <Header/>
         <NavigationContainer independent={true}>
           <TopTabNavigatior.Navigator
             initialRouteName="Daily"

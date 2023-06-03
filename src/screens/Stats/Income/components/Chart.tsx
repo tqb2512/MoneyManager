@@ -1,5 +1,5 @@
 import { View, Dimensions, ActivityIndicator } from "react-native";
-import { Text, StyleSheet, ScrollView } from "react-native";
+import { Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { PieChart } from "react-native-gifted-charts";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Category from "./Category";
@@ -7,10 +7,11 @@ import SelectDropdown from "react-native-select-dropdown";
 import { getDBConnection, getTransactionsFromLastMonth, getTransactionsFromLastYear, getExistedCategoryByTransactionList, getPieData } from "../../../../services/db-services";
 import { Transaction } from "../../../../models/transaction";
 import { Category as CategoryModel } from "../../../../models/category";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { Skeleton, Spinner } from "native-base";
+import MonthPicker from "react-native-month-year-picker";
 
 export type PieData = {
     name: string,
@@ -29,7 +30,20 @@ export default function Chart() {
 
     const timeOptions = ["Monthly", "Yearly"];
 
-
+    const [date, setDate] = useState(new Date());
+    const [show, setShow] = useState(false);
+  
+    const showPicker = useCallback((value:any) => setShow(value), []);
+  
+    const onValueChange = useCallback(
+      (event:any, newDate:any) => {
+        const selectedDate = newDate || date;
+  
+        showPicker(false);
+        setDate(selectedDate);
+      },
+      [date, showPicker],
+    );
 
     const updateChart = (time: any) => {
         getDBConnection().then((db) => {
@@ -53,24 +67,43 @@ export default function Chart() {
 
     return (
         <SafeAreaView>
-            <View style={styles.datePicker}>
-                <SelectDropdown
-                    data={timeOptions}
-                    defaultButtonText="Monthly"
-                    buttonTextStyle={styles.selectDropDownText}
-                    buttonStyle={styles.selectDropDownContainer}
-                    rowStyle={styles.rowContainer}
-                    dropdownIconPosition="right"
-                    onSelect={(selectedItem, index) => {
-                        updateChart(selectedItem);
-                    }}
-                    buttonTextAfterSelection={(selectedItem) => {
-                        return selectedItem;
-                    }}
-                    rowTextForSelection={(item) => {
-                        return item;
-                    }}
-                />
+            <View style={styles.pickerContainer}>
+                <View style={styles.monthPicker}>
+                        <TouchableOpacity 
+                            style={styles.monthPickerContainer}
+                            onPress={() => showPicker(true)}
+                            >
+                            <Text style={styles.monthPickerText}>Open</Text>
+                        </TouchableOpacity>
+                        {show && (
+                        <MonthPicker
+                            onChange={onValueChange}
+                            value={date}
+                            minimumDate={new Date()}
+                            maximumDate={new Date(2025, 5)}
+                            locale="ko"
+                        />
+                    )}
+                    </View>
+                <View style={styles.datePicker}>
+                    <SelectDropdown
+                        data={timeOptions}
+                        defaultButtonText="Monthly"
+                        buttonTextStyle={styles.selectDropDownText}
+                        buttonStyle={styles.selectDropDownContainer}
+                        rowStyle={styles.rowContainer}
+                        dropdownIconPosition="right"
+                        onSelect={(selectedItem, index) => {
+                            updateChart(selectedItem);
+                        }}
+                        buttonTextAfterSelection={(selectedItem) => {
+                            return selectedItem;
+                        }}
+                        rowTextForSelection={(item) => {
+                            return item;
+                        }}
+                    />
+                </View>
             </View>
 
             <View style={styles.chartContainer}>
@@ -131,10 +164,8 @@ const styles = StyleSheet.create({
     },
     datePicker: {
         justifyContent: 'flex-end',
-        alignItems: 'flex-end',
         backgroundColor: 'white',
-        marginRight: 15
-
+        marginRight: "13%"
     },
     selectDropDownText: {
         fontSize: 18,
@@ -145,12 +176,39 @@ const styles = StyleSheet.create({
         borderRadius: 7,
         backgroundColor: "#7DCEA0",
         marginTop: 15,
-        marginRight: 30,
-        width: "25%",
+        marginVertical: "5%",
+        marginRight: "10%",
+        alignItems: 'center',
+        width: "150%",
         justifyContent: "flex-start"
     },
     rowContainer: {
         backgroundColor: "white",
         justifyContent: "flex-start"
+    },
+    monthPickerContainer: {
+        borderRadius: 7,
+        backgroundColor: "white",
+        borderColor: '#7DCEA0',
+        borderWidth: 1,
+        paddingVertical: 10,
+        marginTop: "13%",
+        marginLeft: "13%",
+        alignItems: 'center',
+        width: "100%",
+    },
+    monthPickerText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#7DCEA0',
+    },
+    monthPicker:{
+        justifyContent: 'flex-start',
+        marginRight: "1%"
+    },
+    pickerContainer:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: 'white'
     },
 })
