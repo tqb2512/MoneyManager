@@ -7,19 +7,20 @@ import Header from './Header';
 
 import Icon from 'react-native-vector-icons/FontAwesome5'
 
+
 import Daily from './Daily';
 import Monthly from './Monthly';
 import CalendarView from './Calendar';
-import { NavigationContainer } from '@react-navigation/native';
-
+import {NavigationContainer} from '@react-navigation/native';
+import { CalendarStackNavigation, StackTransEditNavigation } from '../../navigation';
 
 const TopTabNavigatior = createMaterialTopTabNavigator();
 
 const Home = () => {
-  const insets = useSafeAreaInsets()
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
-    getDBConnection().then((db) => {
+    getDBConnection().then(db => {
       /*dropDatabaseAndRecreate(db).then(() => {
         console.log("Database dropped and recreated");
       });*/
@@ -47,27 +48,43 @@ const Home = () => {
             tabBarOptions={{
               activeTintColor: '#000000',
               inactiveTintColor: '#000000',
-              labelStyle: { fontSize: 16, fontWeight: 'bold', color: 'grey' },
-              indicatorStyle: { backgroundColor: '#000000' },
-              style: { backgroundColor: '#fff' },
-            }}
-          >
-            <TopTabNavigatior.Screen name="Daily" component={Daily} />
-            <TopTabNavigatior.Screen name="Monthly" component={Monthly} />
-            <TopTabNavigatior.Screen name="Calendar" component={CalendarView} />
+              labelStyle: {fontSize: 12, fontWeight: 'bold'},
+              indicatorStyle: {backgroundColor: '#000000'},
+              style: {backgroundColor: '#fff'},
+            }}>
+            <TopTabNavigatior.Screen
+              name="Daily"
+              component={StackTransEditNavigation}
+              options={{tabBarLabel: 'Daily'}}
+            />
+            <TopTabNavigatior.Screen
+              name="Monthly"
+              component={Monthly}
+              options={{tabBarLabel: 'Monthly'}}
+            />
+            <TopTabNavigatior.Screen
+              name="Calendar"
+              component={CalendarStackNavigation}
+              options={{tabBarLabel: 'Calendar', swipeEnabled: false}}
+            />
           </TopTabNavigatior.Navigator>
         </NavigationContainer>
         {/*Floating button*/}
-        <View style={{ position: 'absolute', bottom: 20, right: 20 }}>
-          <View style={{ width: 60, height: 60, borderRadius: 30, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
-            <Icon name='home' size={30}/>
+        <View style={{position: 'absolute', bottom: 20, right: 20}}>
+          <View
+            style={{
+              width: 60,
+              height: 60,
+              borderRadius: 30,
+              backgroundColor: '#000000',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{fontSize: 40, color: '#fff'}}>+</Text>
           </View>
         </View>
       </SafeAreaView>
     </View>
-
-      
-
   );
 };
 

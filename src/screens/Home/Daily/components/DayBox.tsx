@@ -1,4 +1,4 @@
-import {DatePickerIOSProps, StyleSheet, Text, View} from 'react-native';
+import {DatePickerIOSProps, StyleSheet, Text, View, ScrollView} from 'react-native';
 import React, { useEffect } from 'react';
 import DayInfo from './DayInfo';
 import { Transaction } from '../../../../models/transaction';
@@ -56,7 +56,7 @@ const DayBox = (props: {date: Date}) => {
             <Text style={styles.date}>{props.date.getDate()}</Text>
           </View>
           <View style={styles.monthYear}>
-            <Text style={styles.day}>{getDayOfWeek(props.date)}</Text>
+            <Text>{getDayOfWeek(props.date)}</Text>
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.month}>{props.date.getMonth()}/</Text>
               <Text style={styles.year}>{props.date.getFullYear()}</Text>
@@ -72,9 +72,11 @@ const DayBox = (props: {date: Date}) => {
 
       </View>
       {/* Danh sách khoản thu chi */}
-      {transactionsList.map((transaction) => {
-        return <DayInfo {...transaction} />;
-      })}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {transactionsList.map((transaction) => {
+          return <DayInfo {...transaction} />;
+        })}
+      </ScrollView>
     </View>
   );
 };
@@ -107,9 +109,6 @@ const styles = StyleSheet.create({
     marginStart: "5%",
   },
 
-  day:{
-    fontSize: 16
-  },
   month: {
     fontSize: 16
   },
@@ -122,7 +121,7 @@ const styles = StyleSheet.create({
     width: "20%"
   },
   inText:{
-    fontSize: 22,
+    fontSize: 18,
     color: "#7DCEA0",
     fontWeight: "bold",
     textAlign: "right",
@@ -133,7 +132,7 @@ const styles = StyleSheet.create({
     width: "30%"
   },
   outText:{
-    fontSize: 22,
+    fontSize: 18,
     color: "#F1948A",
     fontWeight: "bold",
     textAlign: "right"

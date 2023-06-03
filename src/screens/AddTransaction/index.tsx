@@ -40,11 +40,11 @@ import {
 
 import Accounts from './components/Accounts';
 import { NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
-import { RootStackParams2 } from '../../navigation';
+import { RootStackParams } from '../../navigation';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 const AddTransaction = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParams2>>();
+  const navigation = useNavigation<NavigationProp<RootStackParams>>();
 
   const [incomeColor, setIncomeColor] = useState('#7DCEA0');
   const [expenseColor, setExpenseColor] = useState('grey');
