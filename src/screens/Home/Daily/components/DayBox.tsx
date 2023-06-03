@@ -1,39 +1,17 @@
-import {DatePickerIOSProps, StyleSheet, Text, View, ScrollView} from 'react-native';
-import React, { useEffect } from 'react';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
+import React from 'react';
 import DayInfo from './DayInfo';
-import { Transaction } from '../../../../models/transaction';
-import { getDBConnection, getTransactionsByDate } from '../../../../services/db-services';
-import { useIsFocused } from '@react-navigation/native';
+import {DayBox as DayBoxModel} from '../../../../models/dayBox';
 
-const DayBox = (props: {date: Date}) => {
-  const [transactionsList, setTransactionsList] = React.useState<Transaction[]>([]);
-  const [income, setIncome] = React.useState<number>(0);
-  const [expense, setExpense] = React.useState<number>(0);
+function DayBox (props: { dayBoxModel: DayBoxModel, navigation: any }) {
 
-  const isFocused = useIsFocused();
-
-  useEffect(() => {
-    if (!isFocused) return;
-    getDBConnection().then((db) => {
-      getTransactionsByDate(db, props.date.getDate(), props.date.getMonth(), props.date.getFullYear()).then((transactions) => {
-        setTransactionsList(transactions);
-        var income = 0;
-        var expense = 0;
-        transactions.forEach((transaction) => {
-          if (transaction.type == 'income') {
-            income += transaction.amount;
-          } else {
-            expense += transaction.amount;
-          }
-        });
-        setIncome(income);
-        setExpense(expense);
-      });
-    });
-  }, [isFocused]);
-
-  const getDayOfWeek = (date: Date) => {
-    var dayOfWeek = new Date(date).getDay();
+  const { navigation } = props;
+  const getDayOfWeek = () => {
+    const dayOfWeek = new Date(
+      props.dayBoxModel.year,
+      props.dayBoxModel.month - 1,
+      props.dayBoxModel.day,
+    ).getDay();
     return isNaN(dayOfWeek)
       ? null
       : [
@@ -53,35 +31,35 @@ const DayBox = (props: {date: Date}) => {
       <View style={styles.header}>
         <View style={{flexDirection: 'row', justifyContent:'flex-start'}}>
           <View style={{width: "25%", alignItems: "center"}}>
-            <Text style={styles.date}>{props.date.getDate()}</Text>
+            <Text style={styles.date}>{props.dayBoxModel.day}</Text>
           </View>
           <View style={styles.monthYear}>
-            <Text>{getDayOfWeek(props.date)}</Text>
+            <Text>{getDayOfWeek()}</Text>
             <View style={{flexDirection: 'row'}}>
-              <Text style={styles.month}>{props.date.getMonth()}/</Text>
-              <Text style={styles.year}>{props.date.getFullYear()}</Text>
+              <Text style={styles.month}>{props.dayBoxModel.month}/</Text>
+              <Text style={styles.year}>{props.dayBoxModel.year}</Text>
             </View>
           </View>
         </View>
           <View style={styles.inContainer}>
-            <Text style={styles.inText}>$ {income}</Text>
+            <Text style={styles.inText}>$ {props.dayBoxModel.totalIncome}</Text>
           </View>
           <View style={styles.outContainer}>
-            <Text style={styles.outText}>$ {expense}</Text>
+            <Text style={styles.outText}>$ {props.dayBoxModel.totalExpense}</Text>
           </View>
 
       </View>
       {/* Danh sách khoản thu chi */}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {transactionsList.map((transaction) => {
-          return <DayInfo {...transaction} />;
-        })}
-      </ScrollView>
+      <FlatList
+        data={props.dayBoxModel.transactions}
+        renderItem={({item}) => <DayInfo transaction={item} navigation={navigation} />}
+        keyExtractor={item => item.id.toString()}
+      />
     </View>
   );
 };
 
-export default DayBox;
+export default React.memo(DayBox);
 
 const styles = StyleSheet.create({
   mainContainer: {

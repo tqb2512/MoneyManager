@@ -1,7 +1,6 @@
 export type Account = {
-    id: any;
-    name: any;
-    balance: any;
-    type: any;
-    note: any;
-  };
+    id: number;
+    name: string;
+    balance: number;
+    group: string;
+}

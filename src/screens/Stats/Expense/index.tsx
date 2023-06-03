@@ -4,12 +4,15 @@ import { Text } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Chart from './components/Chart'
 import { useState } from 'react'
+import { ExpenseStatsProp } from '../../../navigation/types'
 
-
-export default function Expense() {
+function ExpenseScreen(props: ExpenseStatsProp) {
+  const { navigation } = props;
   return (
     <SafeAreaView>
       <Chart/>
     </SafeAreaView>
   )
 }
+
+export default React.memo(ExpenseScreen);

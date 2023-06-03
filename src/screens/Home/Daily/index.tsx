@@ -1,60 +1,27 @@
-import { SafeAreaView, ScrollView as ScrollViewRN, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, FlatList, TouchableOpacity, Text } from 'react-native';
 import React, { useEffect } from 'react';
-import DayInfo from './components/DayInfo';
 import DayBox from './components/DayBox';
-import { Transaction } from '../../../models/transaction';
-import { getDBConnection,  getAllDatesListByMonth} from '../../../services/db-services';
-import { NativeBaseProvider, ScrollView } from 'native-base';
-import { useFocus } from 'native-base/lib/typescript/components/primitives';
-import { useIsFocused } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
+import { DayBox as DayBoxModel } from '../../../models/dayBox';
+import { DailyScreenProp } from '../../../navigation/types';
+import { NativeBaseProvider } from 'native-base';
+import { getDBConnection, getDayBoxFromMonthYear, createTables, dropTables, importTestData } from '../../../services/db-services';
 
-const Daily = () => {
-
-  const [DateList, setDateList] = React.useState<Date[]>([]);
-  const [isSort, setIsSort] = React.useState<boolean>(false);
-
-  const isFocused = useIsFocused();
-
-  const navigation = useNavigation();
+function DailyScreen (props: DailyScreenProp) {
+  
+  const { navigation } = props;
+  const [dayBoxes, setDayBoxes] = React.useState<DayBoxModel[]>([]);
 
   useEffect(() => {
-
-    const unsubscribe = navigation.addListener("tabPress", () => {
-      var date = new Date();
-      var month = date.getMonth() + 1;
-      var year = date.getFullYear();
+    const unsubscribe = navigation.addListener("focus", () => {
       getDBConnection().then((db) => {
-        getAllDatesListByMonth(db, month, year).then((dates) => {
-          setDateList(dates);
+        getDayBoxFromMonthYear(db, 6, 2023).then((dayBoxes) => {
+          setDayBoxes(dayBoxes);
         });
       });
-
     });
-    
+    console.log(dayBoxes)
     return unsubscribe;
   }, [navigation]);
-
-  useEffect(() => {
-
-    var date = new Date();
-      var month = date.getMonth() + 1;
-      var year = date.getFullYear();
-      getDBConnection().then((db) => {
-        getAllDatesListByMonth(db, month, year).then((dates) => {
-          setDateList(dates);
-        });
-      });
-  }, [isFocused]);
-
-  const sortDateList = () => {
-    var sortedDateList = DateList.sort((a, b) => {
-      return b.getTime() - a.getTime();
-    }
-    );
-    setDateList(sortedDateList);
-    setIsSort(true);
-  }
 
   return (
 
@@ -63,23 +30,20 @@ const Daily = () => {
         {/* Income, expense, total, bar */}
         {/* Show list view chi tiêt schi tiêu ngày */}
 
-        <ScrollView>
-          {DateList.map((date) => {
-            return (
-              <DayBox date={date} />
-            );
-          })
-          }
-        </ScrollView>
+        <FlatList
+          data={dayBoxes}
+          renderItem={({ item }) => <DayBox dayBoxModel={item} navigation = {props.navigation}/>}
+          keyExtractor={(item) => item.day.toString()}
+        />
 
+        <TouchableOpacity onPress={() => navigation.navigate("add_transaction")}>
+          <Text>Add Transaction</Text>
+        </TouchableOpacity>
+        
       </SafeAreaView>
     </NativeBaseProvider>
 
   );
 };
 
-export default Daily;
-
-const styles = StyleSheet.create({
-
-});
+export default React.memo(DailyScreen);

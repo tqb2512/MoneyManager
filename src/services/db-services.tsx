@@ -1,423 +1,229 @@
-import { enablePromise, openDatabase, SQLiteDatabase } from 'react-native-sqlite-storage';
-
+import { enablePromise, SQLiteDatabase, openDatabase } from 'react-native-sqlite-storage';
 import { Transaction } from '../models/transaction';
 import { Category } from '../models/category';
 import { Account } from '../models/account';
+import { DayBox } from '../models/dayBox';
 
 enablePromise(true);
-
-export type PieData = {
-    name: string,
-    percentage: number,
-    value: number,
-    color: string,
-}
-
-const tableName = 'transactions';
 
 export const getDBConnection = async (): Promise<SQLiteDatabase> => {
     return openDatabase({ name: 'money-manager.db', location: 'default' });
 }
 
-export const createTable = async (db: SQLiteDatabase): Promise<void> => {
-    await db.executeSql(`CREATE TABLE IF NOT EXISTS ${tableName} (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        type TEXT,
-        category INTEGER,
-        account INTEGER,
-        amount INTEGER,
-        note TEXT,
-        day INTEGER,
-        month INTEGER,
-        year INTEGER,
-        time INTEGER
-    )`);
+export const createTables = async (db: SQLiteDatabase): Promise<void> => {
+    await db.executeSql('CREATE TABLE IF NOT EXISTS categories '+
+    '(id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+    'name TEXT, ' +
+    'color TEXT)');
 
-    await db.executeSql(`CREATE TABLE IF NOT EXISTS accounts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        balance INTEGER,
-        type TEXT,
-        note TEXT
-    )`);
+    await db.executeSql('CREATE TABLE IF NOT EXISTS accounts '+
+    '(id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+    'name TEXT, ' +
+    'balance INTEGER, ' +
+    'account_group TEXT)');
 
-    await db.executeSql(`CREATE TABLE IF NOT EXISTS categories (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        image TEXT,
-        color TEXT
-    )`);
+    await db.executeSql('CREATE TABLE IF NOT EXISTS transactions '+
+    '(id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+    'amount INTEGER, ' +
+    'day INTEGER, ' +
+    'month INTEGER, ' +
+    'year INTEGER, ' +
+    'note TEXT, ' +
+    'type TEXT, ' +
+    'categoryId INTEGER, ' +
+    'accountId INTEGER, ' +
+    'FOREIGN KEY(categoryId) REFERENCES categories(id), ' +
+    'FOREIGN KEY(accountId) REFERENCES accounts(id))');
+    console.log('Tables created');
+}
+
+export const dropTables = async (db: SQLiteDatabase): Promise<void> => {
+    await db.executeSql('DROP TABLE IF EXISTS transactions');
+    await db.executeSql('DROP TABLE IF EXISTS accounts');
+    await db.executeSql('DROP TABLE IF EXISTS categories');
+    console.log('Tables dropped');
+}
+
+export const importTestData = async (db: SQLiteDatabase): Promise<void> => {
+    const accounts: Account[] = [
+        { id: 1, name: "Cash", balance: 0, group: "Cash" },
+        { id: 2, name: "Bank", balance: 0, group: "Bank" },
+    ]
+
+    const categories: Category[] = [
+        { id: 1, name: "Food", color: "#FF0000", icon: "" },
+        { id: 2, name: "Transport", color: "#00FF00", icon: "" },
+    ]
+
+    const transactions: Transaction[] = [
+        { id: 1, amount: 100, day: 1, month: 1, year: 2020, note: "Food", type: "Expense", category: categories[0], account: accounts[0] },
+        { id: 2, amount: 200, day: 1, month: 1, year: 2020, note: "Transport", type: "Expense", category: categories[1], account: accounts[0] },
+        { id: 3, amount: 300, day: 1, month: 1, year: 2020, note: "Food", type: "Expense", category: categories[0], account: accounts[1] },
+    ]
+
+    for (let i = 0; i < accounts.length; i++) {
+        const account = accounts[i];
+        await db.executeSql('INSERT INTO accounts (id, name, balance, account_group) VALUES (?, ?, ?, ?)', [account.id, account.name, account.balance, account.group]);
+    }
+
+    for (let i = 0; i < categories.length; i++) {
+        const category = categories[i];
+        await db.executeSql('INSERT INTO categories (id, name, color) VALUES (?, ?, ?)', [category.id, category.name, category.color]);
+    }
+
+    for (let i = 0; i < transactions.length; i++) {
+        const transaction = transactions[i];
+        await db.executeSql('INSERT INTO transactions (id, amount, day, month, year, note, type, categoryId, accountId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [transaction.id, transaction.amount, transaction.day, transaction.month, transaction.year, transaction.note, transaction.type, transaction.category.id, transaction.account.id]);
+    }
+    console.log('Test data imported');
+}
+
+export const consoleLogDB = async (db: SQLiteDatabase): Promise<void> => {
+    const [accounts, categories, transactions] = await Promise.all([
+        db.executeSql('SELECT * FROM accounts'),
+        db.executeSql('SELECT * FROM categories'),
+        db.executeSql('SELECT * FROM transactions'),
+    ]);
+
+    console.log(accounts[0].rows.raw());
+    console.log(categories[0].rows.raw());
+    console.log(transactions[0].rows.raw());
 }
 
 export const insertTransaction = async (db: SQLiteDatabase, transaction: Transaction): Promise<void> => {
-    await db.executeSql(`INSERT INTO ${tableName} (type, category, account, amount, note, day, month, year, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
-        transaction.type,
-        transaction.category,
-        transaction.account,
-        transaction.amount,
-        transaction.note,
-        transaction.day,
-        transaction.month,
-        transaction.year,
-        transaction.time
-    ]);
-    console.log('inserted');
+    await db.executeSql('INSERT INTO transactions (amount, day, month, year, note, type, categoryId, accountId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [transaction.amount, transaction.day, transaction.month, transaction.year, transaction.note, transaction.type, transaction.category.id, transaction.account.id]);
 }
 
-export const getTransactions = async (db: SQLiteDatabase): Promise<Transaction[]> => {
-    const [results] = await db.executeSql(`SELECT * FROM ${tableName}`);
-    const transactions: Transaction[] = [];
-    for (let i = 0; i < results.rows.length; i++) {
-        const row = results.rows.item(i);
-        transactions.push({
-            id: row.id,
-            type: row.type,
-            category: row.category,
-            account: row.account,
-            amount: row.amount,
-            note: row.note,
-            day: row.day,
-            month: row.month,
-            year: row.year,
-            time: row.time
-        });
-    }
-    return transactions;
+export const updateTransaction = async (db: SQLiteDatabase, transaction: Transaction): Promise<void> => {
+    await db.executeSql('UPDATE transactions SET amount = ?, day = ?, month = ?, year = ?, note = ?, type = ?, categoryId = ?, accountId = ? WHERE id = ?', [transaction.amount, transaction.day, transaction.month, transaction.year, transaction.note, transaction.type, transaction.category.id, transaction.account.id, transaction.id]);
 }
 
-export const getTransactionsByDate = async (db: SQLiteDatabase, date: number, month: number, year: number): Promise<Transaction[]> => {
-    const [results] = await db.executeSql(`SELECT * FROM ${tableName} WHERE day = ? AND month = ? AND year = ?`, [date, month, year]);
-    const transactions: Transaction[] = [];
-    for (let i = 0; i < results.rows.length; i++) {
-        const row = results.rows.item(i);
-        transactions.push({
-            id: row.id,
-            type: row.type,
-            category: row.category,
-            account: row.account,
-            amount: row.amount,
-            note: row.note,
-            day: row.day,
-            month: row.month,
-            year: row.year,
-            time: row.time
-        });
-    }
-    return transactions;
-}
-
-export const getTransactionsByMonth = async (db: SQLiteDatabase, month: number, year: number): Promise<Transaction[]> => {
-    const [results] = await db.executeSql(`SELECT * FROM ${tableName} WHERE month = ? AND year = ?`, [month, year]);
-    const transactions: Transaction[] = [];
-    for (let i = 0; i < results.rows.length; i++) {
-        const row = results.rows.item(i);
-        transactions.push({
-            id: row.id,
-            type: row.type,
-            category: row.category,
-            account: row.account,
-            amount: row.amount,
-            note: row.note,
-            day: row.day,
-            month: row.month,
-            year: row.year,
-            time: row.time
-        });
-    }
-    return transactions;
-}
-
-export const getTransactionsFromLastMonth = async (db: SQLiteDatabase): Promise<Transaction[]> => {
-    const [results] = await db.executeSql(`SELECT * FROM ${tableName} WHERE month = ? AND year = ?`, [new Date().getMonth() + 1, new Date().getFullYear()]);
-    const transactions: Transaction[] = [];
-    for (let i = 0; i < results.rows.length; i++) {
-        const row = results.rows.item(i);
-        transactions.push({
-            id: row.id,
-            type: row.type,
-            category: row.category,
-            account: row.account,
-            amount: row.amount,
-            note: row.note,
-            day: row.day,
-            month: row.month,
-            year: row.year,
-            time: row.time
-        });
-    }
-    return transactions;
-}
-
-export const getTransactionsFromLastYear = async (db: SQLiteDatabase): Promise<Transaction[]> => {
-    const [results] = await db.executeSql(`SELECT * FROM ${tableName} WHERE year = ?`, [new Date().getFullYear()]);
-    const transactions: Transaction[] = [];
-    for (let i = 0; i < results.rows.length; i++) {
-        const row = results.rows.item(i);
-        transactions.push({
-            id: row.id,
-            type: row.type,
-            category: row.category,
-            account: row.account,
-            amount: row.amount,
-            note: row.note,
-            day: row.day,
-            month: row.month,
-            year: row.year,
-            time: row.time
-        });
-    }
-    return transactions;
-}
-
-
-export const insertCategory = async (db: SQLiteDatabase, category: Category): Promise<void> => {
-    await db.executeSql(`INSERT INTO categories (name, image, color) VALUES (?, ?, ?)`, [
-        category.name,
-        category.image,
-        category.color
-    ]);
-}
-
-export const getCategoryById = async (db: SQLiteDatabase, id: number): Promise<Category> => {
-    const [results] = await db.executeSql(`SELECT * FROM categories WHERE id = ?`, [id]);
-    const row = results.rows.item(0);
-    return {
-        id: row.id,
-        name: row.name,
-        image: row.image,
-        color: row.color
-    };
-}
-
-export const getCategoryByName = async (db: SQLiteDatabase, name: string): Promise<Category> => {
-    const [results] = await db.executeSql(`SELECT * FROM categories WHERE name = ?`, [name]);
-    const row = results.rows.item(0);
-    return {
-        id: row.id,
-        name: row.name,
-        image: row.image,
-        color: row.color
-    };
-}
-
-export const getExistedCategoryByDate = async (db: SQLiteDatabase, fromMonth: number, fromYear: number, toMonth: number, toYear: number): Promise<Category[]> => {
-    const [results] = await db.executeSql(`SELECT DISTINCT category FROM ${tableName} WHERE (month >= ? AND year = ?) AND (month <= ? AND year = ?)`, [fromMonth, fromYear, toMonth, toYear]);
-    const categories: Category[] = [];
-    for (let i = 0; i < results.rows.length; i++) {
-        const row = results.rows.item(i);
-        categories.push(await getCategoryById(db, row.category));
-    }
-    return categories;
-}
-
-export const getExistedCategoryByTransactionList = async (db: SQLiteDatabase, transactions: Transaction[]): Promise<Category[]> => {
-    const categories: Category[] = [];
-    for (let i = 0; i < transactions.length; i++) {
-        const transaction = transactions[i];
-        const category = await getCategoryById(db, transaction.category);
-        if (!categories.find(c => c.id === category.id)) {
-            categories.push(category);
-        }
-    }
-    return categories;
-}
-
-export const getAllCategories = async (db: SQLiteDatabase): Promise<Category[]> => {
-    const [results] = await db.executeSql(`SELECT * FROM categories`);
-    const categories: Category[] = [];
-    for (let i = 0; i < results.rows.length; i++) {
-        const row = results.rows.item(i);
-        categories.push({
-            id: row.id,
-            name: row.name,
-            image: row.image,
-            color: row.color
-        });
-    }
-    return categories;
+export const deleteTransaction = async (db: SQLiteDatabase, transaction: Transaction): Promise<void> => {
+    await db.executeSql('DELETE FROM transactions WHERE id = ?', [transaction.id]);
 }
 
 export const insertAccount = async (db: SQLiteDatabase, account: Account): Promise<void> => {
-    await db.executeSql(`INSERT INTO accounts (name, balance, type, note) VALUES (?, ?, ?, ?)`, [
-        account.name,
-        account.balance,
-        account.type,
-        account.note
-    ]);
+    await db.executeSql('INSERT INTO accounts (name, balance, account_group) VALUES (?, ?, ?)', [account.name, account.balance, account.group]);
 }
 
-export const getAllAccounts = async (db: SQLiteDatabase): Promise<Account[]> => {
-    const [results] = await db.executeSql(`SELECT * FROM accounts`);
-    const accounts: Account[] = [];
-    for (let i = 0; i < results.rows.length; i++) {
-        const row = results.rows.item(i);
-        accounts.push({
-            id: row.id,
-            name: row.name,
-            balance: row.balance,
-            type: row.type,
-            note: row.note
-        });
-    }
-    return accounts;
+export const updateAccount = async (db: SQLiteDatabase, account: Account): Promise<void> => {
+    await db.executeSql('UPDATE accounts SET name = ?, balance = ?, account_group = ? WHERE id = ?', [account.name, account.balance, account.group, account.id]);
 }
 
-export const getAccountByType = async (db: SQLiteDatabase, type: String): Promise<Account[]> => {
-    const [results] = await db.executeSql(`SELECT * FROM accounts WHERE type = ?`, [type]);
-    const accounts: Account[] = [];
-    for (let i = 0; i < results.rows.length; i++) {
-        const row = results.rows.item(i);
-        accounts.push({
-            id: row.id,
-            name: row.name,
-            balance: row.balance,
-            type: row.type,
-            note: row.note
-        });
-    }
-    return accounts;
+export const deleteAccount = async (db: SQLiteDatabase, account: Account): Promise<void> => {
+    await db.executeSql('DELETE FROM accounts WHERE id = ?', [account.id]);
 }
 
-export const getExistedAccountType = async (db: SQLiteDatabase): Promise<string[]> => {
-    const [results] = await db.executeSql(`SELECT DISTINCT type FROM accounts`);
-    const accounts: string[] = [];
-    for (let i = 0; i < results.rows.length; i++) {
-        const row = results.rows.item(i);
-        accounts.push(row.type);
-    }
-    return accounts;
+export const insertCategory = async (db: SQLiteDatabase, category: Category): Promise<void> => {
+    await db.executeSql('INSERT INTO categories (name, color) VALUES (?, ?)', [category.name, category.color]);
 }
 
-export const getAllDatesList = async (db: SQLiteDatabase): Promise<number[]> => {
-    const [results] = await db.executeSql(`SELECT DISTINCT day FROM ${tableName}`);
-    const dates: number[] = [];
-    for (let i = 0; i < results.rows.length; i++) {
-        const row = results.rows.item(i);
-        dates.push(row.day);
-    }
-    return dates;
-
+export const updateCategory = async (db: SQLiteDatabase, category: Category): Promise<void> => {
+    await db.executeSql('UPDATE categories SET name = ?, color = ? WHERE id = ?', [category.name, category.color, category.id]);
 }
 
-export const getAllDatesListByMonth = async (db: SQLiteDatabase, month: number, year: number): Promise<Date[]> => {
-    const [results] = await db.executeSql(`SELECT DISTINCT day FROM ${tableName} WHERE month = ? AND year = ? ORDER BY day DESC`, [month, year]);
-    const dates: Date[] = [];
-    for (let i = 0; i < results.rows.length; i++) {
-        const row = results.rows.item(i);
-        dates.push(new Date(year, month, row.day));
-    }
-    return dates;
+export const deleteCategory = async (db: SQLiteDatabase, category: Category): Promise<void> => {
+    await db.executeSql('DELETE FROM categories WHERE id = ?', [category.id]);
 }
 
-
-export const importTestData = async (db: SQLiteDatabase): Promise<void> => {
-    const categories: Category[] = [
-        { id: 1, name: 'Food', image: 'https://cdn-icons-png.flaticon.com/512/2922/2922506.png', color: '#FF0000' },
-        { id: 2, name: 'Transport', image: 'https://cdn-icons-png.flaticon.com/512/2922/2922506.png', color: '#00FF00' },
-        { id: 3, name: 'Shopping', image: 'https://cdn-icons-png.flaticon.com/512/2922/2922506.png', color: '#0000FF' }
-    ];
-
-    const accounts: Account[] = [
-        { id: 1, name: 'Tiền mặt', balance: 75, type: 'Cash', note: '' },
-        { id: 2, name: 'MBBank', balance: 10000, type: 'Bank', note: '' }
-    ];
-
-    var date = new Date();
-    var day = date.getDate();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
-
-    const transactions: Transaction[] = [
-
-        { id: 1, type: 'expense', category: 1, account: 1, amount: 100000, note: 'Mua thịt', day: day, month: month, year: year, time: date.getTime() },
-        { id: 2, type: 'expense', category: 2, account: 1, amount: 200000, note: 'Mua xăng', day: day, month: month, year: year, time: date.getTime() },
-        { id: 3, type: 'expense', category: 3, account: 1, amount: 300000, note: 'Mua quần áo', day: day, month: month, year: year, time: date.getTime() },
-    ];
-
-    for (const category of categories) {
-        await insertCategory(db, category);
+export const getTransactionsFromDay = async (db: SQLiteDatabase, day: number, month: number, year: number): Promise<Transaction[]> => {
+    const [result] = await db.executeSql('SELECT transactions.id as t_id , transactions.amount as t_amount, transactions.day as t_day, transactions.month as t_month, transactions.year as t_year, transactions.note as t_note, transactions.type as t_type, transactions.categoryId as t_categoryId, transactions.accountId as t_accountId, categories.id as c_id, categories.name as c_name, categories.color as c_color, accounts.id as a_id, accounts.name as a_name, accounts.balance as a_balance, accounts.account_group as a_account_group FROM transactions INNER JOIN categories ON transactions.categoryId = categories.id INNER JOIN accounts ON transactions.accountId = accounts.id WHERE transactions.day = ? AND transactions.month = ? AND transactions.year = ?', [day, month, year]);
+    let transactions: Transaction[] = [];
+    for (let i = 0; i < result.rows.length; i++) {
+        const row = result.rows.item(i);
+        const transaction: Transaction = {
+            id: row.t_id,
+            amount: row.t_amount,
+            day: row.t_day,
+            month: row.t_month,
+            year: row.t_year,
+            note: row.t_note,
+            type: row.t_type,
+            category: {
+                id: row.c_id,
+                name: row.c_name,
+                color: row.c_color,
+                icon: "",
+            },
+            account: {
+                id: row.a_id,
+                name: row.a_name,
+                balance: row.a_balance,
+                group: row.a_account_group,
+            },
+        }
+        transactions.push(transaction);
     }
-
-    for (const account of accounts) {
-        await insertAccount(db, account);
-    }
-
-    /*for (const transaction of transactions) {
-        await insertTransaction(db, transaction);
-    }*/
+    return transactions;
 }
 
-export const getPieData = async (db: SQLiteDatabase, time: string, type: string): Promise<PieData[]> => {
-    var transactionsList: Transaction[] = [];
-    var categoriesList: Category[] = [];
-
-    switch (time) {
-        case "Monthly":
-            transactionsList = await getTransactionsFromLastMonth(db);
-            categoriesList = await getExistedCategoryByTransactionList(db, transactionsList);
-            break;
-        case "Yearly":
-            transactionsList = await getTransactionsFromLastYear(db);
-            categoriesList = await getExistedCategoryByTransactionList(db, transactionsList);
-            break;
+export const getDistinctDays = async (db: SQLiteDatabase, month: number, year: number): Promise<number[]> => {
+    const [result] = await db.executeSql('SELECT DISTINCT day FROM transactions WHERE month = ? AND year = ? ORDER BY day DESC', [month, year]);
+    let days: number[] = [];
+    for (let i = 0; i < result.rows.length; i++) {
+        const row = result.rows.item(i);
+        days.push(row.day);
     }
+    return days;
+}
 
-    const pieData: PieData[] = [];
-    var total = 0;
-    categoriesList.forEach((category) => {
-        var sum = 0;
-        transactionsList.forEach((transaction) => {
-            if (transaction.category == category.id && transaction.type == type) {
-                sum += transaction.amount;
+export const getDayBoxFromMonthYear = async (db: SQLiteDatabase, month: number, year: number): Promise<DayBox[]> => {
+    const days = await getDistinctDays(db, month, year);
+    let dateModels: DayBox[] = [];
+    for (let i = 0; i < days.length; i++) {
+        const day = days[i];
+        const transactions = await getTransactionsFromDay(db, day, month, year);
+        let totalIncome = 0;
+        let totalExpense = 0;
+        for (let j = 0; j < transactions.length; j++) {
+            const transaction = transactions[j];
+            if (transaction.type === 'income') {
+                totalIncome += transaction.amount;
+            } else {
+                totalExpense += transaction.amount;
             }
-        });
-        total += sum;
-        if (sum > 0)
-            pieData.push({
-                name: category.name,
-                percentage: 0,
-                value: sum,
-                color: category.color,
-            });
-    });
-    pieData.forEach((data) => {
-        data.percentage = data.value / total;
-    });
-    return pieData;
+        }
+        const dateModel: DayBox = {
+            day: day,
+            month: month,
+            year: year,
+            totalIncome: totalIncome,
+            totalExpense: totalExpense,
+            transactions: transactions,
+        }
+        dateModels.push(dateModel);
+    }
+    return dateModels;
 }
 
-export const clearDatabase = async (db: SQLiteDatabase): Promise<void> => {
-    await db.executeSql(`DELETE FROM ${tableName}`);
-    await db.executeSql(`DELETE FROM categories`);
-    await db.executeSql(`DELETE FROM accounts`);
+export const getCategories = async (db: SQLiteDatabase): Promise<Category[]> => {
+    const [result] = await db.executeSql('SELECT * FROM categories');
+    let categories: Category[] = [];
+    for (let i = 0; i < result.rows.length; i++) {
+        const row = result.rows.item(i);
+        const category: Category = {
+            id: row.id,
+            name: row.name,
+            color: row.color,
+            icon: row.icon,
+        }
+        categories.push(category);
+    }
+    return categories;
 }
 
-export const dropDatabaseAndRecreate = async (db: SQLiteDatabase): Promise<void> => {
-    await db.executeSql(`DROP TABLE IF EXISTS ${tableName}`);
-    await db.executeSql(`DROP TABLE IF EXISTS categories`);
-    await db.executeSql(`DROP TABLE IF EXISTS accounts`);
-}
-
-export const logAllToConsole = async (db: SQLiteDatabase): Promise<void> => {
-
-    const [results] = await db.executeSql(`SELECT * FROM ${tableName}`);
-    console.log(`Transactions: ${results.rows.length}`);
-    for (let i = 0; i < results.rows.length; i++) {
-        const row = results.rows.item(i);
-        console.log(`Transaction ${i + 1}: ${JSON.stringify(row)}`);
+export const getAccounts = async (db: SQLiteDatabase): Promise<Account[]> => {
+    const [result] = await db.executeSql('SELECT * FROM accounts');
+    let accounts: Account[] = [];
+    for (let i = 0; i < result.rows.length; i++) {
+        const row = result.rows.item(i);
+        const account: Account = {
+            id: row.id,
+            name: row.name,
+            balance: row.balance,
+            group: row.account_group,
+        }
+        accounts.push(account);
     }
-
-    const [results2] = await db.executeSql(`SELECT * FROM categories`);
-    console.log(`Categories: ${results2.rows.length}`);
-    for (let i = 0; i < results2.rows.length; i++) {
-        const row = results2.rows.item(i);
-        console.log(`Category ${i + 1}: ${JSON.stringify(row)}`);
-    }
-
-    const [results3] = await db.executeSql(`SELECT * FROM accounts`);
-    console.log(`Accounts: ${results3.rows.length}`);
-    for (let i = 0; i < results3.rows.length; i++) {
-        const row = results3.rows.item(i);
-        console.log(`Account ${i + 1}: ${JSON.stringify(row)}`);
-    }
+    return accounts;
 }

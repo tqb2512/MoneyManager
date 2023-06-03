@@ -1,12 +1,14 @@
+import { Account } from "./account";
+import { Category } from "./category";
+
 export type Transaction = {
-  id: any;
-  type: any;
-  category: any;
-  account: any;
-  amount: any;
-  day: any;
-  month: any;
-  year: any;
-  time: any;
-  note: any;
-};
+    id: number;
+    type: string;
+    category: Category;
+    amount: number;
+    day: number;
+    month: number;
+    year: number;
+    note: string;
+    account: Account;
+}

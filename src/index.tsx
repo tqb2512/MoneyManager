@@ -9,7 +9,7 @@ export default function App() {
     return (
         <NativeBaseProvider>
             <NavigationContainer>
-                <BottomBarTabs />
+                <AppNavigation/>
             </NavigationContainer>
         </NativeBaseProvider>
     );

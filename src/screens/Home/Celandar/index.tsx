@@ -6,14 +6,15 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
-import React, {useState, useEffect} from 'react';
-import {Calendar} from 'react-native-big-calendar';
-import {getAllDatesList, getDBConnection} from '../../../services/db-services';
-import {useIsFocused} from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { Calendar } from 'react-native-big-calendar';
+import { getAllDatesList, getDBConnection } from '../../../services/db-services';
+import { useIsFocused } from '@react-navigation/native';
 import DayBox from '../Daily/components/DayBox';
-import {ArrowLeftIcon, ArrowRightIcon, PlusIcon} from 'react-native-heroicons/outline';
-import {ChevronLeftIcon, ChevronRightIcon} from 'native-base';
+import { ArrowLeftIcon, ArrowRightIcon, PlusIcon } from 'react-native-heroicons/outline';
+import { ChevronLeftIcon, ChevronRightIcon } from 'native-base';
 import { ScrollView } from 'react-native';
+import { CelandarScreenProp } from '../../../navigation/types';
 
 const events = [
   {
@@ -28,7 +29,8 @@ const events = [
   },
 ];
 
-const CalendarView = () => {
+function CalendarScreen (props: CelandarScreenProp) {
+  const { navigation } = props;
   const [dayClicked, setDayClicked] = useState(false);
   const [mode, setMode] = useState<any>('month');
   const [dateValue, setDateValue] = React.useState(new Date());
@@ -39,7 +41,7 @@ const CalendarView = () => {
     setDayClicked(false)
     setDateValue(dateValue);
 
-    getDBConnection().then(db => {});
+    getDBConnection().then(db => { });
 
     if (!isFocused) return;
 
@@ -58,7 +60,7 @@ const CalendarView = () => {
         height={600}
         eventCellStyle={[
           // {backgroundColor: 'white'},
-          {borderWidth: 1, borderColor: 'green'},
+          { borderWidth: 1, borderColor: 'green' },
         ]}
         mode="month"
         showAllDayEventCell={false}
@@ -67,8 +69,8 @@ const CalendarView = () => {
           setDayClicked(true);
           setDateValue(date);
         }}
-        //sortedMonthView={true}
-        // headerContainerStyle={HeaderView}
+      //sortedMonthView={true}
+      // headerContainerStyle={HeaderView}
       />
 
       {/* Hiện chi tiết ngày khi bấm  */}
@@ -82,8 +84,8 @@ const CalendarView = () => {
               <DayBox date={dateValue} />
 
               {/* Add transaction */}
-              <TouchableOpacity 
-                style={{ margin: 8, bottom: 0, right: 0 , backgroundColor: '#F1948A', width: 54, height: 54, borderRadius: 9999, position: 'absolute', shadowRadius: 16, shadowOffset: {width: 4, height: 4}, alignItems: 'center', justifyContent: 'center' }}>
+              <TouchableOpacity
+                style={{ margin: 8, bottom: 0, right: 0, backgroundColor: '#F1948A', width: 54, height: 54, borderRadius: 9999, position: 'absolute', shadowRadius: 16, shadowOffset: { width: 4, height: 4 }, alignItems: 'center', justifyContent: 'center' }}>
                 <PlusIcon style={{}} size={30} color='white' />
               </TouchableOpacity>
             </View>
@@ -100,7 +102,7 @@ const CalendarView = () => {
               borderTopWidth: 0.2,
             }}>
 
-            <View style={{flexDirection: 'row', marginEnd: 16, padding: 4}}>
+            <View style={{ flexDirection: 'row', marginEnd: 16, padding: 4 }}>
               <ChevronLeftIcon
                 onPress={() => {
                   setDateValue(prevDate => {
@@ -140,17 +142,17 @@ const CalendarView = () => {
               onPress={() => {
                 setDayClicked(false);
               }}
-              style={{marginEnd: 16, padding: 4}}>
-              <Text style={{fontSize: 20, fontWeight: '500'}}>Close</Text>
+              style={{ marginEnd: 16, padding: 4 }}>
+              <Text style={{ fontSize: 20, fontWeight: '500' }}>Close</Text>
             </Pressable>
-          </View> 
+          </View>
         </Modal>
       )}
     </View>
   );
 };
 
-export default CalendarView;
+export default React.memo(CalendarScreen);
 
 const styles = StyleSheet.create({
   centeredView: {
