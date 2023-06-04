@@ -14,6 +14,12 @@ import AddAccountScreen from '../screens/AddAccount';
 import AddTransaction from '../screens/AddTransaction';
 import TransactionDetail from '../screens/TransactionDetail';
 import AccountDetail from '../screens/AccountDetail';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Header from '../screens/Home/Header';
+import StatsHeaderLeft from '../screens/Stats/StatsHeaderLeft';
+import StatsHeaderRight from '../screens/Stats/StatsHeaderRight';
+import { View } from 'native-base';
+import { styles } from 'react-native-gifted-charts/src/BarChart/styles';
 
 
 const HomeTopBar = createMaterialTopTabNavigator<HomeTopBarParamList>();
@@ -43,7 +49,9 @@ function BottomBarTabs()
         name="bottom_bar_home" 
         component={HomeScreenTopBar}
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitle: '',
+          headerRight: () => (<Header />),
           tabBarIcon: ({focused}) => 
             <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} size={30} />
         }} 
@@ -52,7 +60,10 @@ function BottomBarTabs()
         name="bottom_bar_stats" 
         component={StatsScreenTopBar}
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitle: '',
+          headerLeft: () => (<StatsHeaderLeft />),
+          headerRight: () => (<StatsHeaderRight />),
           tabBarIcon: ({focused}) => 
             <Ionicons name={focused ? 'ios-pie-chart' : 'ios-pie-chart-outline'} size={30} />
         }} 
@@ -73,7 +84,8 @@ function BottomBarTabs()
 function HomeScreenTopBar()
 {
   return (
-    <HomeTopBar.Navigator
+      <View style={{flex: 1}}>
+      <HomeTopBar.Navigator
       initialRouteName="home_top_bar_daily"
       tabBarOptions={{
         activeTintColor: '#000000',
@@ -106,20 +118,22 @@ function HomeScreenTopBar()
           tabBarIndicatorStyle: {borderBottomColor: '#566573', borderBottomWidth: 1, backgroundColor: 'white'}
         }}
         />
-    </HomeTopBar.Navigator>
+      </HomeTopBar.Navigator>
+      </View>
   ) 
 }
 
 function StatsScreenTopBar()
 {
   return (
-    <StatsTopBar.Navigator
-    tabBarOptions={{
-      activeTintColor: '#000000',
-      inactiveTintColor: '#000000',
-      labelStyle: { fontSize: 16, fontWeight: 'bold', color: 'grey' },
-      indicatorStyle: { height: 0 },
-      style: { backgroundColor: '#fff' },
+      <View style={{flex: 1}}>
+        <StatsTopBar.Navigator
+      tabBarOptions={{
+        activeTintColor: '#000000',
+        inactiveTintColor: '#000000',
+        labelStyle: { fontSize: 16, fontWeight: 'bold', color: 'grey' },
+        indicatorStyle: { height: 0 },
+        style: { backgroundColor: '#fff' },
       }}
     >
       <StatsTopBar.Screen 
@@ -131,8 +145,7 @@ function StatsScreenTopBar()
         tabBarActiveTintColor: '#7DCEA0',
         tabBarInactiveTintColor: '#D5D8DC',
         tabBarBounces: false,
-        tabBarIndicatorStyle: {borderBottomColor: '#7DCEA0', borderBottomWidth: 1, backgroundColor: 'white'}
-
+        tabBarIndicatorStyle: {borderBottomColor: '#7DCEA0', borderBottomWidth: 1, backgroundColor: 'white'},
       }} 
     />
       <StatsTopBar.Screen 
@@ -148,6 +161,7 @@ function StatsScreenTopBar()
       }} 
     />
     </StatsTopBar.Navigator>
+      </View>
   )
 }
 

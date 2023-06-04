@@ -68,46 +68,6 @@ export default function Chart() {
 
     return (
         <SafeAreaView>
-            <View style={styles.pickerContainer}>
-                <View style={styles.monthPicker}>
-                        <TouchableOpacity 
-                            style={styles.monthPickerContainer}
-                            onPress={() => showPicker(true)}
-                            >
-                            <Ionicons name='ios-calendar-sharp' size={26} color='#7DCEA0'/>
-                            <Text style={styles.monthPickerText}>{date.getMonth()+1}/{date.getFullYear()}</Text>
-                        </TouchableOpacity>
-                        {show && (
-                        <MonthPicker
-                            onChange={onValueChange}
-                            value={date}
-                            minimumDate={new Date()}
-                            maximumDate={new Date(2025, 5)}
-                            locale="ko"
-                        />
-                    )}
-                    </View>
-                <View style={styles.datePicker}>
-                    <SelectDropdown
-                        data={timeOptions}
-                        defaultButtonText="Monthly"
-                        buttonTextStyle={styles.selectDropDownText}
-                        buttonStyle={styles.selectDropDownContainer}
-                        rowStyle={styles.rowContainer}
-                        renderDropdownIcon={() => <Ionicons name='ios-caret-down-outline' size={26} color='#7DCEA0'/>}
-                        dropdownIconPosition="right"
-                        onSelect={(selectedItem, index) => {
-                            updateChart(selectedItem);
-                        }}
-                        buttonTextAfterSelection={(selectedItem) => {
-                            return selectedItem;
-                        }}
-                        rowTextForSelection={(item) => {
-                            return item;
-                        }}
-                    />
-                </View>
-            </View>
 
             <View style={styles.chartContainer}>
                     <PieChart
@@ -164,60 +124,5 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         marginBottom: 15,
         backgroundColor: 'white'
-    },
-    datePicker: {
-        justifyContent: 'flex-end',
-        marginRight: "10%",
-        marginLeft: "1%"
-    },
-    selectDropDownText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: 'grey',
-    },
-    selectDropDownContainer: {
-        flexDirection: 'row',
-        justifyContent:'space-between',
-        backgroundColor: "white",
-        borderBottomColor: '#7DCEA0',
-        borderBottomWidth: 0.5,
-        paddingTop: "5%",
-        paddingBottom: "0%",
-        paddingHorizontal: "3%",
-        alignItems: 'center',
-        width: 120
-    },
-    rowContainer: {
-        backgroundColor: "white",
-        justifyContent: "flex-start"
-    },
-    monthPickerContainer: {
-        flexDirection: 'row',
-        justifyContent:'space-between',
-        backgroundColor: "white",
-        borderBottomColor: '#7DCEA0',
-        borderBottomWidth: 0.5,
-        paddingTop: "5%",
-        paddingBottom: "0%",
-        paddingHorizontal: "3%",
-        alignItems: 'center',
-        width: 120
-    },
-    monthPickerText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: 'grey',
-    },
-    monthPicker:{
-        justifyContent: 'flex-start',
-        marginRight: "1%",
-        marginLeft: "10%",
-    },
-    pickerContainer:{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: 'white',
-        paddingTop: '2%',
-        paddingBot: '2%'
     },
 })

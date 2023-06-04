@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SelectDropdown from 'react-native-select-dropdown'
 import MonthPicker from 'react-native-month-year-picker';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 type Props = {}
 
@@ -24,15 +25,13 @@ export default function Header({}: Props) {
     );
   return (
     <SafeAreaView style={styles.headerContainer}>
-        <View style={styles.titleContainer}>
-            <Text style={styles.headerText}>Home</Text>
-        </View>
         <View style={styles.dropDownContainer}>
             <TouchableOpacity 
                 style={styles.selectDropDownContainer}
                 onPress={() => showPicker(true)}
                 >
-                <Text style={styles.selectDropDownText}>Open</Text>
+                <Ionicons name='ios-calendar-sharp' size={26} color='#ABB2B9'/>
+                <Text style={styles.selectDropDownText}>{date.getMonth()+1}/{date.getFullYear()}</Text>
             </TouchableOpacity>
             {show && (
             <MonthPicker
@@ -51,7 +50,9 @@ export default function Header({}: Props) {
 const styles = StyleSheet.create({
     headerContainer:{
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginRight: "7%",
+        marginTop: "0%"
     },
     titleContainer:{
         justifyContent: 'flex-start',
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
         marginRight: "1%"
     },
     selectDropDownText: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
         color: 'grey',
     },
@@ -73,15 +74,16 @@ const styles = StyleSheet.create({
         color: '#ABB2B9',
     },
     selectDropDownContainer: {
-        borderRadius: 7,
+        flexDirection: 'row',
+        justifyContent:'space-between',
         backgroundColor: "white",
-        borderBottomColor: 'grey',
-        borderWidth: 0.4,
-        paddingVertical: 10,
-        marginVertical: "5%",
-        marginRight: "10%",
+        borderBottomColor: '#D5D8DC',
+        borderBottomWidth: 0.5,
+        paddingTop: "5%",
+        paddingBottom: "0%",
+        paddingHorizontal: "3%",
         alignItems: 'center',
-        width: "100%",
+        width: 120
     },
     rowContainer: {
         backgroundColor: "white",

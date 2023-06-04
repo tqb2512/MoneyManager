@@ -5,6 +5,7 @@ import { DayBox as DayBoxModel } from '../../../models/dayBox';
 import { DailyScreenProp } from '../../../navigation/types';
 import { NativeBaseProvider } from 'native-base';
 import { getDBConnection, getDayBoxFromMonthYear, createTables, dropTables, importTestData } from '../../../services/db-services';
+import Header from '../Header';
 
 function DailyScreen (props: DailyScreenProp) {
   
