@@ -63,7 +63,6 @@ export default React.memo(DayBox);
 
 const styles = StyleSheet.create({
   mainContainer: {
-    marginTop : 12,
   },
 
   header: {
@@ -99,18 +98,18 @@ const styles = StyleSheet.create({
     width: "20%"
   },
   inText:{
-    fontSize: 18,
+    fontSize: 24,
     color: "#7DCEA0",
     fontWeight: "bold",
     textAlign: "right",
   },
   outContainer:{
-    marginRight: 13,
+    marginRight: "5%",
     marginTop: 5,
     width: "30%"
   },
   outText:{
-    fontSize: 18,
+    fontSize: 24,
     color: "#F1948A",
     fontWeight: "bold",
     textAlign: "right"

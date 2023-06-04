@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import React, {useState, useCallback} from 'react';
 import { Transaction } from '../../../../models/transaction';
 import { Category } from '../../../../models/category';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
@@ -17,9 +17,9 @@ function DayInfo (props: {transaction : Transaction, navigation: any}) {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={{flexDirection: 'row', backgroundColor: 'white'}}>
-        <View style={{width: 100,flexDirection: 'row', alignItems: 'center', padding: 8, marginLeft: 13}}>
+        <View style={{width: 100,flexDirection: 'row', alignItems: 'center', padding: 8, marginLeft: "3%"}}>
           
-          <Text style={{ marginStart: 8 }}>{props.transaction.category.name}</Text>
+          <Text style={{ marginStart: "5%" }}>{props.transaction.category.name}</Text>
         </View>
         <View style={{flex: 1, marginStart: "5%", justifyContent: 'center'}}>
           <Text style={{fontSize: 16, fontWeight: 'bold'}}>{props.transaction.note}</Text>
@@ -28,7 +28,7 @@ function DayInfo (props: {transaction : Transaction, navigation: any}) {
         <Text
           style={{
             alignSelf: 'center',
-            marginRight: 21,
+            marginRight: "6.5%",
             fontSize: 18,
             fontWeight:'bold',
             color: props.transaction.type === 'income' ? '#7DCEA0' : '#F1948A',

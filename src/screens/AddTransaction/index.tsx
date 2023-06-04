@@ -17,11 +17,6 @@ function AddTransaction(props: AddTransactionProp) {
   const [categories, setCategories] = React.useState<Category[]>([]);
   const [accounts, setAccounts] = React.useState<Account[]>([]);
 
-  const [incomeColor, setIncomeColor] = React.useState('#7DCEA0');
-  const [expenseColor, setExpenseColor] = React.useState('grey');
-
-  const [isIncome, setIsIncome] = React.useState(true);
-
   const [isDateClicked, setIsDateClicked] = React.useState(false);
   const [isCategoriesClicked, setIsCategoriesClicked] = React.useState(false);
   const [isAmountClicked, setIsAmountClicked] = React.useState(false);
@@ -71,9 +66,6 @@ function AddTransaction(props: AddTransactionProp) {
               <View style={[styles.buttonContainer, {}]}>
                 <TouchableOpacity onPress={() => {
                   setTransaction({ ...transaction, type: 'income' });
-                  setIncomeColor('#7DCEA0');
-                  setExpenseColor('#EAECEE');
-                  setIsIncome(true);
                 }}>
                   <View style={transaction.type == 'income' ? [styles.typeButton, { borderColor: "#7DCEA0" }] : styles.typeButton}>
                     <Text style={transaction.type == 'income' ? [styles.typeText, { color: "#7DCEA0" }] : styles.typeText}>
@@ -84,9 +76,6 @@ function AddTransaction(props: AddTransactionProp) {
 
                 <TouchableOpacity onPress={() => {
                   setTransaction({ ...transaction, type: 'expense' });
-                  setExpenseColor('#F1948A');
-                  setIncomeColor('#EAECEE');
-                  setIsIncome(false);
                 }}>
                   <View style={transaction.type == 'expense' ? [styles.typeButton, { borderColor: "#F1948A" }] : styles.typeButton}>
                     <Text style={transaction.type == 'expense' ? [styles.typeText, { color: "#F1948A" }] : styles.typeText}>

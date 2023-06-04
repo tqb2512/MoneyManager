@@ -19,6 +19,12 @@ function TransactionDetail(props: TransactionDetailProp) {
     const [categories, setCategories] = React.useState<Category[]>([]);
     const [accounts, setAccounts] = React.useState<Account[]>([]);
 
+    const [isDateClicked, setIsDateClicked] = React.useState(false);
+    const [isCategoriesClicked, setIsCategoriesClicked] = React.useState(false);
+    const [isAmountClicked, setIsAmountClicked] = React.useState(false);
+    const [isAccountsClicked, setIsAccountsClicked] = React.useState(false);
+    const [isNoteClicked, setIsNoteClicked] = React.useState(false);
+
     const [selectedInput, setSelectedInput] = React.useState('');
 
     const saveTransaction = () => {
@@ -52,7 +58,9 @@ function TransactionDetail(props: TransactionDetailProp) {
                         {/*select type*/}
                         <View style={{ backgroundColor: 'white' }}>
                             <View style={[styles.buttonContainer, {}]}>
-                                <TouchableOpacity onPress={() => {setTransaction({ ...transaction, type: 'income' });}}>
+                                <TouchableOpacity onPress={() => {
+                                    setTransaction({ ...transaction, type: 'income' });
+                                    }}>
                                     <View style={transaction.type == 'income' ? [styles.typeButton, { borderColor: "#7DCEA0" }] : styles.typeButton}>
                                         <Text style={transaction.type == 'income' ? [styles.typeText, { color: "#7DCEA0" }] : styles.typeText}>
                                             Income
@@ -77,9 +85,17 @@ function TransactionDetail(props: TransactionDetailProp) {
                                 <Text style={styles.inputLabel}>Date</Text>
                                 <TextInput
                                     style={styles.infoText}
-                                    onPressIn={() => { setShowDTP(true); setSelectedInput('date');}}
+                                    onPressIn={() => { 
+                                        setShowDTP(true); 
+                                        setSelectedInput('date');
+                                        setIsDateClicked(true);
+                                        setIsCategoriesClicked(false);
+                                        setIsAccountsClicked(false);
+                                        setIsAmountClicked(false);
+                                        setIsNoteClicked(false);
+                                    }}
                                     showSoftInputOnFocus={false}
-                                    underlineColorAndroid={selectedInput == 'date' ? '#7DCEA0' : 'gray'}
+                                    underlineColorAndroid={transaction.type != null ? isDateClicked ? transaction.type == 'expense' ? '#F1948A' : '#7DCEA0' : '#EAECEE' : '#EAECEE' }
                                     caretHidden={true}
                                     value={transaction.day + '/' + transaction.month + '/' + transaction.year}
                                 />
@@ -108,9 +124,16 @@ function TransactionDetail(props: TransactionDetailProp) {
                                 <TextInput
                                     style={styles.infoText}
                                     placeholder=""
-                                    onPressIn={() => { setShowCategories(true); setSelectedInput('category'); }}
-                                    underlineColorAndroid={selectedInput == 'category' ? '#7DCEA0' : 'gray'}
-                                    showSoftInputOnFocus={false}
+                                    onPressIn={() => { 
+                                        setShowCategories(true); 
+                                        setSelectedInput('category'); 
+                                        setIsDateClicked(false);
+                                        setIsCategoriesClicked(true);
+                                        setIsAccountsClicked(false);
+                                        setIsAmountClicked(false);
+                                        setIsNoteClicked(false);}}
+                                        underlineColorAndroid={transaction.type != null ? isCategoriesClicked ? transaction.type == 'expense' ? '#F1948A' : '#7DCEA0' : '#EAECEE' : '#EAECEE' }
+                                        showSoftInputOnFocus={false}
                                     caretHidden={true}
                                     value={transaction.category?.name}
                                 />
@@ -161,8 +184,16 @@ function TransactionDetail(props: TransactionDetailProp) {
                                 <TextInput
                                     style={styles.infoText}
                                     placeholder=""
-                                    onPressIn={() => {setShowAccounts(true); setSelectedInput('account');}}
-                                    underlineColorAndroid={selectedInput == 'account' ? '#7DCEA0' : 'gray'}
+                                    onPressIn={() => {
+                                        setShowAccounts(true); 
+                                        setSelectedInput('account');
+                                        setIsDateClicked(false);
+                                        setIsCategoriesClicked(false);
+                                        setIsAccountsClicked(true);
+                                        setIsAmountClicked(false);
+                                        setIsNoteClicked(false);
+                                    }}
+                                    underlineColorAndroid={transaction.type != null ? isAccountsClicked ? transaction.type == 'expense' ? '#F1948A' : '#7DCEA0' : '#EAECEE' : '#EAECEE' }
                                     showSoftInputOnFocus={false}
                                     caretHidden={true}
                                     value={transaction.account?.name}
@@ -217,10 +248,17 @@ function TransactionDetail(props: TransactionDetailProp) {
                                         style={styles.infoText}
                                         placeholder=""
                                         value={transaction.amount.toString()}
-                                        onChangeText={(text) => {setTransaction({ ...transaction, amount: Number(text) });}}
+                                        onChangeText={(text) => {
+                                            setTransaction({ ...transaction, amount: Number(text) });}}
                                         keyboardType="number-pad"
-                                        onPressIn={() => {setSelectedInput('amount');}}
-                                        underlineColorAndroid={selectedInput == 'amount' ? '#7DCEA0' : 'gray'}
+                                        onPressIn={() => 
+                                            {setSelectedInput('amount');
+                                            setIsDateClicked(false);
+                                            setIsCategoriesClicked(false);
+                                            setIsAccountsClicked(false);
+                                            setIsAmountClicked(true);
+                                            setIsNoteClicked(false);}}
+                                        underlineColorAndroid={transaction.type != null ? isAmountClicked ? transaction.type == 'expense' ? '#F1948A' : '#7DCEA0' : '#EAECEE' : '#EAECEE' }
                                     />
                                 </View>
                             </TouchableWithoutFeedback>
@@ -231,9 +269,15 @@ function TransactionDetail(props: TransactionDetailProp) {
                                     style={styles.infoText}
                                     value={transaction.note}
                                     onChangeText={(text) => {setTransaction({ ...transaction, note: text });}}
-                                    onPressIn={() => {setSelectedInput('note');}}
-                                    underlineColorAndroid={selectedInput == 'note' ? '#7DCEA0' : 'gray'}
-                                    placeholder=""
+                                    onPressIn={() => {
+                                        setSelectedInput('note');
+                                        setIsDateClicked(false);
+                                        setIsCategoriesClicked(false);
+                                        setIsAccountsClicked(false);
+                                        setIsAmountClicked(false);
+                                        setIsNoteClicked(true);}}
+                                        underlineColorAndroid={transaction.type != null ? isNoteClicked ? transaction.type == 'expense' ? '#F1948A' : '#7DCEA0' : '#EAECEE' : '#EAECEE' }
+                                        placeholder=""
                                 />
                             </View>
                         </View>
@@ -243,7 +287,7 @@ function TransactionDetail(props: TransactionDetailProp) {
 
                             <View style={{ flexDirection: 'row', padding: "4%", marginTop: "1%" }}>
                                 <TouchableOpacity
-                                    style={[styles.saveButton]}
+                                    style={transaction.type != null ? transaction.type == 'expense' ? [styles.saveButton, {backgroundColor: '#F1948A'}] : [styles.saveButton, {backgroundColor: '#7DCEA0'}] : styles.saveButton }
                                     onPress={() => {
                                         if (transaction.amount === 0) {
                                             Alert.alert('Please enter amount');
@@ -277,20 +321,21 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: 'rgba(229, 231, 235, 0.5)',
-    },
-
-    buttonContainer: {
+      },
+    
+      buttonContainer: {
         flexDirection: 'row',
         backgroundColor: 'white',
         justifyContent: 'space-between',
         padding: 8,
         paddingHorizontal: "15%",
         marginTop: "3%"
-    },
-
-    typeButton: {
+      },
+    
+      typeButton: {
         borderWidth: 1,
         borderRadius: 4,
+        borderColor: '#D5D8DC',
         padding: 4,
         paddingLeft: 30,
         paddingRight: 30,
@@ -298,55 +343,55 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         textAlign: 'center',
         verticalAlign: 'middle',
-    },
-    typeText: {
+      },
+      typeText: {
         fontWeight: 'bold',
         fontSize: 18,
         fontFamily: 'Montserrat'
-    },
-
-    input: {
+      },
+    
+      input: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: "5%",
         marginVertical: "1%",
-    },
-    inputLabel: {
+      },
+      inputLabel: {
         fontSize: 18,
         width: "20%",
         fontWeight: "500",
         color: 'grey',
-    },
-
-    infoText: {
+      },
+    
+      infoText: {
         fontSize: 18,
         width: "20%",
         fontWeight: "bold",
         color: '#2C3E50',
         flex: 1,
         marginLeft: "5%"
-    },
-
-    saveButtonText: {
+      },
+    
+      saveButtonText: {
         fontSize: 18,
         fontWeight: "500",
         color: 'white',
         flex: 1,
-    },
-
-    continueButtonText: {
+      },
+    
+      continueButtonText: {
         fontSize: 18,
         fontWeight: "bold",
         color: 'grey',
         flex: 1,
-    },
-
-    bottomContainer: {
+      },
+    
+      bottomContainer: {
         backgroundColor: 'white',
-    },
-
-    saveButton: {
-        backgroundColor: '#7DCEA0',
+      },
+    
+      saveButton: {
+        backgroundColor: '#D5D8DC',
         borderRadius: 4,
         width: "60%",
         height: "100%",
@@ -354,111 +399,111 @@ const styles = StyleSheet.create({
         padding: "1%",
         paddingTop: "2%",
         alignItems: 'center',
-    },
-
-    continueButton: {
+      },
+    
+      continueButton: {
         backgroundColor: 'white',
-        borderWidth: 0.8,
-        borderColor: 'grey',
+        borderWidth: 1,
+        borderColor: '#D5D8DC',
         width: "35%",
         height: 40,
         borderRadius: 4,
         alignItems: 'center',
         paddingTop: "2%"
-    },
-
-    categoryAction: {
+      },
+    
+      categoryAction: {
         // position: 'absolute',
         // bottom: 0,
         // zIndex: 50,
         // backgroundColor: '#666161',
         // width: '100%',
         // height: '50%',
-    },
-
-    categoryTopBar: {
+      },
+    
+      categoryTopBar: {
         backgroundColor: 'black',
         height: 36,
         flexDirection: 'row',
         justifyContent: 'space-between',
-    },
-
-    icons: {
+      },
+    
+      icons: {
         padding: 8,
         marginLeft: 4,
         marginRight: 4,
-    },
-
-    categoryContainer: {
+      },
+    
+      categoryContainer: {
         flexDirection: 'row',
-    },
-
-    accountContainer: {
+      },
+    
+      accountContainer: {
         flexDirection: 'column',
-    },
-
-    chooseAccountButton: {
+      },
+    
+      chooseAccountButton: {
         width: '100%',
         backgroundColor: 'white',
         padding: 16,
         borderWidth: 0.4,
-    },
-
-    centeredView: {
+      },
+    
+      centeredView: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 10,
         backgroundColor: 'rgba(0,0,0,0.4)',
-    },
-    modalView: {
+      },
+      modalView: {
         backgroundColor: 'white',
         borderRadius: 2,
         padding: 4,
         // alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
-            width: 0,
-            height: 2,
+          width: 0,
+          height: 2,
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
         height: '60%',
         width: '88%',
-    },
-    button: {
+      },
+      button: {
         padding: 10,
         elevation: 2,
         flexDirection: 'row',
         flexWrap: 'wrap',
-    },
-
-    buttonAccount: {
+      },
+    
+      buttonAccount: {
         padding: 10,
         elevation: 2,
-    },
-
-    textHeaderStyle: {
+      },
+    
+      textHeaderStyle: {
         color: 'black',
         fontWeight: 'bold',
         padding: 10,
         //textAlign: 'center',
-    },
-
-    textStyle: {
+      },
+    
+      textStyle: {
         color: 'black',
         // textAlign: 'center',
-    },
-
-    dateTimePicker: {
+      },
+    
+      dateTimePicker:{
         backgroundColor: 'white',
         borderRadius: 5,
         borderColor: '#C5C5C5',
         borderWidth: 1,
         marginVertical: 10,
         height: 43,
-    }
+      }
 });
 
 export default React.memo(TransactionDetail);

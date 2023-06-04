@@ -12,6 +12,11 @@ function DailyScreen (props: DailyScreenProp) {
   const [dayBoxes, setDayBoxes] = React.useState<DayBoxModel[]>([]);
 
   useEffect(() => {
+    getDBConnection().then((db) =>{
+      //createTables(db);
+      //importTestData(db);
+    })
+
     const unsubscribe = navigation.addListener("focus", () => {
       getDBConnection().then((db) => {
         getDayBoxFromMonthYear(db, 6, 2023).then((dayBoxes) => {
@@ -62,7 +67,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderRadius: 100,
-    backgroundColor: '#D5D8DC',
+    backgroundColor: 'rgba(178, 178, 178, 0.85)'
   },
   addButtonText:{
     fontSize: 30,
@@ -71,7 +76,13 @@ const styles = StyleSheet.create({
   addButtonContainer:{
     justifyContent: 'flex-end',
     alignSelf: 'flex-end',
-    position: 'absolute'
+    margin: "1%",
+    marginBottom: "3%",
+    marginRight: "3%",
+    position: 'absolute',
+    bot: 0,
+    right: 0,
+    top: 590,
   }
 })
 
