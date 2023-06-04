@@ -12,6 +12,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { Skeleton, Spinner } from "native-base";
 import MonthPicker from "react-native-month-year-picker";
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 export type PieData = {
     name: string,
@@ -73,7 +74,8 @@ export default function Chart() {
                             style={styles.monthPickerContainer}
                             onPress={() => showPicker(true)}
                             >
-                            <Text style={styles.monthPickerText}>Open</Text>
+                            <Ionicons name='ios-calendar-sharp' size={26} color='#7DCEA0'/>
+                            <Text style={styles.monthPickerText}>{date.getMonth()+1}/{date.getFullYear()}</Text>
                         </TouchableOpacity>
                         {show && (
                         <MonthPicker
@@ -92,6 +94,7 @@ export default function Chart() {
                         buttonTextStyle={styles.selectDropDownText}
                         buttonStyle={styles.selectDropDownContainer}
                         rowStyle={styles.rowContainer}
+                        renderDropdownIcon={() => <Ionicons name='ios-caret-down-outline' size={26} color='#7DCEA0'/>}
                         dropdownIconPosition="right"
                         onSelect={(selectedItem, index) => {
                             updateChart(selectedItem);
@@ -164,51 +167,57 @@ const styles = StyleSheet.create({
     },
     datePicker: {
         justifyContent: 'flex-end',
-        backgroundColor: 'white',
-        marginRight: "13%"
+        marginRight: "10%",
+        marginLeft: "1%"
     },
     selectDropDownText: {
         fontSize: 18,
-        fontWeight: '500',
-        color: 'white',
+        fontWeight: 'bold',
+        color: 'grey',
     },
     selectDropDownContainer: {
-        borderRadius: 7,
-        backgroundColor: "#7DCEA0",
-        marginTop: 15,
-        marginVertical: "5%",
-        marginRight: "10%",
+        flexDirection: 'row',
+        justifyContent:'space-between',
+        backgroundColor: "white",
+        borderBottomColor: '#7DCEA0',
+        borderBottomWidth: 0.5,
+        paddingTop: "5%",
+        paddingBottom: "0%",
+        paddingHorizontal: "3%",
         alignItems: 'center',
-        width: "150%",
-        justifyContent: "flex-start"
+        width: 120
     },
     rowContainer: {
         backgroundColor: "white",
         justifyContent: "flex-start"
     },
     monthPickerContainer: {
-        borderRadius: 7,
+        flexDirection: 'row',
+        justifyContent:'space-between',
         backgroundColor: "white",
-        borderColor: '#7DCEA0',
-        borderWidth: 1,
-        paddingVertical: 10,
-        marginTop: "13%",
-        marginLeft: "13%",
+        borderBottomColor: '#7DCEA0',
+        borderBottomWidth: 0.5,
+        paddingTop: "5%",
+        paddingBottom: "0%",
+        paddingHorizontal: "3%",
         alignItems: 'center',
-        width: "100%",
+        width: 120
     },
     monthPickerText: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
-        color: '#7DCEA0',
+        color: 'grey',
     },
     monthPicker:{
         justifyContent: 'flex-start',
-        marginRight: "1%"
+        marginRight: "1%",
+        marginLeft: "10%",
     },
     pickerContainer:{
         flexDirection: 'row',
         justifyContent: 'space-between',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        paddingTop: '2%',
+        paddingBot: '2%'
     },
 })

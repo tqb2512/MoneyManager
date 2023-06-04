@@ -17,6 +17,17 @@ function AddTransaction(props: AddTransactionProp) {
   const [categories, setCategories] = React.useState<Category[]>([]);
   const [accounts, setAccounts] = React.useState<Account[]>([]);
 
+  const [incomeColor, setIncomeColor] = React.useState('#7DCEA0');
+  const [expenseColor, setExpenseColor] = React.useState('grey');
+
+  const [isIncome, setIsIncome] = React.useState(true);
+
+  const [isDateClicked, setIsDateClicked] = React.useState(false);
+  const [isCategoriesClicked, setIsCategoriesClicked] = React.useState(false);
+  const [isAmountClicked, setIsAmountClicked] = React.useState(false);
+  const [isAccountsClicked, setIsAccountsClicked] = React.useState(false);
+  const [isNoteClicked, setIsNoteClicked] = React.useState(false);
+
   const [selectedInput, setSelectedInput] = React.useState('');
 
   const saveTransaction = () => {
@@ -54,13 +65,15 @@ function AddTransaction(props: AddTransactionProp) {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.mainContainer}>
         <View>
-
           <View>
             {/*select type*/}
             <View style={{ backgroundColor: 'white' }}>
               <View style={[styles.buttonContainer, {}]}>
                 <TouchableOpacity onPress={() => {
                   setTransaction({ ...transaction, type: 'income' });
+                  setIncomeColor('#7DCEA0');
+                  setExpenseColor('#EAECEE');
+                  setIsIncome(true);
                 }}>
                   <View style={transaction.type == 'income' ? [styles.typeButton, { borderColor: "#7DCEA0" }] : styles.typeButton}>
                     <Text style={transaction.type == 'income' ? [styles.typeText, { color: "#7DCEA0" }] : styles.typeText}>
@@ -71,6 +84,9 @@ function AddTransaction(props: AddTransactionProp) {
 
                 <TouchableOpacity onPress={() => {
                   setTransaction({ ...transaction, type: 'expense' });
+                  setExpenseColor('#F1948A');
+                  setIncomeColor('#EAECEE');
+                  setIsIncome(false);
                 }}>
                   <View style={transaction.type == 'expense' ? [styles.typeButton, { borderColor: "#F1948A" }] : styles.typeButton}>
                     <Text style={transaction.type == 'expense' ? [styles.typeText, { color: "#F1948A" }] : styles.typeText}>
@@ -88,10 +104,16 @@ function AddTransaction(props: AddTransactionProp) {
                 <Text style={styles.inputLabel}>Date</Text>
                 <TextInput
                   style={styles.infoText}
-                  onPressIn={() => { setShowDTP(true);}}
+                  onPressIn={() => { 
+                    setShowDTP(true);
+                    setIsDateClicked(true);
+                    setIsCategoriesClicked(false);
+                    setIsAccountsClicked(false);
+                    setIsAmountClicked(false);
+                    setIsNoteClicked(false);
+                  }}
                   showSoftInputOnFocus={false}
-                  underlineColorAndroid={selectedInput == 'date' ? '#7DCEA0' : 'gray'}
-                  caretHidden={true}
+                  underlineColorAndroid={transaction.type != null ? isDateClicked ? transaction.type == 'expense' ? '#F1948A' : '#7DCEA0' : '#EAECEE' : '#EAECEE' }
                   value={transaction.day + '/' + transaction.month + '/' + transaction.year}
                 />
               </View>
@@ -123,9 +145,16 @@ function AddTransaction(props: AddTransactionProp) {
                 <TextInput
                   style={styles.infoText}
                   placeholder=""
-                  onPressIn={() => { setShowCategories(true); setSelectedInput('category'); }}
-                  underlineColorAndroid={selectedInput == 'category' ? '#7DCEA0' : 'gray'}
-                  showSoftInputOnFocus={false}
+                  onPressIn={() => { 
+                    setShowCategories(true); 
+                    setSelectedInput('category'); 
+                    setIsDateClicked(false);
+                    setIsCategoriesClicked(true);
+                    setIsAccountsClicked(false);
+                    setIsAmountClicked(false);
+                    setIsNoteClicked(false);
+                  }}
+                  underlineColorAndroid={transaction.type != null ? isCategoriesClicked ? transaction.type == 'expense' ? '#F1948A' : '#7DCEA0' : '#EAECEE' : '#EAECEE' }
                   caretHidden={true}
                   value={transaction.category?.name}
                 />
@@ -176,9 +205,16 @@ function AddTransaction(props: AddTransactionProp) {
                 <TextInput
                   style={styles.infoText}
                   placeholder=""
-                  onPressIn={() => { setShowAccounts(true); setSelectedInput('account'); }}
-                  underlineColorAndroid={selectedInput == 'account' ? '#7DCEA0' : 'gray'}
-                  showSoftInputOnFocus={false}
+                  onPressIn={() => { 
+                    setShowAccounts(true); 
+                    setSelectedInput('account'); 
+                    setIsDateClicked(false);
+                    setIsCategoriesClicked(false);
+                    setIsAccountsClicked(true);
+                    setIsAmountClicked(false);
+                    setIsNoteClicked(false);
+                  }}
+                  underlineColorAndroid={transaction.type != null ? isAccountsClicked ? transaction.type == 'expense' ? '#F1948A' : '#7DCEA0' : '#EAECEE' : '#EAECEE' }
                   caretHidden={true}
                   value={transaction.account?.name}
                 />
@@ -234,9 +270,16 @@ function AddTransaction(props: AddTransactionProp) {
                     value={transaction.amount.toString()}
                     onChangeText={(text) => { setTransaction({ ...transaction, amount: Number(text) }); }}
                     keyboardType="number-pad"
-                    onPressIn={() => { setSelectedInput('amount'); }}
-                    underlineColorAndroid={selectedInput == 'amount' ? '#7DCEA0' : 'gray'}
-                  />
+                    onPressIn={() => { 
+                      setSelectedInput('amount'); 
+                      setIsDateClicked(false);
+                      setIsCategoriesClicked(false);
+                      setIsAccountsClicked(false);
+                      setIsAmountClicked(true);
+                      setIsNoteClicked(false);
+                    }}
+                    underlineColorAndroid={transaction.type != null ? isAmountClicked ? transaction.type == 'expense' ? '#F1948A' : '#7DCEA0' : '#EAECEE' : '#EAECEE' }
+                    />
                 </View>
               </TouchableWithoutFeedback>
 
@@ -246,9 +289,15 @@ function AddTransaction(props: AddTransactionProp) {
                   style={styles.infoText}
                   value={transaction.note}
                   onChangeText={(text) => { setTransaction({ ...transaction, note: text }); }}
-                  onPressIn={() => { setSelectedInput('note'); }}
-                  underlineColorAndroid={selectedInput == 'note' ? '#7DCEA0' : 'gray'}
-                  placeholder=""
+                  onPressIn={() => { 
+                    setSelectedInput('note'); 
+                    setIsDateClicked(false);
+                    setIsCategoriesClicked(false);
+                    setIsAccountsClicked(false);
+                    setIsAmountClicked(false);
+                    setIsNoteClicked(true);
+                  }}
+                  underlineColorAndroid={transaction.type != null ? isNoteClicked ? transaction.type == 'expense' ? '#F1948A' : '#7DCEA0' : '#EAECEE' : '#EAECEE' }
                 />
               </View>
             </View>
@@ -258,7 +307,7 @@ function AddTransaction(props: AddTransactionProp) {
 
               <View style={{ flexDirection: 'row', padding: "4%", marginTop: "1%" }}>
                 <TouchableOpacity
-                  style={[styles.saveButton]}
+                  style={transaction.type != null ? transaction.type == 'expense' ? [styles.saveButton, {backgroundColor: '#F1948A'}] : [styles.saveButton, {backgroundColor: '#7DCEA0'}] : styles.saveButton }
                   onPress={() => {
                     if (transaction.amount === 0) {
                       Alert.alert('Please enter amount');
@@ -310,6 +359,7 @@ const styles = StyleSheet.create({
   typeButton: {
     borderWidth: 1,
     borderRadius: 4,
+    borderColor: '#D5D8DC',
     padding: 4,
     paddingLeft: 30,
     paddingRight: 30,
@@ -365,7 +415,7 @@ const styles = StyleSheet.create({
   },
 
   saveButton: {
-    backgroundColor: '#7DCEA0',
+    backgroundColor: '#D5D8DC',
     borderRadius: 4,
     width: "60%",
     height: "100%",
@@ -377,8 +427,8 @@ const styles = StyleSheet.create({
 
   continueButton: {
     backgroundColor: 'white',
-    borderWidth: 0.8,
-    borderColor: 'grey',
+    borderWidth: 1,
+    borderColor: '#D5D8DC',
     width: "35%",
     height: 40,
     borderRadius: 4,
@@ -470,7 +520,7 @@ const styles = StyleSheet.create({
     // textAlign: 'center',
   },
 
-  dateTimePicker: {
+  dateTimePicker:{
     backgroundColor: 'white',
     borderRadius: 5,
     borderColor: '#C5C5C5',

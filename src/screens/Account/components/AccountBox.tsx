@@ -10,6 +10,8 @@ export default function AccountBox(props: { account: Account; navigation: any; }
             <View style={styles.accountButton}>
                 <View style={styles.accountLabel}>
                     <Text style={styles.accountText}>{account.name}</Text>
+                </View>
+                <View style={styles.moneyLabel}>
                     <Text style={account.balance >= 0 ? [styles.moneyText, {color: "#7DCEA0"}] : [styles.moneyText, {color: "#F1948A"}]}>$ {account.balance}</Text>
                 </View>
             </View>
@@ -20,7 +22,6 @@ export default function AccountBox(props: { account: Account; navigation: any; }
 /* #7DCEA0 - green, #F1948A - red */
 
 const styles = StyleSheet.create({
-
     mainContainer: {
         marginTop: 16
     },
@@ -29,7 +30,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 4,
-        paddingHorizontal: 16,
+        marginLeft: "3%",
+    },
+    moneyLabel: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 4,
+        marginRight: "3%",
     },
 
     moneyText: {
@@ -57,8 +64,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 16,
+        padding: "3.5%",
         borderWidth: 1,
         borderColor: 'rgba(229, 231, 235, 0.4)'
     },
+
 })

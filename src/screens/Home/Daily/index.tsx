@@ -1,4 +1,4 @@
-import { SafeAreaView, FlatList, TouchableOpacity, Text } from 'react-native';
+import { SafeAreaView, FlatList, TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import React, { useEffect } from 'react';
 import DayBox from './components/DayBox';
 import { DayBox as DayBoxModel } from '../../../models/dayBox';
@@ -26,7 +26,7 @@ function DailyScreen (props: DailyScreenProp) {
   return (
 
     <NativeBaseProvider>
-      <SafeAreaView>
+      <SafeAreaView style={styles.mainContainer}>
         {/* Income, expense, total, bar */}
         {/* Show list view chi tiêt schi tiêu ngày */}
 
@@ -36,14 +36,43 @@ function DailyScreen (props: DailyScreenProp) {
           keyExtractor={(item) => item.day.toString()}
         />
 
-        <TouchableOpacity onPress={() => navigation.navigate("add_transaction")}>
-          <Text>Add Transaction</Text>
-        </TouchableOpacity>
+          <View style={styles.addButtonContainer}>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => navigation.navigate("add_transaction")}
+            >
+            <Text style={styles.addButtonText}>+</Text>
+          </TouchableOpacity>
+          </View>
         
       </SafeAreaView>
     </NativeBaseProvider>
 
   );
 };
+
+const styles = StyleSheet.create({
+  mainContainer:{
+    flexDirection: 'column'
+  },
+  addButton:{
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10,
+    borderRadius: 100,
+    backgroundColor: '#D5D8DC',
+  },
+  addButtonText:{
+    fontSize: 30,
+    color: 'white'
+  },
+  addButtonContainer:{
+    justifyContent: 'flex-end',
+    alignSelf: 'flex-end',
+    position: 'absolute'
+  }
+})
 
 export default React.memo(DailyScreen);
