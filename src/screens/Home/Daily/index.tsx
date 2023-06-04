@@ -76,13 +76,11 @@ const styles = StyleSheet.create({
   addButtonContainer:{
     justifyContent: 'flex-end',
     alignSelf: 'flex-end',
-    margin: "1%",
-    marginBottom: "3%",
-    marginRight: "3%",
+    marginRight: "2.5%",
+    marginBottom: "10%",
     position: 'absolute',
-    bot: 0,
+    bottom: 0,
     right: 0,
-    top: 590,
   }
 })
 
