@@ -145,6 +145,7 @@ function AddTransaction(props: AddTransactionProp) {
                   }}
                   underlineColorAndroid={transaction.type != null ? isCategoriesClicked ? transaction.type == 'expense' ? '#F1948A' : '#7DCEA0' : '#EAECEE' : '#EAECEE' }
                   caretHidden={true}
+                  showSoftInputOnFocus={false}
                   value={transaction.category?.name}
                 />
               </View>
@@ -214,6 +215,7 @@ function AddTransaction(props: AddTransactionProp) {
                   }}
                   underlineColorAndroid={transaction.type != null ? isAccountsClicked ? transaction.type == 'expense' ? '#F1948A' : '#7DCEA0' : '#EAECEE' : '#EAECEE' }
                   caretHidden={true}
+                  showSoftInputOnFocus={false}
                   value={transaction.account?.name}
                 />
               </View>

@@ -25,7 +25,7 @@ function AccountsScreen(props: AccountsScreenProp) {
                 setAccounts(accounts);
             });
         });
-    });
+    }, [navigation]);
 
     return (
         <NativeBaseProvider>

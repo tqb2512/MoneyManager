@@ -12,15 +12,12 @@ export default function StatsHeaderLeft({}: Props) {
   
     const showPicker = useCallback((value:any) => setShow(value), []);
 
-    const onValueChange = useCallback(
-      (event:any, newDate:any) => {
-        const selectedDate = newDate || date;
+    const onValueChange = (event:any, newDate:any) => {
+      const selectedDate = newDate || date;
   
-        showPicker(false);
-        setDate(selectedDate);
-      },
-      [date, showPicker],
-    );
+      showPicker(false);
+      setDate(selectedDate);
+    }
   
     // const onValueChange = (event: any, newDate: any) => {
     //   const selectedDate = newDate || date;
@@ -42,8 +39,6 @@ export default function StatsHeaderLeft({}: Props) {
         mode='number'
         onChange={onValueChange}
         value={date}
-        minimumDate={new Date()}
-        maximumDate={new Date(2025, 5)}
         locale="ko"
     />
 )}
