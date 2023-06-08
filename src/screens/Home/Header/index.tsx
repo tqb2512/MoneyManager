@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   dropDownContainer: {
     justifyContent: 'flex-end',
-    marginRight: '1%',
+    marginRight: '2%',
   },
   selectDropDownText: {
 
@@ -82,9 +82,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     paddingTop: '5%',
     paddingBottom: '0%',
-    paddingHorizontal: '3%',
+    // paddingHorizontal: '3%',
     alignItems: 'center',
-    width: 120,
+    // width: 120,
     // shadowRadius: 40,
     // shadowOffset: {width: 4, height: 4},
     // shadowOpacity: 5,

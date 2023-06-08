@@ -44,18 +44,6 @@ function DailyScreen(props: DailyScreenProp) {
   return (
     <NativeBaseProvider>
       <SafeAreaView style={styles.mainContainer}>
-        {/* Income, expense, total, bar */}
-        {/* Show list view chi tiêt schi tiêu ngày */}
-        <View>
-          <FlatList
-            data={dayBoxes}
-            renderItem={({item}) => (
-              <DayBox dayBoxModel={item} navigation={props.navigation} />
-            )}
-            keyExtractor={item => item.day.toString()}
-          />
-        </View>
-
         <View style={styles.addButtonContainer}>
           <TouchableOpacity
             style={styles.addButton}
@@ -63,6 +51,16 @@ function DailyScreen(props: DailyScreenProp) {
             <Text style={styles.addButtonText}>+</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Income, expense, total, bar */}
+        {/* Show list view chi tiêt schi tiêu ngày */}
+        <FlatList
+          data={dayBoxes}
+          renderItem={({item}) => (
+            <DayBox dayBoxModel={item} navigation={props.navigation} />
+          )}
+          keyExtractor={item => item.day.toString()}
+        />
       </SafeAreaView>
     </NativeBaseProvider>
   );
@@ -71,7 +69,25 @@ function DailyScreen(props: DailyScreenProp) {
 const styles = StyleSheet.create({
   mainContainer: {
     flexDirection: 'column',
+    position: 'relative',
+    flex: 1
   },
+
+  addButtonText: {
+    fontSize: 30,
+    color: 'white',
+  },
+  addButtonContainer: {
+    justifyContent: 'flex-end',
+    alignSelf: 'flex-end',
+    marginRight: 16,
+    marginBottom: 16,
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    zIndex: 100,
+  },
+
   addButton: {
     width: 70,
     height: 70,
@@ -80,19 +96,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 100,
     backgroundColor: 'rgba(178, 178, 178, 0.85)',
-  },
-  addButtonText: {
-    fontSize: 30,
-    color: 'white',
-  },
-  addButtonContainer: {
-    justifyContent: 'flex-end',
-    alignSelf: 'flex-end',
-    marginRight: '2.5%',
-    marginBottom: '10%',
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
   },
 });
 
