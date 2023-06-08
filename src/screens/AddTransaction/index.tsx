@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform, TextInput, TouchableWithoutFeedback, Keyboard, Modal, FlatList, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Platform, TextInput, TouchableWithoutFeedback, Keyboard, Modal, FlatList, Alert, Image, ScrollView } from 'react-native';
 import { NativeBaseProvider, KeyboardAvoidingView, CloseIcon } from 'native-base';
 import { AddTransactionProp } from '../../navigation/types';
 import { Transaction } from '../../models/transaction';
@@ -162,12 +162,14 @@ function AddTransaction(props: AddTransactionProp) {
                           borderBottomColor: 'grba(0,0,0,0.1)',
                           borderBottomWidth: 0.2,
                         }}>
-                        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Categories</Text>
-                        <CloseIcon onPress={() => { setShowCategories(false); setSelectedInput('') }} />
+                        <Text style={{ fontSize: 18, fontWeight: 'bold', padding: 8  }}>Categories</Text>
+                        <CloseIcon style={{ marginEnd: 8 }} onPress={() => { setShowCategories(false); setSelectedInput('') }} />
                       </View>
 
                       <View>
                         <FlatList
+                          contentContainerStyle={{ alignSelf: 'flex-start' }}
+                          numColumns={3/1}
                           data={categories}
                           renderItem={({ item }) => (
                             <TouchableOpacity
@@ -176,6 +178,8 @@ function AddTransaction(props: AddTransactionProp) {
                                 setSelectedInput('');
                                 setShowCategories(false);
                               }}>
+                                {/* test image */}
+                              <Image source={ require('../../../assets/icons/culture.png') } style={{ width: 64, height: 64 }} />
                               <Text>{item.name}</Text>
                             </TouchableOpacity>
                           )}
@@ -222,8 +226,8 @@ function AddTransaction(props: AddTransactionProp) {
                           borderBottomColor: 'grba(0,0,0,0.1)',
                           borderBottomWidth: 0.2,
                         }}>
-                        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Accounts</Text>
-                        <CloseIcon onPress={() => { setShowAccounts(false); setSelectedInput('') }} />
+                        <Text style={{ fontSize: 18, fontWeight: 'bold', padding: 8 }}>Accounts</Text>
+                        <CloseIcon style={{ marginEnd: 8 }} onPress={() => { setShowAccounts(false); setSelectedInput('') }} />
                       </View>
 
                       <View>
@@ -231,12 +235,14 @@ function AddTransaction(props: AddTransactionProp) {
                           data={accounts}
                           renderItem={({ item }) => (
                             <TouchableOpacity
+                              style={{ padding: 8, marginTop: 8 }}
                               onPress={() => {
                                 setTransaction({ ...transaction, account: item });
                                 setSelectedInput('');
                                 setShowAccounts(false);
                               }}>
                               <Text>{item.name}</Text>
+                              {/* <View style={{ borderWidth: 0.2 }} ></View> */}
                             </TouchableOpacity>
                           )}
                           keyExtractor={(item) => item.id.toString()}
@@ -370,9 +376,9 @@ const styles = StyleSheet.create({
     marginVertical: "1%",
   },
   inputLabel: {
-    fontSize: 18,
+    // fontSize: 18,
     width: "20%",
-    fontWeight: "500",
+    // fontWeight: "500",
     color: 'grey',
   },
 
@@ -471,7 +477,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     backgroundColor: 'white',
-    borderRadius: 2,
+    borderRadius: 4,
     padding: 4,
     // alignItems: 'center',
     shadowColor: '#000',

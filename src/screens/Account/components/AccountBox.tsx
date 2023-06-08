@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
     moneyText: {
         color: 'black',
         alignSelf: 'center',
-        fontSize: 20,
-        fontWeight: 'bold',
+        fontSize: 16,
+        fontWeight: '500',
     },
 
     totalElement: {
@@ -55,9 +55,9 @@ const styles = StyleSheet.create({
 
     accountText: {
         alignSelf: 'center',
-        fontSize: 18,
-        fontWeight: "500",
-        color: 'grey',
+        fontSize: 14,
+        // fontWeight: "500",
+        color: 'black',
     },
 
     accountButton: {

@@ -47,19 +47,19 @@ function AccountsScreen(props: AccountsScreenProp) {
                     <View style={styles.secondTopBar}>
                         <View style={styles.totalCalc}>
                             <Text style={styles.totalElement}>Assets</Text>
-                            <Text style={{ color: '#7DCEA0', alignSelf: 'center', fontSize: 20, fontWeight: 'bold' }}>
+                            <Text style={{ color: '#7DCEA0', alignSelf: 'center', fontSize: 14, fontWeight: '500' }}>
                                 $ 35.00
                             </Text>
                         </View>
                         <View style={styles.totalCalc}>
                             <Text style={styles.totalElement}>Liabilities</Text>
-                            <Text style={{ color: '#F1948A', alignSelf: 'center', fontSize: 20, fontWeight: 'bold' }}>
+                            <Text style={{ color: '#F1948A', alignSelf: 'center', fontSize: 14, fontWeight: '500' }}>
                                 $ 35.00
                             </Text>
                         </View>
                         <View style={styles.totalCalc}>
                             <Text style={styles.totalElement}>Total</Text>
-                            <Text style={{ color: 'grey', alignSelf: 'center', fontSize: 20, fontWeight: 'bold' }}>
+                            <Text style={{ color: 'grey', alignSelf: 'center', fontSize: 14, fontWeight: '500' }}>
                                 $ 35.00
                             </Text>
                         </View>
@@ -112,10 +112,10 @@ const styles = StyleSheet.create({
     secondTopBar: {
         backgroundColor: 'white',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly',
         paddingTop: 10,
         paddingBottom: 10,
-        paddingHorizontal: 20,
+        // paddingHorizontal: 20,
         borderWidth: 1,
         borderColor: 'rgba(229, 231, 235, 0.4)',
     },
@@ -127,14 +127,15 @@ const styles = StyleSheet.create({
 
     totalElement: {
         alignSelf: 'center',
-        fontSize: 18,
-        fontWeight: "600",
+        fontSize: 16,
+        fontWeight: "500",
     },
 
     threeDotsText: {
+        // marginStart: 8
         alignSelf: 'center',
-        fontSize: 18,
-        fontWeight: "600"
+        fontSize: 14,
+        // fontWeight: "600"
     },
 
     viewShow: {

@@ -48,11 +48,21 @@ export const importTestData = async (db: SQLiteDatabase): Promise<void> => {
     const accounts: Account[] = [
         { id: 1, name: "Cash", balance: 0, group: "Cash" },
         { id: 2, name: "Bank", balance: 0, group: "Bank" },
+        // { id: 3, name: "Bank 1", balance: 0, group: "Bank" },
+        // { id: 4, name: "Bank 2", balance: 0, group: "Bank" },
+        // { id: 5, name: "Bank 3", balance: 0, group: "Bank" },
+        // { id: 6, name: "Bank 4", balance: 0, group: "Bank" },
+        // { id: 7, name: "Bank 5", balance: 0, group: "Bank" },
     ]
 
     const categories: Category[] = [
         { id: 1, name: "Food", color: "#FF0000", icon: "" },
         { id: 2, name: "Transport", color: "#00FF00", icon: "" },
+        // { id: 3, name: "Play", color: "#00FF00", icon: "" },
+        // { id: 4, name: "Watch", color: "#00FF00", icon: "" },
+        // { id: 5, name: "Study", color: "#00FF00", icon: "" },
+        // { id: 6, name: "Entertainment", color: "#00FF00", icon: "" },
+        // { id: 7, name: "Salary", color: "#00FF00", icon: "" },
     ]
 
     const transactions: Transaction[] = [

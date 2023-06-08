@@ -11,7 +11,7 @@ export default function StatsHeaderLeft({}: Props) {
     const [show, setShow] = useState(false);
   
     const showPicker = useCallback((value:any) => setShow(value), []);
-  
+
     const onValueChange = useCallback(
       (event:any, newDate:any) => {
         const selectedDate = newDate || date;
@@ -21,6 +21,12 @@ export default function StatsHeaderLeft({}: Props) {
       },
       [date, showPicker],
     );
+  
+    // const onValueChange = (event: any, newDate: any) => {
+    //   const selectedDate = newDate || date;
+    //   setShow(!show);
+    //   setDate(selectedDate);
+    // };
 
   return (
   <View style={styles.monthPicker}>
@@ -28,11 +34,12 @@ export default function StatsHeaderLeft({}: Props) {
         style={styles.monthPickerContainer}
         onPress={() => showPicker(true)}
         >
-        <Ionicons name='ios-calendar-sharp' size={26} color='#ABB2B9'/>
+        <Ionicons name="ios-calendar-sharp" size={22} color="black" />
         <Text style={styles.monthPickerText}>{date.getMonth()+1}/{date.getFullYear()}</Text>
     </TouchableOpacity>
     {show && (
     <MonthPicker
+        mode='number'
         onChange={onValueChange}
         value={date}
         minimumDate={new Date()}
@@ -51,6 +58,15 @@ const styles = StyleSheet.create({
         marginLeft: "20%",
     },
     monthPickerContainer: {
+      // flexDirection: 'row',
+      // backgroundColor: 'white',
+      // borderBottomColor: '#D5D8DC',
+      // borderBottomWidth: 0.5,
+      // paddingTop: '5%',
+      // paddingBottom: '0%',
+      // paddingHorizontal: '3%',
+      // alignItems: 'center',
+      // width: 120,
         flexDirection: 'row',
         justifyContent:'space-between',
         backgroundColor: "white",
@@ -60,11 +76,14 @@ const styles = StyleSheet.create({
         paddingBottom: "0%",
         paddingHorizontal: "3%",
         alignItems: 'center',
-        width: 120
     },
     monthPickerText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: 'grey',
+        // fontSize: 20,
+        // fontWeight: 'bold',
+        // color: 'grey',
+        marginLeft: 12,
+        fontSize: 14,
+        fontWeight: '500',
+        color: 'black',
     },
 })

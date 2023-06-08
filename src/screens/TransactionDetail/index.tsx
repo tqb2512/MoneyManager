@@ -357,9 +357,9 @@ const styles = StyleSheet.create({
         marginVertical: "1%",
       },
       inputLabel: {
-        fontSize: 18,
+        // fontSize: 18,
         width: "20%",
-        fontWeight: "500",
+        // fontWeight: "500",
         color: 'grey',
       },
     
