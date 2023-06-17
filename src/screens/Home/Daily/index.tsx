@@ -24,11 +24,6 @@ function DailyScreen(props: DailyScreenProp) {
   const {navigation} = props;
   const [dayBoxes, setDayBoxes] = React.useState<DayBoxModel[]>([]);
   useEffect(() => {
-    getDBConnection().then(db => {
-      // dropTables(db)
-      // createTables(db);
-      importTestData(db);
-    });
 
     const unsubscribe = navigation.addListener('focus', () => {
       getDBConnection().then(db => {

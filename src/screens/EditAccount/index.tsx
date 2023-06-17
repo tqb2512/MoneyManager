@@ -14,7 +14,7 @@ import { TrashIcon, ChevronLeftIcon } from 'react-native-heroicons/outline'
 
 const EditAccount = (props: EditAccountProp) => {
 
-    const { navigation } = props;
+  const { navigation } = props;
 
   const ACC = props.route.params.account;
 
