@@ -5,7 +5,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import SelectDropdown from 'react-native-select-dropdown';
 import MonthPicker from 'react-native-month-year-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { ChevronRightIcon, ChevronLeftIcon } from 'react-native-heroicons/outline'
+import { CalendarIcon } from 'react-native-heroicons/outline'
 
 type Props = {};
 
@@ -26,7 +26,7 @@ export default function Header({}: Props) {
         <TouchableOpacity
           style={styles.selectDropDownContainer}
           onPress={() => setShow(true)}>
-          <Ionicons name="ios-calendar-sharp" size={22} color="black" />
+          <CalendarIcon size={20} color='white' />
           <Text style={styles.selectDropDownText}>
             {date.getMonth() + 1}/{date.getFullYear()}
           </Text>
@@ -36,8 +36,6 @@ export default function Header({}: Props) {
             mode='number'
             onChange={onValueChange}
             value={date}
-            minimumDate={new Date()}
-            maximumDate={new Date(2025, 5)}
             locale="ko"
           />
         )}
@@ -49,9 +47,12 @@ export default function Header({}: Props) {
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginRight: '2%',
-    marginTop: '0%',
+    marginLeft: 16,
+    marginBottom: 24,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    zIndex: 100,
   },
   titleContainer: {
     justifyContent: 'flex-start',
@@ -63,11 +64,10 @@ const styles = StyleSheet.create({
     marginRight: '2%',
   },
   selectDropDownText: {
-
     marginLeft: 12,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '500',
-    color: 'black',
+    color: 'white',
   },
   headerText: {
     fontSize: 26,
@@ -75,22 +75,17 @@ const styles = StyleSheet.create({
     color: '#ABB2B9',
   },
   selectDropDownContainer: {
-    // justifyContent: 'space-between',
     flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: 'rgb(99, 99, 99)',
+    borderRadius: 16,
     borderBottomColor: '#D5D8DC',
-    borderBottomWidth: 0.5,
     paddingTop: '5%',
-    paddingBottom: '0%',
-    // paddingHorizontal: '3%',
-    alignItems: 'center',
-    // width: 120,
-    // shadowRadius: 40,
-    // shadowOffset: {width: 4, height: 4},
-    // shadowOpacity: 5,
-  },
-  rowContainer: {
-    backgroundColor: 'white',
-    justifyContent: 'flex-start',
+    padding: 12,
+    paddingBottom: '5%',
+    justifyContent: 'center',
+    shadowColor: '#171717',
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
 });

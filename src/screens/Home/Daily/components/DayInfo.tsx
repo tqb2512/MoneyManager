@@ -29,8 +29,6 @@ function DayInfo (props: {transaction : Transaction, navigation: any}) {
           style={{
             alignSelf: 'center',
             marginRight: "6.5%",
-            fontSize: 18,
-            fontWeight:'bold',
             color: props.transaction.type === 'income' ? '#7DCEA0' : '#F1948A',
           }}>
           $ {props.transaction.amount}

@@ -16,7 +16,7 @@ const Settings = () => {
             </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
                 <Image style={styles.img} source={require('../../../assets/settingImage/export.png')} />
-                <Text>Export</Text>
+                <Text>Data</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
                 <Image style={styles.img} source={require('../../../assets/settingImage/palette.png')} />

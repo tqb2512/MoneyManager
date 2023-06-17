@@ -52,9 +52,9 @@ function BottomBarTabs()
         name="bottom_bar_home" 
         component={HomeScreenTopBar}
         options={{
-          headerShown: true,
+          headerShown: false,
           headerTitle: '',
-          headerRight: () => (<Header />),
+          // headerRight: () => (<Header />),
           tabBarIcon: ({focused}) => 
             <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} color={focused ? '#2A7BDB': 'grey'} size={20} />
         }} 

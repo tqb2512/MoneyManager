@@ -49,13 +49,23 @@ function DailyScreen(props: DailyScreenProp) {
 
         {/* Income, expense, total, bar */}
         {/* Show list view chi tiêt schi tiêu ngày */}
-        <FlatList
-          data={dayBoxes}
-          renderItem={({item}) => (
-            <DayBox dayBoxModel={item} navigation={props.navigation} />
-          )}
-          keyExtractor={item => item.day.toString()}
-        />
+        <View>
+          <FlatList
+            data={dayBoxes}
+            renderItem={({item, index}) => (
+              <View>
+                <DayBox dayBoxModel={item} navigation={props.navigation} />
+                { index === dayBoxes.length - 1 ? 
+                (<View style={styles.footerView}>
+                  <Text>  </Text>
+                </View>) 
+                : null}
+              </View>
+            )}
+            keyExtractor={item => item.day.toString()}
+          />
+        </View>
+        <Header />
       </SafeAreaView>
     </NativeBaseProvider>
   );
@@ -92,6 +102,11 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: 'rgba(178, 178, 178, 0.85)',
   },
+
+  footerView: {
+    height: 75,
+    width: '100%',
+  }
 });
 
 export default React.memo(DailyScreen);
