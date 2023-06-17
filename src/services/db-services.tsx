@@ -206,6 +206,41 @@ export const getDayBoxFromMonthYear = async (db: SQLiteDatabase, month: number, 
     return dateModels;
 }
 
+export const getDayBoxByAccount = async (db: SQLiteDatabase, account: Account): Promise<DayBox[]> => {
+    const [result] = await db.executeSql('SELECT DISTINCT day, month, year FROM transactions WHERE accountId = ? ORDER BY day DESC', [account.id]);
+    let days: Date[] = [];
+    for (let i = 0; i < result.rows.length; i++) {
+        const row = result.rows.item(i);
+        const date = new Date(row.year, row.month, row.day);
+        days.push(date);
+    }
+    let dateModels: DayBox[] = [];
+    for (let i = 0; i < days.length; i++) {
+        const day = days[i];
+        const transactions = await getTransactionsFromDay(db, day.getDate(), day.getMonth(), day.getFullYear());
+        let totalIncome = 0;
+        let totalExpense = 0;
+        for (let j = 0; j < transactions.length; j++) {
+            const transaction = transactions[j];
+            if (transaction.type === 'income') {
+                totalIncome += transaction.amount;
+            } else {
+                totalExpense += transaction.amount;
+            }
+        }
+        const dateModel: DayBox = {
+            day: day.getDate(),
+            month: day.getMonth(),
+            year: day.getFullYear(),
+            totalIncome: totalIncome,
+            totalExpense: totalExpense,
+            transactions: transactions,
+        }
+        dateModels.push(dateModel);
+    }
+    return dateModels;
+}
+
 export const getCategories = async (db: SQLiteDatabase): Promise<Category[]> => {
     const [result] = await db.executeSql('SELECT * FROM categories');
     let categories: Category[] = [];

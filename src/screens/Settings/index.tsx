@@ -11,26 +11,21 @@ const Settings = () => {
 
         <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button}>
-                <Image style={styles.img} source={require('../../../assets/SettingImage/currency.png')} />
+                <Image style={styles.img} source={require('../../../assets/settingImage/currency.png')} />
                 <Text>Currency</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
-                <Image style={styles.img} source={require('../../../assets/SettingImage/export.png')} />
+                <Image style={styles.img} source={require('../../../assets/settingImage/export.png')} />
                 <Text>Export</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
-                <Image style={styles.img} source={require('../../../assets/SettingImage/palette.png')} />
+                <Image style={styles.img} source={require('../../../assets/settingImage/palette.png')} />
                 <Text>Theme</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
-                <Image style={styles.img} source={require('../../../assets/SettingImage/help.png')} />
+                <Image style={styles.img} source={require('../../../assets/settingImage/help.png')} />
                 <Text>Help</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-                <Image style={styles.img} source={require('../../../assets/SettingImage/help.png')} />
-                <Text>Help</Text>
-            </TouchableOpacity>
-            
         </View>
     </View>
   )
