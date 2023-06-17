@@ -2,17 +2,27 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Pressable, FlatList } from 'react-native';
 import { Account } from '../../models/account';
 import { AddAccountProp } from '../../navigation/types';
+import { ChevronLeftIcon, CheckIcon } from 'react-native-heroicons/outline'
 
 function AddAccount(props: AddAccountProp) {
 
     const { navigation } = props;
     const [account, setAccount] = React.useState<Account>({} as Account);
     const [showGroup, setShowGroup] = React.useState<boolean>(false);
-
     const groupList = ["Cash", "Bank", "Credit Card", "Savings", "Loan", "Insurance", "E-Wallet", "Others"];
 
     return (
         <View style={{ backgroundColor: 'white' }}>
+            <View style={styles.navigateHeader}>
+            <View style={styles.backButton}>
+              <ChevronLeftIcon
+                onPress={() => navigation.goBack()}
+                size={20}
+                color="black"
+              />
+              <Text style={styles.accountNameTxt}>Add Account</Text>
+            </View>
+          </View>
             {/* Group */}
             <View style={styles.input}>
                 <Text style={styles.inputLabel}>Group</Text>
@@ -33,7 +43,6 @@ function AddAccount(props: AddAccountProp) {
                 <TextInput
                     style={styles.infoText}
                     onPressIn={() => { }}
-                    showSoftInputOnFocus={false}
                     onChangeText={(name) => {
                         setAccount({ ...account, name: name });
                     }}
@@ -62,7 +71,7 @@ function AddAccount(props: AddAccountProp) {
                     onRequestClose={() => {
                         setShowGroup(!showGroup);
                     }}>
-                    <Pressable onPress={() => setShowGroup(false)} style={styles.centeredView}>
+                    <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                             <View
                                 style={{
@@ -78,18 +87,23 @@ function AddAccount(props: AddAccountProp) {
                                     data={groupList}
                                     renderItem={({ item }) => (
                                         <TouchableOpacity
+                                            style={styles.accountGroupButton}
                                             onPress={() => {
                                                 setAccount({ ...account, group: item });
                                                 setShowGroup(false);
                                             }}>
-                                            <Text>{item}</Text>
+                                            
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                <Text style={[styles.accountGroupText, { color: item === account.group ? '#DD2F24' : 'grey', fontWeight: item === account.group ? '600' : '400' }]}>{item}</Text>
+                                                { item === account.group && <CheckIcon style={{ paddingLeft: '12 %' }} size={18} color='#DD2F24' />  }
+                                            </View>
                                         </TouchableOpacity>
                                     )}
                                     keyExtractor={(item) => item}
                                 />
                             </Pressable>
                         </View>
-                    </Pressable>
+                    </View>
                 </Modal>
             )}
 
@@ -104,36 +118,45 @@ function AddAccount(props: AddAccountProp) {
 };
 
 const styles = StyleSheet.create({
-    input: {
+    navigateHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: 'white',
+        padding: 12,
+        textAlign: 'center',
+        marginBottom: 4,
+      },
+    
+      backButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: "5%",
-        marginVertical: "1%",
-    },
-    inputLabel: {
+      },
+    
+      accountNameTxt: {
+        marginLeft: 24,
         fontSize: 18,
-        width: "30%",
-        fontWeight: "500",
-        color: 'grey',
-        marginRight: "0%"
-    },
+        color: 'black',
+      },
+
+      input: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: 16,
+        paddingRight: 16,
+        margin: 2,
+        marginBottom: 16
+      },
+      inputLabel: {
+        marginRight: 16,
+        width: '15%',
+      },
+    
 
     saveButtonText: {
         fontSize: 18,
         fontWeight: "500",
         color: 'white',
     },
-
-    /*saveButton: {
-      backgroundColor: '#7DCEA0',
-      borderRadius: 4,
-      width: "100%",
-      height: "50%",
-      marginRight: "5%",
-      padding: "1%",
-      paddingTop: "2.5%",
-      alignItems: 'center',
-    },*/
 
     blurLayout: {
         // backgroundColor: 'rgba(0,0,0, 0.3)',
@@ -151,7 +174,7 @@ const styles = StyleSheet.create({
     modalView: {
         backgroundColor: 'white',
         borderRadius: 2,
-        padding: 4,
+        // padding: 4,
         // alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
@@ -165,14 +188,13 @@ const styles = StyleSheet.create({
         width: '88%',
     },
     button: {
-        padding: 10,
         elevation: 2,
     },
 
     textHeaderStyle: {
         color: 'black',
         fontWeight: 'bold',
-        padding: 10,
+        padding: 15,
         // textAlign: 'center',
     },
 
@@ -184,7 +206,8 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.4,
         borderBottomColor: 'gray',
         flex: 1,
-        marginLeft: "5%"
+        marginLeft: "5%",
+        padding: 4
     },
 
     saveButton: {
@@ -196,6 +219,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
     },
+
+    accountGroupText: {
+        marginStart: '6%'
+    },
+
+    accountGroupButton: {
+        paddingVertical: '4.3%',
+        borderTopWidth: 0.18,
+        borderBottomWidth: 0.18,
+    }
 });
 
 export default React.memo(AddAccount);

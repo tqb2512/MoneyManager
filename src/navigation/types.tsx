@@ -14,12 +14,15 @@ export type RootStackParamList = {
     income_stats: undefined;
     expenses_stats: undefined;
     account_detail: { account: Account };
+    edit_account: { account: Account };
 }
 
 export type BottomTabParamList = {
     bottom_bar_home: undefined;
     bottom_bar_accounts: undefined;
+    bottom_bar_addTransaction: undefined;
     bottom_bar_stats: undefined;
+    bottom_bat_settings: undefined;
 }
 
 export type HomeTopBarParamList = {
@@ -50,6 +53,11 @@ export type TransactionDetailProp = NativeStackScreenProps<
 export type AccountDetailProp = NativeStackScreenProps<
     RootStackParamList,
     'account_detail'
+>;
+
+export type EditAccountProp = NativeStackScreenProps<
+    RootStackParamList,
+    'edit_account'
 >;
 
 export type AddTransactionProp = NativeStackScreenProps<

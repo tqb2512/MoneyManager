@@ -89,11 +89,11 @@ const styles = StyleSheet.create({
   },
 
   addButton: {
-    width: 70,
-    height: 70,
+    width: 54,
+    height: 54,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
+    paddingBottom: 2,
     borderRadius: 100,
     backgroundColor: 'rgba(178, 178, 178, 0.85)',
   },

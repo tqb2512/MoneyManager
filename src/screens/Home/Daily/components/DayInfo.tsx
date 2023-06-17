@@ -16,13 +16,13 @@ function DayInfo (props: {transaction : Transaction, navigation: any}) {
 
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={{flexDirection: 'row', backgroundColor: 'white'}}>
+      <View style={{flexDirection: 'row', backgroundColor: 'white', padding: 4}}>
         <View style={{width: 100,flexDirection: 'row', alignItems: 'center', padding: 8, marginLeft: "3%"}}>
           
           <Text style={{ marginStart: "5%" }}>{props.transaction.category.name}</Text>
         </View>
         <View style={{flex: 1, marginStart: "5%", justifyContent: 'center'}}>
-          <Text style={{fontSize: 16, fontWeight: 'bold'}}>{props.transaction.note}</Text>
+          {props.transaction.note != null && (<Text style={{fontSize: 16, fontWeight: 'bold'}}>{props.transaction.note}</Text>) }
           <Text style={{fontSize: 12, color: '#A6ACAF'}}>{props.transaction.account.name}</Text>
         </View>
         <Text

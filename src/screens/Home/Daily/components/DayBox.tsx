@@ -34,11 +34,8 @@ function DayBox (props: { dayBoxModel: DayBoxModel, navigation: any }) {
             <Text style={styles.date}>{props.dayBoxModel.day}</Text>
           </View>
           <View style={styles.monthYear}>
-            <Text>{getDayOfWeek()}</Text>
-            <View style={{flexDirection: 'row'}}>
-              <Text style={styles.month}>{props.dayBoxModel.month}/</Text>
-              <Text style={styles.year}>{props.dayBoxModel.year}</Text>
-            </View>
+            <Text style={{ fontWeight: '600' }}>{getDayOfWeek()}</Text>
+            <Text style={styles.month}>{props.dayBoxModel.month}/{props.dayBoxModel.year}</Text>
           </View>
         </View>
           <View style={styles.inContainer}>
@@ -63,6 +60,7 @@ export default React.memo(DayBox);
 
 const styles = StyleSheet.create({
   mainContainer: {
+    marginBottom: 12,
   },
 
   header: {
@@ -95,10 +93,11 @@ const styles = StyleSheet.create({
   inContainer:{
     marginRight: 0,
     marginTop: 5,
-    width: "20%"
+    width: "20%",
+    justifyContent: 'center'
   },
   inText:{
-    fontSize: 24,
+    fontSize: 16,
     color: "#7DCEA0",
     fontWeight: "bold",
     textAlign: "right",
@@ -106,12 +105,13 @@ const styles = StyleSheet.create({
   outContainer:{
     marginRight: "5%",
     marginTop: 5,
-    width: "30%"
+    width: "30%",
+    justifyContent: 'center'
   },
   outText:{
-    fontSize: 24,
+    fontSize: 16,
     color: "#F1948A",
     fontWeight: "bold",
-    textAlign: "right"
+    textAlign: "right",
   }
 });

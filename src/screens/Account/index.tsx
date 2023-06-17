@@ -80,7 +80,7 @@ function AccountsScreen(props: AccountsScreenProp) {
                     <View style={styles.subView}>
                         <TouchableOpacity
                             style={styles.addThreeDotsContainer}
-                            onPress={() => { navigation.navigate("add_account")}}>
+                            onPress={() => { navigation.navigate("add_account"); setMenuShow(false)}}>
                             <Text style={styles.threeDotsText}>Add</Text>
                         </TouchableOpacity>
                     </View>

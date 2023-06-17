@@ -14,12 +14,15 @@ import AddAccountScreen from '../screens/AddAccount';
 import AddTransaction from '../screens/AddTransaction';
 import TransactionDetail from '../screens/TransactionDetail';
 import AccountDetail from '../screens/AccountDetail';
+import EditAccount from '../screens/EditAccount';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../screens/Home/Header';
 import StatsHeaderLeft from '../screens/Stats/StatsHeaderLeft';
 import StatsHeaderRight from '../screens/Stats/StatsHeaderRight';
 import { View } from 'native-base';
 import { styles } from 'react-native-gifted-charts/src/BarChart/styles';
+import Settings from '../screens/Settings';
+
 
 
 const HomeTopBar = createMaterialTopTabNavigator<HomeTopBarParamList>();
@@ -53,7 +56,7 @@ function BottomBarTabs()
           headerTitle: '',
           headerRight: () => (<Header />),
           tabBarIcon: ({focused}) => 
-            <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} size={30} />
+            <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} color={focused ? '#2A7BDB': 'grey'} size={20} />
         }} 
         />
       <BottomBar.Screen 
@@ -65,16 +68,26 @@ function BottomBarTabs()
           headerLeft: () => (<StatsHeaderLeft />),
           headerRight: () => (<StatsHeaderRight />),
           tabBarIcon: ({focused}) => 
-            <Ionicons name={focused ? 'ios-pie-chart' : 'ios-pie-chart-outline'} size={30} />
+            <Ionicons name={focused ? 'ios-pie-chart' : 'ios-pie-chart-outline'} color={focused ? '#2A7BDB': 'grey'} size={20} />
         }} 
       />
+
       <BottomBar.Screen 
         name="bottom_bar_accounts" 
         component={AccountsScreen}
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => 
-            <Ionicons name={focused ? 'ios-card' : 'ios-card-outline'} size={30} />
+            <Ionicons name={focused ? 'ios-card' : 'ios-card-outline'} color={focused ? '#2A7BDB': 'grey'} size={20} />
+        }} 
+      />
+      <BottomBar.Screen 
+        name="bottom_bat_settings"
+        component={Settings}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) => 
+            <Ionicons name={focused ? 'settings' : 'settings-outline'} color={focused ? '#2A7BDB': 'grey'} size={20} />
         }} 
       />
     </BottomBar.Navigator>
@@ -176,6 +189,7 @@ function AppNavigation()
       >
       <AppStack.Screen name="add_account" component={AddAccountScreen} />
       <AppStack.Screen name="add_transaction" component={AddTransaction} />
+      <AppStack.Screen name="edit_account" component={EditAccount} />
       <AppStack.Screen name="account_detail" component={AccountDetail} />
       <AppStack.Screen name="transaction_detail" component={TransactionDetail} />
       <AppStack.Screen name="bottom_bar" component={BottomBarTabs} />
