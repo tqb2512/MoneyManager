@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Pressable, 
 import { Account } from '../../models/account';
 import { AddAccountProp } from '../../navigation/types';
 import { ChevronLeftIcon, CheckIcon } from 'react-native-heroicons/outline'
+import { getDBConnection, insertAccount } from '../../services/db-services';
 
 function AddAccount(props: AddAccountProp) {
 
@@ -11,24 +12,32 @@ function AddAccount(props: AddAccountProp) {
     const [showGroup, setShowGroup] = React.useState<boolean>(false);
     const groupList = ["Cash", "Bank", "Credit Card", "Savings", "Loan", "Insurance", "E-Wallet", "Others"];
 
+    const saveAccount = () => {
+        getDBConnection().then(db => {
+            insertAccount(db, account).then(() => {
+                navigation.goBack();
+            });
+        });
+    }
+
     return (
         <View style={{ backgroundColor: 'white' }}>
             <View style={styles.navigateHeader}>
-            <View style={styles.backButton}>
-              <ChevronLeftIcon
-                onPress={() => navigation.goBack()}
-                size={20}
-                color="black"
-              />
-              <Text style={styles.accountNameTxt}>Add Account</Text>
+                <View style={styles.backButton}>
+                    <ChevronLeftIcon
+                        onPress={() => navigation.goBack()}
+                        size={20}
+                        color="black"
+                    />
+                    <Text style={styles.accountNameTxt}>Add Account</Text>
+                </View>
             </View>
-          </View>
             {/* Group */}
             <View style={styles.input}>
                 <Text style={styles.inputLabel}>Group</Text>
                 <TextInput
                     style={styles.infoText}
-                    onPressIn={() => {setShowGroup(!showGroup)}}
+                    onPressIn={() => { setShowGroup(!showGroup) }}
                     showSoftInputOnFocus={false}
                     value={account.group}
                     onChangeText={(groupValue) => {
@@ -92,10 +101,10 @@ function AddAccount(props: AddAccountProp) {
                                                 setAccount({ ...account, group: item });
                                                 setShowGroup(false);
                                             }}>
-                                            
+
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                                 <Text style={[styles.accountGroupText, { color: item === account.group ? '#DD2F24' : 'grey', fontWeight: item === account.group ? '600' : '400' }]}>{item}</Text>
-                                                { item === account.group && <CheckIcon style={{ paddingLeft: '12 %' }} size={18} color='#DD2F24' />  }
+                                                {item === account.group && <CheckIcon style={{ paddingLeft: '12 %' }} size={18} color='#DD2F24' />}
                                             </View>
                                         </TouchableOpacity>
                                     )}
@@ -110,7 +119,7 @@ function AddAccount(props: AddAccountProp) {
             {/* Nút save account */}
             <TouchableOpacity
                 style={styles.saveButton}
-                onPress={() => {}}>
+                onPress={() => saveAccount()}>
                 <Text style={styles.saveButtonText}>Save</Text>
             </TouchableOpacity>
         </View>
@@ -125,32 +134,32 @@ const styles = StyleSheet.create({
         padding: 12,
         textAlign: 'center',
         marginBottom: 4,
-      },
-    
-      backButton: {
+    },
+
+    backButton: {
         flexDirection: 'row',
         alignItems: 'center',
-      },
-    
-      accountNameTxt: {
+    },
+
+    accountNameTxt: {
         marginLeft: 24,
         fontSize: 18,
         color: 'black',
-      },
+    },
 
-      input: {
+    input: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingLeft: 16,
         paddingRight: 16,
         margin: 2,
         marginBottom: 16
-      },
-      inputLabel: {
+    },
+    inputLabel: {
         marginRight: 16,
         width: '15%',
-      },
-    
+    },
+
 
     saveButtonText: {
         fontSize: 18,

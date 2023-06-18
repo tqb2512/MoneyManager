@@ -26,6 +26,7 @@ import {
   getCategories,
   getAccounts,
   insertTransaction,
+  updateAccountBalance,
 } from '../../services/db-services';
 
 function AddTransaction(props: AddTransactionProp) {
@@ -51,11 +52,17 @@ function AddTransaction(props: AddTransactionProp) {
   const [selectedInput, setSelectedInput] = React.useState('');
 
   const saveTransaction = () => {
+    if (transaction.type == 'expense') {
+      transaction.account.balance = transaction.account.balance - transaction.amount;
+    } else if (transaction.type == 'income') {
+      transaction.account.balance = transaction.account.balance + transaction.amount;
+    }
     if (transaction.amount && transaction.category && transaction.account) {
       getDBConnection().then(db => {
         insertTransaction(db, transaction).then(() => {
-          console.log(transaction);
-          navigation.goBack();
+          updateAccountBalance(db, transaction.account).then(() => {
+            navigation.goBack();
+          });
         });
       });
     } else {

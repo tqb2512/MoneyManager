@@ -34,6 +34,9 @@ export const createTables = async (db: SQLiteDatabase): Promise<void> => {
     'accountId INTEGER, ' +
     'FOREIGN KEY(categoryId) REFERENCES categories(id), ' +
     'FOREIGN KEY(accountId) REFERENCES accounts(id))');
+
+    await db.executeSql('CREATE TABLE IF NOT EXISTS settings '+
+    '(currency TEXT)');
     console.log('Tables created');
 }
 
@@ -85,6 +88,8 @@ export const importTestData = async (db: SQLiteDatabase): Promise<void> => {
         const transaction = transactions[i];
         await db.executeSql('INSERT INTO transactions (id, amount, day, month, year, note, type, categoryId, accountId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [transaction.id, transaction.amount, transaction.day, transaction.month, transaction.year, transaction.note, transaction.type, transaction.category.id, transaction.account.id]);
     }
+
+    await db.executeSql('INSERT INTO SETTINGS (currency) VALUES ("USD")');
     console.log('Test data imported');
 }
 
@@ -114,6 +119,10 @@ export const deleteTransaction = async (db: SQLiteDatabase, transaction: Transac
 
 export const insertAccount = async (db: SQLiteDatabase, account: Account): Promise<void> => {
     await db.executeSql('INSERT INTO accounts (name, balance, account_group) VALUES (?, ?, ?)', [account.name, account.balance, account.group]);
+}
+
+export const updateAccountBalance = async (db: SQLiteDatabase, account: Account): Promise<void> => {
+    await db.executeSql('UPDATE accounts SET balance = ? WHERE id = ?', [account.balance, account.id]);
 }
 
 export const updateAccount = async (db: SQLiteDatabase, account: Account): Promise<void> => {
@@ -271,4 +280,16 @@ export const getAccounts = async (db: SQLiteDatabase): Promise<Account[]> => {
         accounts.push(account);
     }
     return accounts;
+}
+
+export const changeAllTransactionsCurrency = async (db: SQLiteDatabase, oldCurrency: string, newCurrency: string): Promise<void> => {
+    fetch("https://raw.githubusercontent.com/fawazahmed0/currency-api/1/latest/currencies/" + oldCurrency.toLowerCase() + "/" + newCurrency.toLowerCase() + ".json")
+        .then(response => response.json())
+        .then(data => {
+            const rate = data[newCurrency];
+            console.log(rate);
+            db.executeSql('UPDATE transactions SET amount = amount * ?', [rate]);
+            db.executeSql('UPDATE accounts SET balance = balance * ?', [rate]);
+            db.executeSql('UPDATE settings SET currency = ?', [newCurrency]);
+        });
 }

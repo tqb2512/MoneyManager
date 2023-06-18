@@ -17,6 +17,7 @@ import {
   createTables,
   dropTables,
   importTestData,
+  changeAllTransactionsCurrency,
 } from '../../../services/db-services';
 import Header from '../Header';
 
@@ -32,7 +33,6 @@ function DailyScreen(props: DailyScreenProp) {
         });
       });
     });
-    console.log(dayBoxes);
     return unsubscribe;
   }, [navigation]);
 

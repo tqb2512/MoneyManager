@@ -30,6 +30,7 @@ function DayInfo (props: {transaction : Transaction, navigation: any}) {
             alignSelf: 'center',
             marginRight: "6.5%",
             color: props.transaction.type === 'income' ? '#7DCEA0' : '#F1948A',
+            fontSize: props.transaction.amount.toString().length > 20 ? 13 : 16,
           }}>
           $ {props.transaction.amount}
         </Text>

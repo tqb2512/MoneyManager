@@ -98,15 +98,7 @@ function HomeScreenTopBar()
 {
   return (
       <View style={{flex: 1}}>
-      <HomeTopBar.Navigator
-      initialRouteName="home_top_bar_daily"
-      tabBarOptions={{
-        activeTintColor: '#000000',
-        inactiveTintColor: '#000000',
-        labelStyle: { fontSize: 16, fontWeight: 'bold', color: 'grey' },
-        indicatorStyle: { backgroundColor: '#000000' },
-        style: { backgroundColor: '#fff' },
-      }}>
+      <HomeTopBar.Navigator initialRouteName="home_top_bar_daily">
       <HomeTopBar.Screen 
         name="home_top_bar_daily" 
         component={DailyScreen}
@@ -140,15 +132,7 @@ function StatsScreenTopBar()
 {
   return (
       <View style={{flex: 1}}>
-        <StatsTopBar.Navigator
-      tabBarOptions={{
-        activeTintColor: '#000000',
-        inactiveTintColor: '#000000',
-        labelStyle: { fontSize: 16, fontWeight: 'bold', color: 'grey' },
-        indicatorStyle: { height: 0 },
-        style: { backgroundColor: '#fff' },
-      }}
-    >
+        <StatsTopBar.Navigator>
       <StatsTopBar.Screen 
       name="stats_top_bar_income" 
       component={IncomeScreen}

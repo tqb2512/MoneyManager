@@ -20,11 +20,14 @@ function AccountsScreen(props: AccountsScreenProp) {
             title: 'Accounts',
         });
 
-        getDBConnection().then(db => {
-            getAccounts(db).then(accounts => {
-                setAccounts(accounts);
+        const unsubscribe = navigation.addListener('focus', () => {
+            getDBConnection().then(db => {
+                getAccounts(db).then(accounts => {
+                    setAccounts(accounts);
+                });
             });
         });
+        return unsubscribe;
     }, [navigation]);
 
     return (
@@ -67,8 +70,8 @@ function AccountsScreen(props: AccountsScreenProp) {
                 </View>
                 {/* List account */}
 
-                
-                
+
+
                 <FlatList
                     data={accounts}
                     renderItem={({ item }) => <AccountBox account={item} navigation={navigation} />}
@@ -80,7 +83,7 @@ function AccountsScreen(props: AccountsScreenProp) {
                     <View style={styles.subView}>
                         <TouchableOpacity
                             style={styles.addThreeDotsContainer}
-                            onPress={() => { navigation.navigate("add_account"); setMenuShow(false)}}>
+                            onPress={() => { navigation.navigate("add_account"); setMenuShow(false) }}>
                             <Text style={styles.threeDotsText}>Add</Text>
                         </TouchableOpacity>
                     </View>

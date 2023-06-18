@@ -39,10 +39,16 @@ function DayBox (props: { dayBoxModel: DayBoxModel, navigation: any }) {
           </View>
         </View>
           <View style={styles.inContainer}>
-            <Text style={styles.inText}>$ {props.dayBoxModel.totalIncome}</Text>
+            <Text 
+              style={[styles.inText,{
+                fontSize: props.dayBoxModel.totalIncome.toString().length > 8 ? 14 : 19,
+              }]}
+            >$ {props.dayBoxModel.totalIncome}</Text>
           </View>
           <View style={styles.outContainer}>
-            <Text style={styles.outText}>$ {props.dayBoxModel.totalExpense}</Text>
+            <Text style={[styles.outText, {
+              fontSize: props.dayBoxModel.totalExpense.toString().length > 8 ? 14 : 19,
+            }]}>$ {props.dayBoxModel.totalExpense}</Text>
           </View>
 
       </View>
@@ -93,7 +99,7 @@ const styles = StyleSheet.create({
   inContainer:{
     marginRight: 0,
     marginTop: 5,
-    width: "20%",
+    width: "25%",
     justifyContent: 'center'
   },
   inText:{
@@ -105,7 +111,7 @@ const styles = StyleSheet.create({
   outContainer:{
     marginRight: "5%",
     marginTop: 5,
-    width: "30%",
+    width: "25%",
     justifyContent: 'center'
   },
   outText:{
