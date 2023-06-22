@@ -22,6 +22,7 @@ import StatsHeaderRight from '../screens/Stats/StatsHeaderRight';
 import { View } from 'native-base';
 import { styles } from 'react-native-gifted-charts/src/BarChart/styles';
 import Settings from '../screens/Settings';
+import ChangeCurrency from '../screens/Settings/components/ChangeCurrency';
 
 
 
@@ -177,6 +178,8 @@ function AppNavigation()
       <AppStack.Screen name="account_detail" component={AccountDetail} />
       <AppStack.Screen name="transaction_detail" component={TransactionDetail} />
       <AppStack.Screen name="bottom_bar" component={BottomBarTabs} />
+      <AppStack.Screen name="change_currency" component={ChangeCurrency} />
+      <AppStack.Screen name="settings" component={Settings} />
     </AppStack.Navigator>
   );
 }

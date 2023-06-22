@@ -1,8 +1,12 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
 import {} from 'react-native-heroicons/outline'
+import { SettingsScreenProp } from '../../navigation/types'
 
-const Settings = () => {
+function Settings(props: SettingsScreenProp){
+
+    const { navigation } = props;
+
   return (
     <View style={styles.mainContainer}>
         <View style={styles.titleHeader}>
@@ -10,7 +14,7 @@ const Settings = () => {
         </View>
 
         <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('change_currency') }}>
                 <Image style={styles.img} source={require('../../../assets/settingImage/currency.png')} />
                 <Text>Currency</Text>
             </TouchableOpacity>

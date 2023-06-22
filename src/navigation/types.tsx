@@ -15,6 +15,8 @@ export type RootStackParamList = {
     expenses_stats: undefined;
     account_detail: { account: Account };
     edit_account: { account: Account };
+    change_currency: undefined;
+    settings: undefined;
 }
 
 export type BottomTabParamList = {
@@ -58,6 +60,16 @@ export type AccountDetailProp = NativeStackScreenProps<
 export type EditAccountProp = NativeStackScreenProps<
     RootStackParamList,
     'edit_account'
+>;
+
+export type SettingsScreenProp = NativeStackScreenProps<
+    RootStackParamList,
+    'settings'
+>;
+
+export type ChangeCurrencyProp = NativeStackScreenProps<
+    RootStackParamList,
+    'change_currency'
 >;
 
 export type AddTransactionProp = NativeStackScreenProps<
