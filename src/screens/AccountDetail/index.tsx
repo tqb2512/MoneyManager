@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { AccountDetailProp } from '../../navigation/types';
 import { ChevronLeftIcon, PencilIcon } from 'react-native-heroicons/outline'
@@ -6,7 +6,13 @@ import { getDBConnection, getDayBoxByAccount } from '../../services/db-services'
 import { DayBox as DayBoxModel } from '../../models/dayBox';
 import DayBox from '../Home/Daily/components/DayBox';
 
+import themeContext from '../../config/themeContext';
+import { themeInterface } from '../../config/themeInterface';
+
+
 function AccountDetail(props: AccountDetailProp) {
+
+    const theme = useContext(themeContext) as themeInterface
 
     const { navigation } = props;
 
@@ -24,34 +30,34 @@ function AccountDetail(props: AccountDetailProp) {
     }, [navigation]);
 
     return (
-        <View>
-            <View style={styles.navigateHeader}>
+        <View style = {[styles.mainContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '' }]}>
+            <View style={[styles.navigateHeader, { backgroundColor: theme.componentBackground, borderBottomColor: theme.color }]}>
                 <View style={styles.backButton}>
-                    <ChevronLeftIcon onPress={() => navigation.goBack()} size={20} color='black' />
-                    <Text style={styles.accountNameTxt}>{props.route.params.account.name}</Text>
+                    <ChevronLeftIcon onPress={() => navigation.goBack()} size={20} color= {theme.color} />
+                    <Text style={[styles.accountNameTxt, { color: theme.color }]}>{props.route.params.account.name}</Text>
                 </View>
-                <PencilIcon onPress={() => { navigation.navigate("edit_account", { account: props.route.params.account }) }} size={20} color='black' />
+                <PencilIcon onPress={() => { navigation.navigate("edit_account", { account: props.route.params.account }) }} size={20} color= {theme.color} />
             </View>
 
-            <View style={styles.totalColumns}>
-                <View style={styles.column}>
-                    <Text>Deposit</Text>
+            <View style={[styles.totalColumns, { backgroundColor: theme.componentBackground }]}>
+                <View style={[styles.column]}>
+                    <Text style={{ color: theme.color }}>Deposit</Text>
                     <Text style={{ color: 'green' }}>0.00</Text>
                 </View>
 
                 <View style={styles.column}>
-                    <Text>Withdrawal</Text>
+                    <Text style={{ color: theme.color }}>Withdrawal</Text>
                     <Text style={{ color: 'red' }}>0.00</Text>
                 </View>
 
                 <View style={styles.column}>
-                    <Text>Total</Text>
-                    <Text style={{ color: 'black' }}>0.00</Text>
+                    <Text style={{ color: theme.color }}>Total</Text>
+                    <Text style={{ color: '#D9D9D9' }}>0.00</Text>
                 </View>
 
                 <View style={styles.column}>
-                    <Text>Balance</Text>
-                    <Text style={{ color: 'blue' }}>{props.route.params.account.balance}</Text>
+                    <Text style={{ color: theme.color }}>Balance</Text>
+                    <Text style={{ color: '#00C4CC' }}>{props.route.params.account.balance}</Text>
                 </View>
             </View>
 
@@ -73,6 +79,10 @@ function AccountDetail(props: AccountDetailProp) {
 export default React.memo(AccountDetail);
 
 const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1
+    },
+
     navigateHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',

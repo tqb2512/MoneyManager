@@ -6,7 +6,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import DayBox from './components/DayBox';
 import {DayBox as DayBoxModel} from '../../../models/dayBox';
 import {DailyScreenProp} from '../../../navigation/types';
@@ -21,7 +21,12 @@ import {
 } from '../../../services/db-services';
 import Header from '../Header';
 
+import themeContext from '../../../config/themeContext';
+import { themeInterface } from '../../../config/themeInterface';
+
 function DailyScreen(props: DailyScreenProp) {
+
+  const theme = useContext(themeContext) as themeInterface
   const {navigation} = props;
   const [dayBoxes, setDayBoxes] = React.useState<DayBoxModel[]>([]);
   useEffect(() => {
@@ -38,7 +43,7 @@ function DailyScreen(props: DailyScreenProp) {
 
   return (
     <NativeBaseProvider>
-      <SafeAreaView style={styles.mainContainer}>
+      <SafeAreaView style={[styles.mainContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }]}>
         <View style={styles.addButtonContainer}>
           <TouchableOpacity
             style={styles.addButton}

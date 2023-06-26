@@ -1,9 +1,14 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import DayInfo from './DayInfo';
 import {DayBox as DayBoxModel} from '../../../../models/dayBox';
 
+import themeContext from '../../../../config/themeContext';
+import { themeInterface } from '../../../../config/themeInterface';
+
 function DayBox (props: { dayBoxModel: DayBoxModel, navigation: any }) {
+
+  const theme = useContext(themeContext) as themeInterface
 
   const { navigation } = props;
   const getDayOfWeek = () => {
@@ -28,14 +33,14 @@ function DayBox (props: { dayBoxModel: DayBoxModel, navigation: any }) {
   return (
     <View style={styles.mainContainer}>
       {/* Hiện ngày tháng năm, tiền thu chi */}
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: theme.componentBackground }]}>
         <View style={{flexDirection: 'row', justifyContent:'flex-start'}}>
           <View style={{width: "25%", alignItems: "center"}}>
-            <Text style={styles.date}>{props.dayBoxModel.day}</Text>
+            <Text style={[styles.date, { color: theme.color }]}>{props.dayBoxModel.day}</Text>
           </View>
           <View style={styles.monthYear}>
-            <Text style={{ fontWeight: '600' }}>{getDayOfWeek()}</Text>
-            <Text style={styles.month}>{props.dayBoxModel.month}/{props.dayBoxModel.year}</Text>
+            <Text style={{ fontWeight: '600', color: theme.color }}>{getDayOfWeek()}</Text>
+            <Text style={[styles.month, { color: theme.color }]}>{props.dayBoxModel.month}/{props.dayBoxModel.year}</Text>
           </View>
         </View>
           <View style={styles.inContainer}>
@@ -76,7 +81,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 8,
     borderLeftColor: '#BEEFFF',
     padding: 8,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: 'rgba(229, 231, 235, 0.8)',
   },
 

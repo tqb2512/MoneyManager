@@ -23,7 +23,10 @@ import { View } from 'native-base';
 import { styles } from 'react-native-gifted-charts/src/BarChart/styles';
 import Settings from '../screens/Settings';
 import ChangeCurrency from '../screens/Settings/components/ChangeCurrency';
-
+import ChangeTheme from '../screens/Settings/components/ChangeTheme';
+import themeContext from '../config/themeContext';
+import { themeInterface } from '../config/themeInterface';
+import { useContext } from 'react';
 
 
 const HomeTopBar = createMaterialTopTabNavigator<HomeTopBarParamList>();
@@ -31,8 +34,10 @@ const StatsTopBar = createMaterialTopTabNavigator<StatsTopBarParamList>();
 const BottomBar = createBottomTabNavigator<BottomTabParamList>();
 const AppStack = createStackNavigator<RootStackParamList>();
 
+
 function BottomBarTabs()
 {
+  const theme = useContext(themeContext) as themeInterface
   return (
     <BottomBar.Navigator
       initialRouteName='bottom_bar_home'
@@ -45,7 +50,8 @@ function BottomBarTabs()
         },
         tabBarItemStyle:{
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          backgroundColor: theme.background
         },
       }}
     >
@@ -97,6 +103,7 @@ function BottomBarTabs()
 
 function HomeScreenTopBar()
 {
+  const theme = useContext(themeContext) as themeInterface
   return (
       <View style={{flex: 1}}>
       <HomeTopBar.Navigator initialRouteName="home_top_bar_daily">
@@ -106,10 +113,11 @@ function HomeScreenTopBar()
         options={{
           tabBarLabel: 'Daily',
           tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
-          tabBarActiveTintColor: '#566573',
+          tabBarActiveTintColor: theme.mode === 'dark' ?  theme.color : '#566573',
           tabBarInactiveTintColor: '#D5D8DC',
           tabBarBounces: false,
-          tabBarIndicatorStyle: {borderBottomColor: '#566573', borderBottomWidth: 1, backgroundColor: 'white'}
+          tabBarIndicatorStyle: {borderBottomColor: '#566573', borderBottomWidth: 1, backgroundColor: 'white'},
+          tabBarStyle: { backgroundColor: theme.background }
         }}
       />
       <HomeTopBar.Screen 
@@ -118,10 +126,11 @@ function HomeScreenTopBar()
         options={{
           tabBarLabel: 'Calendar',
           tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
-          tabBarActiveTintColor: '#566573',
+          tabBarActiveTintColor: theme.mode === 'dark' ?  theme.color : '#566573',
           tabBarInactiveTintColor: '#D5D8DC',
           tabBarBounces: false,
-          tabBarIndicatorStyle: {borderBottomColor: '#566573', borderBottomWidth: 1, backgroundColor: 'white'}
+          tabBarIndicatorStyle: {borderBottomColor: '#566573', borderBottomWidth: 1, backgroundColor: 'white'},
+          tabBarStyle: { backgroundColor: theme.background }
         }}
         />
       </HomeTopBar.Navigator>
@@ -179,6 +188,7 @@ function AppNavigation()
       <AppStack.Screen name="transaction_detail" component={TransactionDetail} />
       <AppStack.Screen name="bottom_bar" component={BottomBarTabs} />
       <AppStack.Screen name="change_currency" component={ChangeCurrency} />
+      <AppStack.Screen name="change_theme" component={ChangeTheme} />
       <AppStack.Screen name="settings" component={Settings} />
     </AppStack.Navigator>
   );

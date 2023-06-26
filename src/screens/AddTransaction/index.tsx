@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   View,
   Text,
@@ -29,7 +29,11 @@ import {
   updateAccountBalance,
 } from '../../services/db-services';
 
+import themeContext from '../../config/themeContext';
+import { themeInterface } from '../../config/themeInterface';
+
 function AddTransaction(props: AddTransactionProp) {
+  const theme = useContext(themeContext) as themeInterface
   const {navigation} = props;
   const [transaction, setTransaction] = React.useState<Transaction>({
     day: new Date().getDate(),
@@ -89,23 +93,23 @@ function AddTransaction(props: AddTransactionProp) {
     <NativeBaseProvider>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.mainContainer}>
-        <View style={styles.navigateHeader}>
+        style={[styles.mainContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }]}>
+        <View style={[styles.navigateHeader, {backgroundColor: theme.componentBackground},]}>
           <View style={styles.backButton}>
             <ChevronLeftIcon
               onPress={() => navigation.goBack()}
               size={20}
-              color="black"
+              color={theme.color}
             />
-            <Text style={styles.accountNameTxt}>New Transaction</Text>
+            <Text style={[styles.accountNameTxt, {color: theme.color}]}>New Transaction</Text>
           </View>
         </View>
-        <View>
-          <View>
+        <View style={{backgroundColor: theme.background}}>
+          <View style={{backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2'}}>
             {/*select type*/}
-            <View style={{backgroundColor: 'white'}}>
-              <View style={[styles.buttonContainer, {}]}>
-                <Text style={{alignSelf: 'center'}}>Type</Text>
+            <View style={{backgroundColor: theme.background}}>
+              <View style={[styles.buttonContainer, { backgroundColor: theme.componentBackground }]}>
+                <Text style={{alignSelf: 'center', color: theme.mode === 'dark' ? theme.color : 'grey'}}>Type</Text>
 
                 <View style={{flexDirection: 'row', marginLeft: '15%'}}>
                   <TouchableOpacity
@@ -122,7 +126,7 @@ function AddTransaction(props: AddTransactionProp) {
                         style={
                           transaction.type == 'income'
                             ? [styles.typeText, {color: '#7DCEA0'}]
-                            : styles.typeText
+                            : [styles.typeText, { color: theme.mode === 'dark' ? 'grey' : 'black' }]
                         }>
                         Income
                       </Text>
@@ -143,7 +147,7 @@ function AddTransaction(props: AddTransactionProp) {
                         style={
                           transaction.type == 'expense'
                             ? [styles.typeText, {color: '#F1948A'}]
-                            : styles.typeText
+                            : [styles.typeText, { color: theme.mode === 'dark' ? 'grey' : 'black' }]
                         }>
                         Expense
                       </Text>
@@ -157,14 +161,14 @@ function AddTransaction(props: AddTransactionProp) {
               style={{
                 paddingBottom: 24,
                 marginBottom: 12,
-                backgroundColor: 'white',
+                backgroundColor: theme.componentBackground,
                 height: 360,
               }}>
               {/* Date */}
               <View style={styles.input}>
-                <Text style={styles.inputLabel}>Date</Text>
+                <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>Date</Text>
                 <TextInput
-                  style={styles.infoText}
+                  style={[styles.infoText, { color: theme.color }]}
                   onPressIn={() => {
                     setShowDTP(true);
                     setIsDateClicked(true);
@@ -216,9 +220,9 @@ function AddTransaction(props: AddTransactionProp) {
 
               {/* Category */}
               <View style={styles.input}>
-                <Text style={styles.inputLabel}>Category</Text>
+                <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>Category</Text>
                 <TextInput
-                  style={styles.infoText}
+                  style={[styles.infoText, { color: theme.color }]}
                   placeholder=""
                   onPressIn={() => {
                     setShowCategories(true);
@@ -327,9 +331,9 @@ function AddTransaction(props: AddTransactionProp) {
 
               {/* Show Accounts */}
               <View style={styles.input}>
-                <Text style={styles.inputLabel}>Account</Text>
+              <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>Account</Text>
                 <TextInput
-                  style={styles.infoText}
+                  style={[styles.infoText, { color: theme.color }]}
                   placeholder=""
                   onPressIn={() => {
                     setShowAccounts(true);
@@ -431,9 +435,9 @@ function AddTransaction(props: AddTransactionProp) {
                 onPress={Keyboard.dismiss}
                 accessible={false}>
                 <View style={styles.input}>
-                  <Text style={styles.inputLabel}>Amount</Text>
+                  <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>Amount</Text>
                   <TextInput
-                    style={styles.infoText}
+                    style={[styles.infoText, { color: theme.color }]}
                     placeholder=""
                     value={transaction.amount.toString()}
                     onChangeText={text => {
@@ -462,9 +466,9 @@ function AddTransaction(props: AddTransactionProp) {
               </TouchableWithoutFeedback>
 
               <View style={styles.input}>
-                <Text style={styles.inputLabel}>Note</Text>
+              <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>Note</Text>
                 <TextInput
-                  style={styles.infoText}
+                  style={[styles.infoText, { color: theme.color }]}
                   value={transaction.note}
                   onChangeText={text => {
                     setTransaction({...transaction, note: text});
@@ -491,7 +495,7 @@ function AddTransaction(props: AddTransactionProp) {
             </View>
 
             {/* Description + Save button + Continue button */}
-            <View style={styles.bottomContainer}>
+            <View style={[styles.bottomContainer, { backgroundColor: theme.componentBackground }]}>
               <View
                 style={{flexDirection: 'row', padding: '4%', marginTop: '1%'}}>
                 <TouchableOpacity

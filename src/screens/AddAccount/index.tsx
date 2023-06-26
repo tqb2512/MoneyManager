@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Pressable, FlatList } from 'react-native';
 import { Account } from '../../models/account';
 import { AddAccountProp } from '../../navigation/types';
 import { ChevronLeftIcon, CheckIcon } from 'react-native-heroicons/outline'
 import { getDBConnection, insertAccount } from '../../services/db-services';
 
+import themeContext from '../../config/themeContext';
+import { themeInterface } from '../../config/themeInterface';
+
 function AddAccount(props: AddAccountProp) {
+
+    const theme = useContext(themeContext) as themeInterface
 
     const { navigation } = props;
     const [account, setAccount] = React.useState<Account>({} as Account);
@@ -21,22 +26,22 @@ function AddAccount(props: AddAccountProp) {
     }
 
     return (
-        <View style={{ backgroundColor: 'white' }}>
-            <View style={styles.navigateHeader}>
+        <View style={{ backgroundColor: theme.background, flex: 1 }}>
+            <View style={[styles.navigateHeader, { backgroundColor: theme.background, borderBottomColor: theme.color }]}>
                 <View style={styles.backButton}>
                     <ChevronLeftIcon
                         onPress={() => navigation.goBack()}
                         size={20}
-                        color="black"
+                        color={theme.color}
                     />
-                    <Text style={styles.accountNameTxt}>Add Account</Text>
+                    <Text style={[styles.accountNameTxt, { color: theme.color }]}>Add Account</Text>
                 </View>
             </View>
             {/* Group */}
             <View style={styles.input}>
-                <Text style={styles.inputLabel}>Group</Text>
+                <Text style={[styles.inputLabel, { color: theme.color }]}>Group</Text>
                 <TextInput
-                    style={styles.infoText}
+                    style={[styles.infoText, { color: theme.color }]}
                     onPressIn={() => { setShowGroup(!showGroup) }}
                     showSoftInputOnFocus={false}
                     value={account.group}
@@ -48,9 +53,9 @@ function AddAccount(props: AddAccountProp) {
             </View>
             {/* Name account */}
             <View style={styles.input}>
-                <Text style={styles.inputLabel}>Name</Text>
+                <Text style={[styles.inputLabel, { color: theme.color }]}>Name</Text>
                 <TextInput
-                    style={styles.infoText}
+                    style={[styles.infoText, { color: theme.color }]}
                     onPressIn={() => { }}
                     onChangeText={(name) => {
                         setAccount({ ...account, name: name });
@@ -60,9 +65,9 @@ function AddAccount(props: AddAccountProp) {
             </View>
             {/* Amount account */}
             <View style={styles.input}>
-                <Text style={styles.inputLabel}>Balance</Text>
+                <Text style={[styles.inputLabel, { color: theme.color }]}>Balance</Text>
                 <TextInput
-                    style={styles.infoText}
+                    style={[styles.infoText, { color: theme.color }]}
                     onPressIn={() => { }}
                     onChangeText={(amount) => {
                         setAccount({ ...account, balance: Number(amount) });

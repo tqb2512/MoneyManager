@@ -1,34 +1,39 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import {} from 'react-native-heroicons/outline'
 import { SettingsScreenProp } from '../../navigation/types'
 
+import themeContext from '../../config/themeContext'
+import { themeInterface } from '../../config/themeInterface'
+
 function Settings(props: SettingsScreenProp){
+
+    const theme = useContext(themeContext) as themeInterface;
 
     const { navigation } = props;
 
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer, { backgroundColor: theme.background }]}>
         <View style={styles.titleHeader}>
-            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', textAlign: 'center' }}>Settings</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'bold', color: theme.color, textAlign: 'center' }}>Settings</Text>
         </View>
 
         <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('change_currency') }}>
-                <Image style={styles.img} source={require('../../../assets/settingImage/currency.png')} />
-                <Text>Currency</Text>
+                <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/currency.png')} />
+                <Text style={{ color: theme.color }}>Currency</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
-                <Image style={styles.img} source={require('../../../assets/settingImage/export.png')} />
-                <Text>Data</Text>
+                <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/export.png')} />
+                <Text style={{ color: theme.color }}>Data</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate("change_theme")}}>
+                <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/palette.png')} />
+                <Text style={{ color: theme.color }}>Theme</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button}>
-                <Image style={styles.img} source={require('../../../assets/settingImage/palette.png')} />
-                <Text>Theme</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-                <Image style={styles.img} source={require('../../../assets/settingImage/help.png')} />
-                <Text>Help</Text>
+                <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/help.png')} />
+                <Text style={{ color: theme.color }}>Help</Text>
             </TouchableOpacity>
         </View>
     </View>
