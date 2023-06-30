@@ -9,23 +9,30 @@ import { getDBConnection, importTestData, createTables, dropTables } from "./ser
 import { EventRegister } from "react-native-event-listeners";
 import themeContext from "./config/themeContext";
 import theme from "./config/theme";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
 
     const [mode, setMode] = useState(false);
 
     useEffect(() => {
+        const getModeValue = async () => {
+            const value = await AsyncStorage.getItem('switchValue')
+            if (value !== null) {
+                setMode(JSON.parse(value));
+            }
+        };
+        getModeValue()
         let eventListener = EventRegister.addEventListener(
             "changeTheme",
             (data) => {
                 setMode(data);
-                console.log(data)
             }
         );
         return () => {
-            EventRegister.removeAllListeners();
-        }
-    });
+            EventRegister.removeEventListener(eventListener.toString())
+        }    
+    }, []);
 
     return (
         <themeContext.Provider value = { mode === true ? theme.dark : theme.light } >
