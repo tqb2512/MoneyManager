@@ -156,7 +156,7 @@ export default function Chart() {
 const styles = StyleSheet.create({
     mainContainer: {
         position: 'relative',
-        backgroundColor: 'yellow',
+        backgroundColor: 'white',
         height: '100%'
         // flex: 1,
       },
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
         paddingLeft: 30,
         paddingVertical: 15,    
         marginBottom: 15,
-        backgroundColor: 'red',
+        backgroundColor: 'white',
     },
 
     pieDataContainer: {
