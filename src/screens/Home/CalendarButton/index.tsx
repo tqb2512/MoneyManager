@@ -9,11 +9,9 @@ import { CalendarIcon } from 'react-native-heroicons/outline'
 
 type Props = {};
 
-export default function Header({}: Props) {
+export default function CalendarButton({}: Props) {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
-
-  const showPicker = useCallback((value: any) => setShow(value), []);
 
   const onValueChange = (event: any, newDate: any) => {
     const selectedDate = newDate || date;

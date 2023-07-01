@@ -19,10 +19,11 @@ import {
   importTestData,
   changeAllTransactionsCurrency,
 } from '../../../services/db-services';
-import Header from '../Header';
+import Header from '../CalendarButton';
 
 import themeContext from '../../../config/themeContext';
 import { themeInterface } from '../../../config/themeInterface';
+import CalendarButton from '../CalendarButton';
 
 function DailyScreen(props: DailyScreenProp) {
 
@@ -70,7 +71,7 @@ function DailyScreen(props: DailyScreenProp) {
             keyExtractor={item => item.day.toString()}
           />
         </View>
-        <Header />
+        <CalendarButton />
       </SafeAreaView>
     </NativeBaseProvider>
   );

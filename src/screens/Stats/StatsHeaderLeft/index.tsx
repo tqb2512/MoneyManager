@@ -1,11 +1,15 @@
-import React, {useState, useCallback} from 'react'
+import React, {useState, useCallback, useContext} from 'react'
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MonthPicker from 'react-native-month-year-picker'
+import themeContext from '../../../config/themeContext'
+import { themeInterface } from '../../../config/themeInterface'
 
 type Props = {}
 
 export default function StatsHeaderLeft({}: Props) {
+
+    const theme = useContext(themeContext) as themeInterface
 
     const [date, setDate] = useState(new Date());
     const [show, setShow] = useState(false);
@@ -28,11 +32,11 @@ export default function StatsHeaderLeft({}: Props) {
   return (
   <View style={styles.monthPicker}>
     <TouchableOpacity 
-        style={styles.monthPickerContainer}
+        style={[styles.monthPickerContainer, { backgroundColor: theme.componentBackground }]}
         onPress={() => showPicker(true)}
         >
-        <Ionicons name="ios-calendar-sharp" size={22} color="black" />
-        <Text style={styles.monthPickerText}>{date.getMonth()+1}/{date.getFullYear()}</Text>
+        <Ionicons name="ios-calendar-sharp" size={22} color={ theme.mode === 'dark' ? '#ABB2B9' : 'black'} />
+        <Text style={[styles.monthPickerText, { color: theme.color }]}>{date.getMonth()+1}/{date.getFullYear()}</Text>
     </TouchableOpacity>
     {show && (
     <MonthPicker
@@ -51,6 +55,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         marginRight: "1%",
         marginLeft: "20%",
+        marginBottom: 8,
     },
     monthPickerContainer: {
       // flexDirection: 'row',

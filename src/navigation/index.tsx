@@ -16,7 +16,7 @@ import TransactionDetail from '../screens/TransactionDetail';
 import AccountDetail from '../screens/AccountDetail';
 import EditAccount from '../screens/EditAccount';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Header from '../screens/Home/Header';
+import Header from '../screens/Home/CalendarButton';
 import StatsHeaderLeft from '../screens/Stats/StatsHeaderLeft';
 import StatsHeaderRight from '../screens/Stats/StatsHeaderRight';
 import { View } from 'native-base';
@@ -70,10 +70,7 @@ function BottomBarTabs()
         name="bottom_bar_stats" 
         component={StatsScreenTopBar}
         options={{
-          headerShown: true,
-          headerTitle: '',
-          headerLeft: () => (<StatsHeaderLeft />),
-          headerRight: () => (<StatsHeaderRight />),
+          headerStyle: { backgroundColor: theme.componentBackground },
           tabBarIcon: ({focused}) => 
             <Ionicons name={focused ? 'ios-pie-chart' : 'ios-pie-chart-outline'} color={focused ? '#2A7BDB': 'grey'} size={20} />
         }} 
@@ -138,38 +135,48 @@ function HomeScreenTopBar()
   ) 
 }
 
-function StatsScreenTopBar()
-{
+function StatsScreenTopBar() {
+  const theme = useContext(themeContext) as themeInterface;
   return (
-      <View style={{flex: 1}}>
-        <StatsTopBar.Navigator>
-      <StatsTopBar.Screen 
-      name="stats_top_bar_income" 
-      component={IncomeScreen}
-      options={{ 
-        tabBarLabel: 'Income',
-        tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
-        tabBarActiveTintColor: '#7DCEA0',
-        tabBarInactiveTintColor: '#D5D8DC',
-        tabBarBounces: false,
-        tabBarIndicatorStyle: {borderBottomColor: '#7DCEA0', borderBottomWidth: 1, backgroundColor: 'white'},
-      }} 
-    />
-      <StatsTopBar.Screen 
-      name="stats_top_bar_expense" 
-      component={ExpenseScreen}
-      options={{ 
-        tabBarLabel: 'Expense',
-        tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
-        tabBarActiveTintColor: '#F1948A',
-        tabBarInactiveTintColor: '#D5D8DC',
-        tabBarBounces: false,
-        tabBarIndicatorStyle: {borderBottomColor: '#F1948A', borderBottomWidth: 1, backgroundColor: 'white'}
-      }} 
-    />
-    </StatsTopBar.Navigator>
-      </View>
-  )
+    <View style={{flex: 1}}>
+      <StatsTopBar.Navigator>
+        <StatsTopBar.Screen
+          name="stats_top_bar_income"
+          component={IncomeScreen}
+          options={{
+            tabBarLabel: 'Income',
+            tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
+            tabBarActiveTintColor: '#7DCEA0',
+            tabBarInactiveTintColor: '#D5D8DC',
+            tabBarBounces: false,
+            tabBarIndicatorStyle: {
+              borderBottomColor: '#7DCEA0',
+              borderBottomWidth: 1,
+              backgroundColor: 'white',
+            },
+            tabBarStyle: {backgroundColor: theme.componentBackground},
+          }}
+        />
+        <StatsTopBar.Screen
+          name="stats_top_bar_expense"
+          component={ExpenseScreen}
+          options={{
+            tabBarLabel: 'Expense',
+            tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
+            tabBarActiveTintColor: '#F1948A',
+            tabBarInactiveTintColor: '#D5D8DC',
+            tabBarBounces: false,
+            tabBarIndicatorStyle: {
+              borderBottomColor: '#F1948A',
+              borderBottomWidth: 1,
+              backgroundColor: 'white',
+            },
+            tabBarStyle: {backgroundColor: theme.componentBackground},
+          }}
+        />
+      </StatsTopBar.Navigator>
+    </View>
+  );
 }
 
 function AppNavigation()
