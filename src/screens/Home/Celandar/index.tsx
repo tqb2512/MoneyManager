@@ -6,15 +6,18 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Calendar } from 'react-native-big-calendar';
-import { getAllDatesList, getDBConnection } from '../../../services/db-services';
+import { getDBConnection } from '../../../services/db-services';
 import { useIsFocused } from '@react-navigation/native';
 import DayBox from '../Daily/components/DayBox';
 import { ArrowLeftIcon, ArrowRightIcon, PlusIcon } from 'react-native-heroicons/outline';
 import { ChevronLeftIcon, ChevronRightIcon } from 'native-base';
 import { ScrollView } from 'react-native';
 import { CelandarScreenProp } from '../../../navigation/types';
+
+import themeContext from '../../../config/themeContext';
+import { themeInterface } from '../../../config/themeInterface';
 
 const events = [
   {
@@ -30,6 +33,7 @@ const events = [
 ];
 
 function CalendarScreen (props: CelandarScreenProp) {
+  const theme = useContext(themeContext) as themeInterface
   const { navigation } = props;
   const [dayClicked, setDayClicked] = useState(false);
   const [mode, setMode] = useState<any>('month');
@@ -53,7 +57,7 @@ function CalendarScreen (props: CelandarScreenProp) {
   }, [isFocused]);
 
   return (
-    <View>
+    <View style ={{ flex: 1, backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }}>
       {/* Calendar */}
       <Calendar
         events={events}

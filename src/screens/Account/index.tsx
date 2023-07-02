@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { AccountsScreenProp } from '../../navigation/types';
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, StyleSheet, FlatList } from 'react-native';
 import { NativeBaseProvider, ThreeDotsIcon } from 'native-base';
@@ -6,11 +6,14 @@ import { getDBConnection, getAccounts } from '../../services/db-services';
 import { Account } from '../../models/account';
 import AccountBox from './components/AccountBox';
 
-
+import themeContext from '../../config/themeContext';
+import { themeInterface } from '../../config/themeInterface';
 
 function AccountsScreen(props: AccountsScreenProp) {
 
     const { navigation } = props;
+
+    const theme = useContext(themeContext) as themeInterface
 
     const [menuShow, setMenuShow] = React.useState(false);
     const [accounts, setAccounts] = React.useState<Account[]>([]);
@@ -20,20 +23,25 @@ function AccountsScreen(props: AccountsScreenProp) {
             title: 'Accounts',
         });
 
-        getDBConnection().then(db => {
-            getAccounts(db).then(accounts => {
-                setAccounts(accounts);
+        const unsubscribe = navigation.addListener('focus', () => {
+            getDBConnection().then(db => {
+                getAccounts(db).then(accounts => {
+                    setAccounts(accounts);
+                });
             });
         });
-    });
+        return unsubscribe;
+    }, [navigation]);
 
     return (
         <NativeBaseProvider>
-            <SafeAreaView style={styles.mainContainer}>
+            <SafeAreaView style={[styles.mainContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2'} ]}>
                 <View style={{ position: 'relative' }}>
-                    <View style={styles.firstTopBar}>
+                    <View style={[styles.firstTopBar,  { backgroundColor: theme.background }]}>
                         <View style={styles.titleHeader}>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', textAlign: 'center' }}>Accounts</Text>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: theme.color , textAlign: 'center' }}>
+                                Accounts
+                            </Text>
                         </View>
                         <View style={styles.threeDots}>
                             <TouchableOpacity
@@ -44,22 +52,22 @@ function AccountsScreen(props: AccountsScreenProp) {
                         </View>
                     </View>
 
-                    <View style={styles.secondTopBar}>
+                    <View style={[styles.secondTopBar, { backgroundColor: theme.background, borderColor: theme.mode === 'dark' ? 'white' : 'rgba(229, 231, 235, 0.4)' }]}>
                         <View style={styles.totalCalc}>
-                            <Text style={styles.totalElement}>Assets</Text>
-                            <Text style={{ color: '#7DCEA0', alignSelf: 'center', fontSize: 20, fontWeight: 'bold' }}>
+                            <Text style={[styles.totalElement, { color: theme.color }]}>Assets</Text>
+                            <Text style={{ color: '#7DCEA0', alignSelf: 'center', fontSize: 14, fontWeight: '500' }}>
                                 $ 35.00
                             </Text>
                         </View>
                         <View style={styles.totalCalc}>
-                            <Text style={styles.totalElement}>Liabilities</Text>
-                            <Text style={{ color: '#F1948A', alignSelf: 'center', fontSize: 20, fontWeight: 'bold' }}>
+                            <Text style={[styles.totalElement, { color: theme.color }]}>Liabilities</Text>
+                            <Text style={{ color: '#F1948A', alignSelf: 'center', fontSize: 14, fontWeight: '500' }}>
                                 $ 35.00
                             </Text>
                         </View>
                         <View style={styles.totalCalc}>
-                            <Text style={styles.totalElement}>Total</Text>
-                            <Text style={{ color: 'grey', alignSelf: 'center', fontSize: 20, fontWeight: 'bold' }}>
+                            <Text style={[styles.totalElement, { color: theme.color }]}>Total</Text>
+                            <Text style={{ color: 'grey', alignSelf: 'center', fontSize: 14, fontWeight: '500' }}>
                                 $ 35.00
                             </Text>
                         </View>
@@ -67,8 +75,8 @@ function AccountsScreen(props: AccountsScreenProp) {
                 </View>
                 {/* List account */}
 
-                
-                
+
+
                 <FlatList
                     data={accounts}
                     renderItem={({ item }) => <AccountBox account={item} navigation={navigation} />}
@@ -77,11 +85,11 @@ function AccountsScreen(props: AccountsScreenProp) {
 
                 {/* Show Add, edit account, ....... */}
                 {menuShow && (
-                    <View style={styles.subView}>
+                    <View style={[styles.subView, { backgroundColor: theme.background }]}>
                         <TouchableOpacity
                             style={styles.addThreeDotsContainer}
-                            onPress={() => { navigation.navigate("add_account")}}>
-                            <Text style={styles.threeDotsText}>Add</Text>
+                            onPress={() => { navigation.navigate("add_account"); setMenuShow(false) }}>
+                            <Text style={[styles.threeDotsText, { color: theme.color }]}>Add</Text>
                         </TouchableOpacity>
                     </View>
                 )}
@@ -92,7 +100,7 @@ function AccountsScreen(props: AccountsScreenProp) {
 
 const styles = StyleSheet.create({
     mainContainer: {
-        position: 'relative',
+        flex: 1,
     },
 
     firstTopBar: {
@@ -112,10 +120,10 @@ const styles = StyleSheet.create({
     secondTopBar: {
         backgroundColor: 'white',
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly',
         paddingTop: 10,
         paddingBottom: 10,
-        paddingHorizontal: 20,
+        // paddingHorizontal: 20,
         borderWidth: 1,
         borderColor: 'rgba(229, 231, 235, 0.4)',
     },
@@ -127,14 +135,15 @@ const styles = StyleSheet.create({
 
     totalElement: {
         alignSelf: 'center',
-        fontSize: 18,
-        fontWeight: "600",
+        fontSize: 16,
+        fontWeight: "500",
     },
 
     threeDotsText: {
+        // marginStart: 8
         alignSelf: 'center',
-        fontSize: 18,
-        fontWeight: "600"
+        fontSize: 14,
+        // fontWeight: "600"
     },
 
     viewShow: {
@@ -147,7 +156,7 @@ const styles = StyleSheet.create({
     },
 
     subView: {
-        backgroundColor: 'white',
+
         position: 'absolute',
         width: '30%',
         top: 30,
@@ -166,7 +175,7 @@ const styles = StyleSheet.create({
     },
     addThreeDotsContainer: {
         borderColor: 'rgba(229, 231, 235, 1)',
-        borderBottomWidth: 0.4,
+        borderBottomWidth: 1,
         padding: 8,
     },
 });

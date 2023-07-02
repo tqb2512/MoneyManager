@@ -1,9 +1,15 @@
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import DayInfo from './DayInfo';
 import {DayBox as DayBoxModel} from '../../../../models/dayBox';
 
-function DayBox (props: { dayBoxModel: DayBoxModel, navigation: any }) {
+import themeContext from '../../../../config/themeContext';
+import { themeInterface } from '../../../../config/themeInterface';
+import { Currency } from '../../../../models/currency';
+
+function DayBox (props: { dayBoxModel: DayBoxModel, navigation: any, currency: Currency }) {
+
+  const theme = useContext(themeContext) as themeInterface
 
   const { navigation } = props;
   const getDayOfWeek = () => {
@@ -28,31 +34,34 @@ function DayBox (props: { dayBoxModel: DayBoxModel, navigation: any }) {
   return (
     <View style={styles.mainContainer}>
       {/* Hiện ngày tháng năm, tiền thu chi */}
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: theme.componentBackground }]}>
         <View style={{flexDirection: 'row', justifyContent:'flex-start'}}>
           <View style={{width: "25%", alignItems: "center"}}>
-            <Text style={styles.date}>{props.dayBoxModel.day}</Text>
+            <Text style={[styles.date, { color: theme.color }]}>{props.dayBoxModel.day}</Text>
           </View>
           <View style={styles.monthYear}>
-            <Text>{getDayOfWeek()}</Text>
-            <View style={{flexDirection: 'row'}}>
-              <Text style={styles.month}>{props.dayBoxModel.month}/</Text>
-              <Text style={styles.year}>{props.dayBoxModel.year}</Text>
-            </View>
+            <Text style={{ fontWeight: '600', color: theme.color }}>{getDayOfWeek()}</Text>
+            <Text style={[styles.month, { color: theme.color }]}>{props.dayBoxModel.month}/{props.dayBoxModel.year}</Text>
           </View>
         </View>
           <View style={styles.inContainer}>
-            <Text style={styles.inText}>$ {props.dayBoxModel.totalIncome}</Text>
+            <Text 
+              style={[styles.inText,{
+                fontSize: props.dayBoxModel.totalIncome.toString().length > 8 ? 14 : 19,
+              }]}
+            >{props.currency.symbol} {props.dayBoxModel.totalIncome}</Text>
           </View>
           <View style={styles.outContainer}>
-            <Text style={styles.outText}>$ {props.dayBoxModel.totalExpense}</Text>
+            <Text style={[styles.outText, {
+              fontSize: props.dayBoxModel.totalExpense.toString().length > 8 ? 14 : 19,
+            }]}>{props.currency.symbol} {props.dayBoxModel.totalExpense}</Text>
           </View>
 
       </View>
       {/* Danh sách khoản thu chi */}
       <FlatList
         data={props.dayBoxModel.transactions}
-        renderItem={({item}) => <DayInfo transaction={item} navigation={navigation} />}
+        renderItem={({item}) => <DayInfo transaction={item} navigation={navigation} currency={props.currency}/>}
         keyExtractor={item => item.id.toString()}
       />
     </View>
@@ -63,7 +72,7 @@ export default React.memo(DayBox);
 
 const styles = StyleSheet.create({
   mainContainer: {
-    marginTop : 12,
+    marginBottom: 12,
   },
 
   header: {
@@ -73,7 +82,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 8,
     borderLeftColor: '#BEEFFF',
     padding: 8,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: 'rgba(229, 231, 235, 0.8)',
   },
 
@@ -96,23 +105,25 @@ const styles = StyleSheet.create({
   inContainer:{
     marginRight: 0,
     marginTop: 5,
-    width: "20%"
+    width: "25%",
+    justifyContent: 'center'
   },
   inText:{
-    fontSize: 18,
+    fontSize: 16,
     color: "#7DCEA0",
     fontWeight: "bold",
     textAlign: "right",
   },
   outContainer:{
-    marginRight: 13,
+    marginRight: "5%",
     marginTop: 5,
-    width: "30%"
+    width: "25%",
+    justifyContent: 'center'
   },
   outText:{
-    fontSize: 18,
+    fontSize: 16,
     color: "#F1948A",
     fontWeight: "bold",
-    textAlign: "right"
+    textAlign: "right",
   }
 });

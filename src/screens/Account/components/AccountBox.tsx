@@ -1,15 +1,22 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Account } from '../../../models/account';
+import themeContext from '../../../config/themeContext';
+import { themeInterface } from '../../../config/themeInterface';
+
 
 export default function AccountBox(props: { account: Account; navigation: any; }) {
     const { account, navigation } = props;
 
+    const theme = useContext(themeContext) as themeInterface
+
     return (
         <TouchableOpacity onPress={() => navigation.navigate('account_detail', { account })}>
-            <View style={styles.accountButton}>
+            <View style={[styles.accountButton,  { backgroundColor: theme.componentBackground }]}>
                 <View style={styles.accountLabel}>
-                    <Text style={styles.accountText}>{account.name}</Text>
+                    <Text style={[styles.accountText, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>{account.name}</Text>
+                </View>
+                <View style={styles.moneyLabel}>
                     <Text style={account.balance >= 0 ? [styles.moneyText, {color: "#7DCEA0"}] : [styles.moneyText, {color: "#F1948A"}]}>$ {account.balance}</Text>
                 </View>
             </View>
@@ -20,7 +27,6 @@ export default function AccountBox(props: { account: Account; navigation: any; }
 /* #7DCEA0 - green, #F1948A - red */
 
 const styles = StyleSheet.create({
-
     mainContainer: {
         marginTop: 16
     },
@@ -29,14 +35,20 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 4,
-        paddingHorizontal: 16,
+        marginLeft: "3%",
+    },
+    moneyLabel: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 4,
+        marginRight: "3%",
     },
 
     moneyText: {
         color: 'black',
         alignSelf: 'center',
-        fontSize: 20,
-        fontWeight: 'bold',
+        fontSize: 16,
+        fontWeight: '500',
     },
 
     totalElement: {
@@ -48,17 +60,18 @@ const styles = StyleSheet.create({
 
     accountText: {
         alignSelf: 'center',
-        fontSize: 18,
-        fontWeight: "500",
-        color: 'grey',
+        fontSize: 14,
+        // fontWeight: "500",
+        color: 'black',
     },
 
     accountButton: {
         backgroundColor: 'white',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 16,
-        borderWidth: 1,
-        borderColor: 'rgba(229, 231, 235, 0.4)'
+        padding: "3.5%",
+        borderBottomWidth: 1,
+        borderColor: 'rgba(229, 231, 235, 0.6)'
     },
+
 })

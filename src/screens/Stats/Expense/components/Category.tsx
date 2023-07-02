@@ -1,6 +1,9 @@
-import React from 'react-native'
+import React, { useContext } from 'react'
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
+import themeContext from '../../../../config/themeContext';
+import { themeInterface } from '../../../../config/themeInterface';
+
 
 export type Props = {
     percentage: any,
@@ -10,16 +13,19 @@ export type Props = {
 };
 
 export default function Category({percentage, name, cost, color}: Props) {
-  return (
+  
+    const theme = useContext(themeContext) as themeInterface
+
+    return (
     <SafeAreaView>
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity style={[styles.container, { backgroundColor: theme.background }]}>
             <View style={styles.percentageNameContainer}>
                 <Text style={{
                     fontSize: 18, 
                     paddingHorizontal: 10, 
                     borderRadius: 3,
                     color: 'white',
-                    backgroundColor:color
+                    backgroundColor: 'red'
                     }}>{percentage.toFixed(2)}%</Text>
                 <Text style={styles.nameText}>{name}</Text>
             </View>
