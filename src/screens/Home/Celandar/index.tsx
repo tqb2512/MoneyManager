@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, { useState, useEffect, useContext } from 'react';
 import { Calendar } from 'react-native-big-calendar';
-import { getAllDatesList, getDBConnection } from '../../../services/db-services';
+import { getDBConnection } from '../../../services/db-services';
 import { useIsFocused } from '@react-navigation/native';
 import DayBox from '../Daily/components/DayBox';
 import { ArrowLeftIcon, ArrowRightIcon, PlusIcon } from 'react-native-heroicons/outline';

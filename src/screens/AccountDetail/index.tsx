@@ -5,9 +5,10 @@ import { ChevronLeftIcon, PencilIcon } from 'react-native-heroicons/outline'
 import { getDBConnection, getDayBoxByAccount } from '../../services/db-services';
 import { DayBox as DayBoxModel } from '../../models/dayBox';
 import DayBox from '../Home/Daily/components/DayBox';
-
+import { Currency } from '../../models/currency';
 import themeContext from '../../config/themeContext';
 import { themeInterface } from '../../config/themeInterface';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 function AccountDetail(props: AccountDetailProp) {
@@ -16,6 +17,7 @@ function AccountDetail(props: AccountDetailProp) {
 
     const { navigation } = props;
 
+    const [currency, setCurrency] = React.useState<Currency>({} as Currency);
     const [dayBoxes, setDayBoxes] = React.useState<DayBoxModel[]>([]);
 
     React.useEffect(() => {
@@ -26,6 +28,14 @@ function AccountDetail(props: AccountDetailProp) {
                 });
             });
         });
+
+        const getCurrencyValue = async () => {
+            const value = await AsyncStorage.getItem('currency')
+            if (value !== null) {
+              setCurrency(JSON.parse(value));
+            }
+          }
+        getCurrencyValue()
         return unsubscribe;
     }, [navigation]);
 
@@ -66,7 +76,7 @@ function AccountDetail(props: AccountDetailProp) {
                 <FlatList
                     data={dayBoxes}
                     renderItem={({ item }) => (
-                        <DayBox dayBoxModel={item} navigation={props.navigation} />
+                        <DayBox dayBoxModel={item} navigation={props.navigation} currency ={currency}/>
                     )}
                     keyExtractor={item => item.day.toString()}
                 />

@@ -5,8 +5,9 @@ import {DayBox as DayBoxModel} from '../../../../models/dayBox';
 
 import themeContext from '../../../../config/themeContext';
 import { themeInterface } from '../../../../config/themeInterface';
+import { Currency } from '../../../../models/currency';
 
-function DayBox (props: { dayBoxModel: DayBoxModel, navigation: any }) {
+function DayBox (props: { dayBoxModel: DayBoxModel, navigation: any, currency: Currency }) {
 
   const theme = useContext(themeContext) as themeInterface
 
@@ -48,19 +49,19 @@ function DayBox (props: { dayBoxModel: DayBoxModel, navigation: any }) {
               style={[styles.inText,{
                 fontSize: props.dayBoxModel.totalIncome.toString().length > 8 ? 14 : 19,
               }]}
-            >$ {props.dayBoxModel.totalIncome}</Text>
+            >{props.currency.symbol} {props.dayBoxModel.totalIncome}</Text>
           </View>
           <View style={styles.outContainer}>
             <Text style={[styles.outText, {
               fontSize: props.dayBoxModel.totalExpense.toString().length > 8 ? 14 : 19,
-            }]}>$ {props.dayBoxModel.totalExpense}</Text>
+            }]}>{props.currency.symbol} {props.dayBoxModel.totalExpense}</Text>
           </View>
 
       </View>
       {/* Danh sách khoản thu chi */}
       <FlatList
         data={props.dayBoxModel.transactions}
-        renderItem={({item}) => <DayInfo transaction={item} navigation={navigation} />}
+        renderItem={({item}) => <DayInfo transaction={item} navigation={navigation} currency={props.currency}/>}
         keyExtractor={item => item.id.toString()}
       />
     </View>

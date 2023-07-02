@@ -31,7 +31,23 @@ export default function App() {
         );
         return () => {
             EventRegister.removeEventListener(eventListener.toString())
-        }    
+        }
+    }, []);
+
+    useEffect(() => {
+        const getCurrencyValue = async () => {
+            const value = await AsyncStorage.getItem('currency')
+            if (value === null) {
+                await AsyncStorage.setItem('currency', JSON.stringify({name: 'USD', fullName: 'US Dollar', symbol: '$'}))
+            }
+        };
+        getCurrencyValue()
+    }, []);
+
+    useEffect(() => {
+        getDBConnection().then((db) => {
+            createTables(db)
+        })
     }, []);
 
     return (

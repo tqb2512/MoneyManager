@@ -9,6 +9,7 @@ import {
 import React, {useContext, useEffect} from 'react';
 import DayBox from './components/DayBox';
 import {DayBox as DayBoxModel} from '../../../models/dayBox';
+import { Currency } from '../../../models/currency';
 import {DailyScreenProp} from '../../../navigation/types';
 import {NativeBaseProvider} from 'native-base';
 import {
@@ -19,28 +20,47 @@ import {
   importTestData,
   changeAllTransactionsCurrency,
 } from '../../../services/db-services';
-import Header from '../CalendarButton';
 
 import themeContext from '../../../config/themeContext';
 import { themeInterface } from '../../../config/themeInterface';
 import CalendarButton from '../CalendarButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function DailyScreen(props: DailyScreenProp) {
 
   const theme = useContext(themeContext) as themeInterface
   const {navigation} = props;
+  const [date, setDate] = React.useState<Date>(new Date());
   const [dayBoxes, setDayBoxes] = React.useState<DayBoxModel[]>([]);
+  const [currency, setCurrency] = React.useState<Currency>({} as Currency);
   useEffect(() => {
 
     const unsubscribe = navigation.addListener('focus', () => {
       getDBConnection().then(db => {
-        getDayBoxFromMonthYear(db, 6, 2023).then(dayBoxes => {
+        getDayBoxFromMonthYear(db, date.getMonth() + 1, date.getFullYear()).then(dayBoxes => {
           setDayBoxes(dayBoxes);
         });
       });
+
+      const getCurrencyValue = async () => {
+        const value = await AsyncStorage.getItem('currency')
+        if (value !== null) {
+          setCurrency(JSON.parse(value));
+        }
+      }
+      getCurrencyValue()
     });
     return unsubscribe;
   }, [navigation]);
+
+  useEffect(() => {
+    getDBConnection().then(db => {
+      getDayBoxFromMonthYear(db, date.getMonth() + 1, date.getFullYear()).then(dayBoxes => {
+        setDayBoxes(dayBoxes);
+      });
+    });
+  }, [date]);
+  
 
   return (
     <NativeBaseProvider>
@@ -60,7 +80,7 @@ function DailyScreen(props: DailyScreenProp) {
             data={dayBoxes}
             renderItem={({item, index}) => (
               <View>
-                <DayBox dayBoxModel={item} navigation={props.navigation} />
+                <DayBox dayBoxModel={item} navigation={props.navigation} currency={currency} />
                 { index === dayBoxes.length - 1 ? 
                 (<View style={styles.footerView}>
                   <Text>  </Text>
@@ -71,7 +91,7 @@ function DailyScreen(props: DailyScreenProp) {
             keyExtractor={item => item.day.toString()}
           />
         </View>
-        <CalendarButton />
+        <CalendarButton date={date} setDate={setDate}/>
       </SafeAreaView>
     </NativeBaseProvider>
   );

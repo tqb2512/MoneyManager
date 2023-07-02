@@ -1,12 +1,68 @@
-import {FlatList, Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import {ChevronLeftIcon} from 'react-native-heroicons/outline';
-import {ChangeCurrencyProp} from '../../../navigation/types';
+import { ChevronLeftIcon } from 'react-native-heroicons/outline';
+import { ChangeCurrencyProp } from '../../../navigation/types';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import Currency from 'react-currency-formatter';
+import { Currency } from '../../../models/currency';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getDBConnection, changeAllTransactionsCurrency, changeAllAccountsCurrency } from '../../../services/db-services';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+
 
 function ChangeCurrency(props: ChangeCurrencyProp) {
-  const {navigation} = props;
+  const { navigation } = props;
+
+  const [currency, setCurrency] = React.useState<Currency>({} as Currency);
+  const currencyList: Currency[] = [
+    {
+      name: 'VND',
+      symbol: '\u20AB',
+      fullName: 'Việt Nam Đồng',
+    },
+    {
+      name: 'JPY',
+      symbol: '\u00A5',
+      fullName: 'Japanese Yen',
+    },
+    {
+      name: 'USD',
+      symbol: '\u0024',
+      fullName: 'United State Dollar',
+    },
+    {
+      name: 'EURO',
+      symbol: '\u20AC',
+      fullName: 'Euro',
+    },
+    {
+      name: 'GBP',
+      symbol: '\u00A3',
+      fullName: 'British Pound',
+    }];
+
+  React.useEffect(() => {
+    const getCurrencyValue = async () => {
+      const value = await AsyncStorage.getItem('currency')
+      if (value !== null) {
+        setCurrency(JSON.parse(value));
+      }
+    }
+    getCurrencyValue()
+  }, []);
+
+  const changeCurrency = async (newCurrency: Currency) => {
+    getDBConnection().then(db => {
+      changeAllTransactionsCurrency(db, currency.name, newCurrency.name).then(() => {
+        changeAllAccountsCurrency(db, currency.name, newCurrency.name).then(() => {
+          try {
+            AsyncStorage.setItem('currency', JSON.stringify(currency))
+            setCurrency(currency);
+          } catch (e) {
+          }
+        })
+      })
+    })        
+  }
 
   return (
     <View style={styles.mainContainer}>
@@ -31,47 +87,18 @@ function ChangeCurrency(props: ChangeCurrencyProp) {
       </View> */}
 
       {/* <FlatList /> */}
-      <ScrollView style={styles.currentButtonView}> 
+      <ScrollView style={styles.currentButtonView}>
         <Text>Để tạm scroll view</Text>
-        <TouchableOpacity style={styles.currencyButton}>
-              <Image style={styles.flagImg} source={require('../../../../assets/flagImage/vietnam.png')} />
-              <View style={styles.currencyTextView}>
-                  <Text style={styles.currencyNameText}>Việt Nam Đồng - VND</Text>
-              </View>
-            <Text style={styles.currencySymbol}>{'\u20AB'}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.currencyButton}>
-              <Image style={styles.flagImg} source={require('../../../../assets/flagImage/japan.png')} />
-              <View style={styles.currencyTextView}>
-                  <Text style={styles.currencyNameText}>Japanese Yen- JPY</Text>
-              </View>
-            <Text style={styles.currencySymbol}>{'\u00A5'}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.currencyButton}>
-              <Image style={styles.flagImg} source={require('../../../../assets/flagImage/united-states.png')} />
-              <View style={styles.currencyTextView}>
-                  <Text style={styles.currencyNameText}>United State Dollar - USD</Text>
-              </View>
-            <Text style={styles.currencySymbol}>{'\u0024'}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.currencyButton}>
-              <Image style={styles.flagImg} source={require('../../../../assets/flagImage/european-union.png')} />
-              <View style={styles.currencyTextView}>
-                  <Text style={styles.currencyNameText}>Euro - EURO</Text>
-              </View>
-            <Text style={styles.currencySymbol}>{'\u20AC'}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.currencyButton}>
-              <Image style={styles.flagImg} source={require('../../../../assets/flagImage/india.png')} />
-              <View style={styles.currencyTextView}>
-                  <Text style={styles.currencyNameText}>Indian Rupee - RUP</Text>
-              </View>
-            <Text style={styles.currencySymbol}>{'\u20B9'}</Text>
-        </TouchableOpacity>
+        <FlatList
+          data={currencyList}
+          renderItem={({ item }) => (
+            <TouchableOpacity style={styles.currencyButton} onPress={() => changeCurrency(item)}>
+              <Text>{item.name} - {item.fullName}</Text>
+              <Text>{item.symbol}</Text>
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item) => item.name}
+        />
       </ScrollView>
 
     </View>
@@ -107,19 +134,19 @@ const styles = StyleSheet.create({
     marginTop: 12,
     width: '95%',
     backgroundColor: '#00CCBB',
-    padding: 24, 
-    borderRadius: 12, 
+    padding: 24,
+    borderRadius: 12,
     alignSelf: 'center'
   },
   countryText: {
     alignSelf: 'center',
     color: 'white',
-    marginBottom: 8, 
+    marginBottom: 8,
   },
   currencyPreviewText: {
     alignSelf: 'center',
     color: 'white',
-    fontSize: 36,  
+    fontSize: 36,
   },
 
   currentButtonView: {
@@ -141,19 +168,19 @@ const styles = StyleSheet.create({
     marginEnd: 16,
   },
 
-currencyTextView: {
-  flex: 1,
-  justifyContent: 'center'
-},
-currencyNameText: {
-  fontSize: 16,
-},
-currencyShortNameText: {
-  fontSize: 12,  
-},
+  currencyTextView: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  currencyNameText: {
+    fontSize: 16,
+  },
+  currencyShortNameText: {
+    fontSize: 12,
+  },
 
-currencySymbol: {
-  alignSelf: 'center'
-}
+  currencySymbol: {
+    alignSelf: 'center'
+  }
 
 });

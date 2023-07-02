@@ -1,3 +1,5 @@
+import { Currency } from "./currency";
+
 export type Settings = {
-    currency: string;
+    currency: Currency;
 };

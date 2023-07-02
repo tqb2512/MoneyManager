@@ -6,8 +6,9 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 import themeContext from '../../../../config/themeContext';
 import { themeInterface } from '../../../../config/themeInterface';
+import { Currency } from '../../../../models/currency';
 
-function DayInfo (props: {transaction : Transaction, navigation: any}) {
+function DayInfo (props: {transaction : Transaction, navigation: any, currency: Currency}) {
 
   const theme = useContext(themeContext) as themeInterface
   
@@ -38,7 +39,7 @@ function DayInfo (props: {transaction : Transaction, navigation: any}) {
             color: props.transaction.type === 'income' ? '#7DCEA0' : '#F1948A',
             fontSize: props.transaction.amount.toString().length > 20 ? 13 : 16,
           }}>
-          $ {props.transaction.amount}
+          {props.currency.symbol} {props.transaction.amount}
         </Text>
       </View>
     </TouchableOpacity>

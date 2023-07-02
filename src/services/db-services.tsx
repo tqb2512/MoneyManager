@@ -3,6 +3,7 @@ import { Transaction } from '../models/transaction';
 import { Category } from '../models/category';
 import { Account } from '../models/account';
 import { DayBox } from '../models/dayBox';
+import { PieData } from '../models/pieData';
 
 enablePromise(true);
 
@@ -34,9 +35,6 @@ export const createTables = async (db: SQLiteDatabase): Promise<void> => {
     'accountId INTEGER, ' +
     'FOREIGN KEY(categoryId) REFERENCES categories(id), ' +
     'FOREIGN KEY(accountId) REFERENCES accounts(id))');
-
-    await db.executeSql('CREATE TABLE IF NOT EXISTS settings '+
-    '(currency TEXT)');
     console.log('Tables created');
 }
 
@@ -59,13 +57,13 @@ export const importTestData = async (db: SQLiteDatabase): Promise<void> => {
     ]
 
     const categories: Category[] = [
-        { id: 1, name: "Food", color: "#FF0000", icon: "" },
-        { id: 2, name: "Transport", color: "#00FF00", icon: "" },
-        { id: 3, name: "Play", color: "#00FF00", icon: "" },
-        { id: 4, name: "Watch", color: "#00FF00", icon: "" },
-        { id: 5, name: "Study", color: "#00FF00", icon: "" },
-        { id: 6, name: "Entertainment", color: "#00FF00", icon: "" },
-        { id: 7, name: "Salary", color: "#00FF00", icon: "" },
+        { id: 1, name: "Food", color: "#FF9B9B", icon: "" },
+        { id: 2, name: "Transport", color: "#FFD6A5", icon: "" },
+        { id: 3, name: "Play", color: "#FFFEC4", icon: "" },
+        { id: 4, name: "Watch", color: "#CBFFA9", icon: "" },
+        { id: 5, name: "Study", color: "#C4DFDF", icon: "" },
+        { id: 6, name: "Entertainment", color: "#BA90C6", icon: "" },
+        { id: 7, name: "Salary", color: "#867070", icon: "" },
     ]
 
     const transactions: Transaction[] = [
@@ -88,8 +86,6 @@ export const importTestData = async (db: SQLiteDatabase): Promise<void> => {
         const transaction = transactions[i];
         await db.executeSql('INSERT INTO transactions (id, amount, day, month, year, note, type, categoryId, accountId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [transaction.id, transaction.amount, transaction.day, transaction.month, transaction.year, transaction.note, transaction.type, transaction.category.id, transaction.account.id]);
     }
-
-    await db.executeSql('INSERT INTO SETTINGS (currency) VALUES ("USD")');
     console.log('Test data imported');
 }
 
@@ -290,6 +286,110 @@ export const changeAllTransactionsCurrency = async (db: SQLiteDatabase, oldCurre
             console.log(rate);
             db.executeSql('UPDATE transactions SET amount = amount * ?', [rate]);
             db.executeSql('UPDATE accounts SET balance = balance * ?', [rate]);
-            db.executeSql('UPDATE settings SET currency = ?', [newCurrency]);
         });
+}
+
+export const changeAllAccountsCurrency = async (db: SQLiteDatabase, oldCurrency: string, newCurrency: string): Promise<void> => {
+    fetch("https://raw.githubusercontent.com/fawazahmed0/currency-api/1/latest/currencies/" + oldCurrency.toLowerCase() + "/" + newCurrency.toLowerCase() + ".json")
+        .then(response => response.json())
+        .then(data => {
+            const rate = data[newCurrency];
+            console.log(rate);
+            db.executeSql('UPDATE accounts SET balance = balance * ?', [rate]);
+        });
+}
+
+export const getPieDataByMonth = async (db: SQLiteDatabase, month: number, year: number, type:  string): Promise<PieData[]> => {
+    const [result] = await db.executeSql('SELECT categoryId, categories.name, categories.color, SUM(amount) as sum FROM transactions inner join categories on transactions.categoryId = categories.id WHERE month = ? AND year = ? AND type = ? GROUP BY categoryId', [month, year, type]);
+    let pieData: PieData[] = [];
+    for (let i = 0; i < result.rows.length; i++) {
+        const row = result.rows.item(i);
+        const category: Category = {
+            id: row.categoryId,
+            name: row.name,
+            color: row.color,
+            icon: '',
+        }
+        const pieDataItem: PieData = {
+            category: category,
+            percentage: 0,
+            value: row.sum,
+        }
+        pieData.push(pieDataItem);
+    }
+    let total = 0;
+    for (let i = 0; i < pieData.length; i++) {
+        total += pieData[i].value;
+    }
+    for (let i = 0; i < pieData.length; i++) {
+        pieData[i].percentage = pieData[i].value / total;
+    }
+    return pieData;
+}
+
+export type ChartData = {
+    name: string,
+    percentage: number,
+    value: number,
+    color: string,
+}
+
+export const getChartDataByMonth = async (db: SQLiteDatabase, month: number, year: number, type:  string): Promise<ChartData[]> => {
+    let pieData: PieData[] = await getPieDataByMonth(db, month, year, type);
+    let chartData: ChartData[] = [];
+    for (let i = 0; i < pieData.length; i++) {
+        const pieDataItem = pieData[i];
+        const chartDataItem: ChartData = {
+            name: pieDataItem.category.name,
+            percentage: pieDataItem.percentage,
+            value: pieDataItem.value,
+            color: pieDataItem.category.color,
+        }
+        chartData.push(chartDataItem);
+    }
+    return chartData;
+}
+
+export const getPieDataByYear = async (db: SQLiteDatabase, year: number, type:  string): Promise<PieData[]> => {
+    const [result] = await db.executeSql('SELECT categoryId, categories.name, categories.color, SUM(amount) as sum FROM transactions inner join categories on transactions.categoryId = categories.id WHERE year = ? AND type = ? GROUP BY categoryId', [year, type]);
+    let pieData: PieData[] = [];
+    for (let i = 0; i < result.rows.length; i++) {
+        const row = result.rows.item(i);
+        const category: Category = {
+            id: row.categoryId,
+            name: row.name,
+            color: row.color,
+            icon: '',
+        }
+        const pieDataItem: PieData = {
+            category: category,
+            percentage: 0,
+            value: row.sum,
+        }
+        pieData.push(pieDataItem);
+    }
+    let total = 0;
+    for (let i = 0; i < pieData.length; i++) {
+        total += pieData[i].value;
+    }
+    for (let i = 0; i < pieData.length; i++) {
+        pieData[i].percentage = pieData[i].value / total;
+    }
+    return pieData;
+}
+
+export const getChartDataByYear = async (db: SQLiteDatabase, year: number, type:  string): Promise<ChartData[]> => {
+    let pieData: PieData[] = await getPieDataByYear(db, year, type);
+    let chartData: ChartData[] = [];
+    for (let i = 0; i < pieData.length; i++) {
+        const pieDataItem = pieData[i];
+        const chartDataItem: ChartData = {
+            name: pieDataItem.category.name,
+            percentage: pieDataItem.percentage,
+            value: pieDataItem.value,
+            color: pieDataItem.category.color,
+        }
+        chartData.push(chartDataItem);
+    }
+    return chartData;
 }

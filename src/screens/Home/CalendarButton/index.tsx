@@ -7,9 +7,8 @@ import MonthPicker from 'react-native-month-year-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { CalendarIcon } from 'react-native-heroicons/outline'
 
-type Props = {};
 
-export default function CalendarButton({}: Props) {
+export default function CalendarButton(props: {date: Date, setDate: Function}) {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
 
@@ -17,6 +16,7 @@ export default function CalendarButton({}: Props) {
     const selectedDate = newDate || date;
     setShow(!show);
     setDate(selectedDate);
+    props.setDate(selectedDate);
   };
   return (
     <SafeAreaView style={styles.headerContainer}>
