@@ -1,4 +1,4 @@
-import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import { ChangeCurrencyProp } from '../../../navigation/types';
@@ -50,18 +50,26 @@ function ChangeCurrency(props: ChangeCurrencyProp) {
     getCurrencyValue()
   }, []);
 
+  // const changeCurrency = async (newCurrency: Currency) => {
+  //   getDBConnection().then(db => {
+  //     changeAllTransactionsCurrency(db, currency.name, newCurrency.name).then(() => {
+  //       changeAllAccountsCurrency(db, currency.name, newCurrency.name).then(() => {
+  //         try {
+  //           AsyncStorage.setItem('currency', JSON.stringify(currency))
+  //           setCurrency(currency);
+  //         } catch (e) {
+  //         }
+  //       })
+  //     })
+  //   })        
+  // }
+
   const changeCurrency = async (newCurrency: Currency) => {
-    getDBConnection().then(db => {
-      changeAllTransactionsCurrency(db, currency.name, newCurrency.name).then(() => {
-        changeAllAccountsCurrency(db, currency.name, newCurrency.name).then(() => {
-          try {
-            AsyncStorage.setItem('currency', JSON.stringify(currency))
-            setCurrency(currency);
-          } catch (e) {
-          }
-        })
-      })
-    })        
+    try {
+      AsyncStorage.setItem('currency', JSON.stringify(newCurrency))
+      setCurrency(newCurrency);
+    } catch (e) {
+    }
   }
 
   return (
@@ -87,20 +95,17 @@ function ChangeCurrency(props: ChangeCurrencyProp) {
       </View> */}
 
       {/* <FlatList /> */}
-      <ScrollView style={styles.currentButtonView}>
-        <Text>Để tạm scroll view</Text>
         <FlatList
           data={currencyList}
           renderItem={({ item }) => (
-            <TouchableOpacity style={styles.currencyButton} onPress={() => changeCurrency(item)}>
+            <TouchableOpacity style={styles.currencyButton} onPress={() => {changeCurrency(item); console.log(currency)}}>
               <Text>{item.name} - {item.fullName}</Text>
               <Text>{item.symbol}</Text>
             </TouchableOpacity>
           )}
           keyExtractor={(item) => item.name}
         />
-      </ScrollView>
-
+        
     </View>
   );
 }

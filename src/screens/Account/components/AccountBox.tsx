@@ -3,9 +3,10 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Account } from '../../../models/account';
 import themeContext from '../../../config/themeContext';
 import { themeInterface } from '../../../config/themeInterface';
+import { Currency } from '../../../models/currency';
 
 
-export default function AccountBox(props: { account: Account; navigation: any; }) {
+export default function AccountBox(props: { account: Account; navigation: any; currency: Currency }) {
     const { account, navigation } = props;
 
     const theme = useContext(themeContext) as themeInterface
@@ -17,7 +18,7 @@ export default function AccountBox(props: { account: Account; navigation: any; }
                     <Text style={[styles.accountText, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>{account.name}</Text>
                 </View>
                 <View style={styles.moneyLabel}>
-                    <Text style={account.balance >= 0 ? [styles.moneyText, {color: "#7DCEA0"}] : [styles.moneyText, {color: "#F1948A"}]}>$ {account.balance}</Text>
+                    <Text style={account.balance >= 0 ? [styles.moneyText, {color: "#7DCEA0"}] : [styles.moneyText, {color: "#F1948A"}]}>{props.currency.symbol} {account.balance}</Text>
                 </View>
             </View>
         </TouchableOpacity>

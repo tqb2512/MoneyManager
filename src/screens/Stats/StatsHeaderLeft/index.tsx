@@ -1,20 +1,39 @@
-import React, {useState, useCallback, useContext} from 'react'
+import React, {useState, useCallback, useContext, useEffect} from 'react'
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MonthPicker from 'react-native-month-year-picker'
 import themeContext from '../../../config/themeContext'
 import { themeInterface } from '../../../config/themeInterface'
+import { Currency } from '../../../models/currency'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = {}
 
 export default function StatsHeaderLeft({}: Props) {
+  
 
+    const {navigation} = props;
     const theme = useContext(themeContext) as themeInterface
 
     const [date, setDate] = useState(new Date());
     const [show, setShow] = useState(false);
   
     const showPicker = useCallback((value:any) => setShow(value), []);
+
+    const [currency, setCurrency] = React.useState<Currency>({} as Currency);
+    useEffect(() => {
+  
+      const unsubscribe = navigation.addListener('focus', () => {
+        const getCurrencyValue = async () => {
+          const value = await AsyncStorage.getItem('currency')
+          if (value !== null) {
+            setCurrency(JSON.parse(value));
+          }
+        }
+        getCurrencyValue()
+      });
+      return unsubscribe;
+    }, [navigation]);
 
     const onValueChange = (event:any, newDate:any) => {
       const selectedDate = newDate || date;

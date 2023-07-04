@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal, Pressable, FlatList } from 'react-native';
 import { Account } from '../../models/account';
 import { AddAccountProp } from '../../navigation/types';
@@ -7,6 +7,9 @@ import { getDBConnection, insertAccount } from '../../services/db-services';
 
 import themeContext from '../../config/themeContext';
 import { themeInterface } from '../../config/themeInterface';
+import { Currency } from '../../models/currency';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 function AddAccount(props: AddAccountProp) {
 
@@ -16,6 +19,21 @@ function AddAccount(props: AddAccountProp) {
     const [account, setAccount] = React.useState<Account>({} as Account);
     const [showGroup, setShowGroup] = React.useState<boolean>(false);
     const groupList = ["Cash", "Bank", "Credit Card", "Savings", "Loan", "Insurance", "E-Wallet", "Others"];
+    const [currency, setCurrency] = React.useState<Currency>({} as Currency);
+
+    useEffect(() => {
+
+        const unsubscribe = navigation.addListener('focus', () => {
+          const getCurrencyValue = async () => {
+            const value = await AsyncStorage.getItem('currency')
+            if (value !== null) {
+              setCurrency(JSON.parse(value));
+            }
+          }
+          getCurrencyValue()
+        });
+        return unsubscribe;
+      }, [navigation]);
 
     const saveAccount = () => {
         getDBConnection().then(db => {
@@ -75,6 +93,7 @@ function AddAccount(props: AddAccountProp) {
                     keyboardType="number-pad"
                 //  Đưa giá trị vô đây
                 />
+                <Text style={[styles.currencySymbol, { color: theme.color }]}>{currency.symbol}</Text>
             </View>
 
             {showGroup && (
@@ -242,6 +261,11 @@ const styles = StyleSheet.create({
         paddingVertical: '4.3%',
         borderTopWidth: 0.18,
         borderBottomWidth: 0.18,
+    },
+
+    currencySymbol: {
+        fontWeight: '600',
+        fontSize: 18,
     }
 });
 

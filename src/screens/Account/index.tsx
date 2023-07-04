@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { AccountsScreenProp } from '../../navigation/types';
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, StyleSheet, FlatList } from 'react-native';
 import { NativeBaseProvider, ThreeDotsIcon } from 'native-base';
@@ -8,6 +8,9 @@ import AccountBox from './components/AccountBox';
 
 import themeContext from '../../config/themeContext';
 import { themeInterface } from '../../config/themeInterface';
+import { Currency } from '../../models/currency';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 function AccountsScreen(props: AccountsScreenProp) {
 
@@ -17,6 +20,21 @@ function AccountsScreen(props: AccountsScreenProp) {
 
     const [menuShow, setMenuShow] = React.useState(false);
     const [accounts, setAccounts] = React.useState<Account[]>([]);
+    const [currency, setCurrency] = React.useState<Currency>({} as Currency);
+
+    useEffect(() => {
+
+        const unsubscribe = navigation.addListener('focus', () => {
+          const getCurrencyValue = async () => {
+            const value = await AsyncStorage.getItem('currency')
+            if (value !== null) {
+              setCurrency(JSON.parse(value));
+            }
+          }
+          getCurrencyValue()
+        });
+        return unsubscribe;
+      }, [navigation]);
 
     React.useEffect(() => {
         props.navigation.setOptions({
@@ -56,19 +74,19 @@ function AccountsScreen(props: AccountsScreenProp) {
                         <View style={styles.totalCalc}>
                             <Text style={[styles.totalElement, { color: theme.color }]}>Assets</Text>
                             <Text style={{ color: '#7DCEA0', alignSelf: 'center', fontSize: 14, fontWeight: '500' }}>
-                                $ 35.00
+                                {currency.symbol} 35.00
                             </Text>
                         </View>
                         <View style={styles.totalCalc}>
                             <Text style={[styles.totalElement, { color: theme.color }]}>Liabilities</Text>
                             <Text style={{ color: '#F1948A', alignSelf: 'center', fontSize: 14, fontWeight: '500' }}>
-                                $ 35.00
+                                {currency.symbol} 35.00
                             </Text>
                         </View>
                         <View style={styles.totalCalc}>
                             <Text style={[styles.totalElement, { color: theme.color }]}>Total</Text>
                             <Text style={{ color: 'grey', alignSelf: 'center', fontSize: 14, fontWeight: '500' }}>
-                                $ 35.00
+                                {currency.symbol} 35.00
                             </Text>
                         </View>
                     </View>
@@ -79,7 +97,7 @@ function AccountsScreen(props: AccountsScreenProp) {
 
                 <FlatList
                     data={accounts}
-                    renderItem={({ item }) => <AccountBox account={item} navigation={navigation} />}
+                    renderItem={({ item }) => <AccountBox account={item} navigation={navigation} currency={currency} />}
                     keyExtractor={item => item.id.toString()}
                 />
 

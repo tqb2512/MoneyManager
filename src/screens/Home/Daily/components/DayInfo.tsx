@@ -29,15 +29,15 @@ function DayInfo (props: {transaction : Transaction, navigation: any, currency: 
           <Text style={{ marginStart: "5%", color: theme.color }}>{props.transaction.category.name}</Text>
         </View>
         <View style={{flex: 1, marginStart: "5%", justifyContent: 'center'}}>
-          {props.transaction.note != null && (<Text style={{fontSize: 16, fontWeight: 'bold', color: theme.color}}>{props.transaction.note}</Text>) }
-          <Text style={{fontSize: 12, color: theme.color === 'dark' ? theme.color : 'grey'}}>{props.transaction.account.name}</Text>
+          {props.transaction.note !== null && (<Text style={{fontSize: 16, fontWeight: 'bold', color: theme.color}}>{props.transaction.note}</Text>) }
+          <Text style={{fontSize: 12, color: theme.color === 'dark' ? theme.color : 'grey', justifyContent: 'center'}}>{props.transaction.account.name}</Text>
         </View>
         <Text
           style={{
             alignSelf: 'center',
             marginRight: "6.5%",
             color: props.transaction.type === 'income' ? '#7DCEA0' : '#F1948A',
-            fontSize: props.transaction.amount.toString().length > 20 ? 13 : 16,
+            // fontSize: props.transaction.amount.toString().length > 20 ? 13 : 16,
           }}>
           {props.currency.symbol} {props.transaction.amount}
         </Text>
