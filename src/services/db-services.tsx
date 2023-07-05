@@ -282,20 +282,20 @@ export const changeAllTransactionsCurrency = async (db: SQLiteDatabase, oldCurre
     fetch("https://raw.githubusercontent.com/fawazahmed0/currency-api/1/latest/currencies/" + oldCurrency.toLowerCase() + "/" + newCurrency.toLowerCase() + ".json")
         .then(response => response.json())
         .then(data => {
-            const rate = data[newCurrency];
-            console.log(rate);
-            db.executeSql('UPDATE transactions SET amount = amount * ?', [rate]);
-            db.executeSql('UPDATE accounts SET balance = balance * ?', [rate]);
-        });
+            const rate = data[newCurrency.toLowerCase()];
+            //round to 2 decimal places
+            db.executeSql('UPDATE transactions SET amount = ROUND(amount * ?, 2)', [rate]);
+            
+        }); 
 }
 
 export const changeAllAccountsCurrency = async (db: SQLiteDatabase, oldCurrency: string, newCurrency: string): Promise<void> => {
     fetch("https://raw.githubusercontent.com/fawazahmed0/currency-api/1/latest/currencies/" + oldCurrency.toLowerCase() + "/" + newCurrency.toLowerCase() + ".json")
         .then(response => response.json())
         .then(data => {
-            const rate = data[newCurrency];
-            console.log(rate);
-            db.executeSql('UPDATE accounts SET balance = balance * ?', [rate]);
+            const rate = data[newCurrency.toLowerCase()];
+            //round to 2 decimal places
+            db.executeSql('UPDATE accounts SET balance = ROUND(balance * ?, 2)', [rate]);
         });
 }
 

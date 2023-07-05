@@ -47,6 +47,8 @@ export default function App() {
     useEffect(() => {
         getDBConnection().then((db) => {
             createTables(db)
+            //dropTables(db)
+            //importTestData(db)
         })
     }, []);
 

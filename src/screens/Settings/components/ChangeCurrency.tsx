@@ -30,7 +30,7 @@ function ChangeCurrency(props: ChangeCurrencyProp) {
       fullName: 'United State Dollar',
     },
     {
-      name: 'EURO',
+      name: 'EUR',
       symbol: '\u20AC',
       fullName: 'Euro',
     },
@@ -50,27 +50,24 @@ function ChangeCurrency(props: ChangeCurrencyProp) {
     getCurrencyValue()
   }, []);
 
-  // const changeCurrency = async (newCurrency: Currency) => {
-  //   getDBConnection().then(db => {
-  //     changeAllTransactionsCurrency(db, currency.name, newCurrency.name).then(() => {
-  //       changeAllAccountsCurrency(db, currency.name, newCurrency.name).then(() => {
-  //         try {
-  //           AsyncStorage.setItem('currency', JSON.stringify(currency))
-  //           setCurrency(currency);
-  //         } catch (e) {
-  //         }
-  //       })
-  //     })
-  //   })        
-  // }
-
   const changeCurrency = async (newCurrency: Currency) => {
-    try {
-      AsyncStorage.setItem('currency', JSON.stringify(newCurrency))
-      setCurrency(newCurrency);
-    } catch (e) {
-    }
+    getDBConnection().then(db => {
+      changeAllTransactionsCurrency(db, currency.name, newCurrency.name).then(() => {
+        changeAllAccountsCurrency(db, currency.name, newCurrency.name).then(() => {
+          AsyncStorage.setItem('currency', JSON.stringify(newCurrency))
+          setCurrency(newCurrency);
+        })
+      })
+    })        
   }
+
+  // const changeCurrency = async (newCurrency: Currency) => {
+  //   try {
+  //     AsyncStorage.setItem('currency', JSON.stringify(newCurrency))
+  //     setCurrency(newCurrency);
+  //   } catch (e) {
+  //   }
+  // }
 
   return (
     <View style={styles.mainContainer}>
