@@ -1,17 +1,19 @@
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import { ChangeCurrencyProp } from '../../../navigation/types';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { CheckCircleIcon } from 'react-native-heroicons/solid'
 import { Currency } from '../../../models/currency';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getDBConnection, changeAllTransactionsCurrency, changeAllAccountsCurrency } from '../../../services/db-services';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
-
+import themeContext from '../../../config/themeContext';
+import { themeInterface } from '../../../config/themeInterface';
 
 function ChangeCurrency(props: ChangeCurrencyProp) {
   const { navigation } = props;
-
+  const theme = useContext(themeContext) as themeInterface
   const [currency, setCurrency] = React.useState<Currency>({} as Currency);
   const currencyList: Currency[] = [
     {
@@ -70,17 +72,17 @@ function ChangeCurrency(props: ChangeCurrencyProp) {
   // }
 
   return (
-    <View style={styles.mainContainer}>
-      <View style={styles.navigateHeader}>
+    <View style={[styles.mainContainer, { backgroundColor: theme.background }]}>
+      <View style={[styles.navigateHeader, { backgroundColor: theme.componentBackground }]}>
         <View style={styles.backButton}>
           <ChevronLeftIcon
             onPress={() => {
               navigation.goBack();
             }}
             size={20}
-            color="black"
+            color={theme.color}
           />
-          <Text style={styles.accountNameTxt}>Change Currency</Text>
+          <Text style={[styles.accountNameTxt,  { color: theme.color }]}>Change Currency</Text>
         </View>
       </View>
 
@@ -95,9 +97,17 @@ function ChangeCurrency(props: ChangeCurrencyProp) {
         <FlatList
           data={currencyList}
           renderItem={({ item }) => (
-            <TouchableOpacity style={styles.currencyButton} onPress={() => {changeCurrency(item); console.log(currency)}}>
-              <Text>{item.name} - {item.fullName}</Text>
-              <Text>{item.symbol}</Text>
+            <TouchableOpacity style={[styles.currencyButton, { backgroundColor: theme.componentBackground }]} onPress={() => {changeCurrency(item); console.log(currency)}}>
+              <View>
+                <Text style={[styles.currencyNameText, { color: theme.color }]}>{item.fullName}</Text>
+                <Text style={[styles.currencyShortNameText, { color: theme.color }]}>{item.name}</Text>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Text style={[styles.currencySymbol, { color: theme.color }]}>{item.symbol}</Text>
+                { currency.fullName === item.fullName && (
+                  <CheckCircleIcon style={{ alignSelf: 'center', marginStart: 12 }} size={20} color='#1056B4' />
+                )}
+              </View>
             </TouchableOpacity>
           )}
           keyExtractor={(item) => item.name}
@@ -110,14 +120,16 @@ function ChangeCurrency(props: ChangeCurrencyProp) {
 export default ChangeCurrency;
 
 const styles = StyleSheet.create({
-  mainContainer: {},
+  mainContainer: {
+    flex: 1,
+  },
   navigateHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: 'white',
     padding: 12,
     textAlign: 'center',
-    borderBottomWidth: 0.2,
+    borderBottomWidth: 1,
     borderBottomColor: 'grey'
   },
 
@@ -145,11 +157,6 @@ const styles = StyleSheet.create({
     color: 'white',
     marginBottom: 8,
   },
-  currencyPreviewText: {
-    alignSelf: 'center',
-    color: 'white',
-    fontSize: 36,
-  },
 
   currentButtonView: {
     backgroundColor: 'white',
@@ -157,11 +164,14 @@ const styles = StyleSheet.create({
   },
 
   currencyButton: {
+    backgroundColor: 'white',
     flexDirection: 'row',
     padding: 10,
-    paddingBottom: 10,
-    // borderBottomWidth: 0.19,
-    // borderBottomColor: 'grey'
+    paddingVertical: 16,
+    paddingEnd: 24, 
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: 'grey'
   },
 
   flagImg: {
@@ -174,15 +184,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center'
   },
+  
   currencyNameText: {
     fontSize: 16,
+    fontWeight: '500'
   },
   currencyShortNameText: {
     fontSize: 12,
   },
 
   currencySymbol: {
-    alignSelf: 'center'
+    alignSelf: 'center',
+    fontWeight: '700',
+    fontSize: 16,
   }
 
 });
