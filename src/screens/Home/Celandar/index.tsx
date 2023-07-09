@@ -62,18 +62,18 @@ function CalendarScreen (props: CelandarScreenProp) {
   }, [isFocused]);
 
   return (
-    <View>
-      <View>
-        <View>
-          <Button title="Today" />
-          <Button title="<" />
-          <Button title=">" />
-          <View>
-            <Text>MMMM YYYY</Text>
+    <View style ={{ flex: 1, backgroundColor: theme.mode === 'dark' ? theme.componentBackground : 'white' }}> 
+      <View style={[styles.timecontrolContainer, { backgroundColor: theme.componentBackground }]} >
+        <View style={styles.buttonContainer}>
+          <Button color="#2196f3" title=" Today " />
+          <Button color="#2196f3" title=" < " />
+          <Button color="#2196f3" title=" > " />
+          <View style={{ alignItems:'center', justifyContent: 'center', marginStart: 8 }}>
+            <Text style={{ color: theme.color }} >MMMM YYYY</Text>
           </View>
         </View>
       </View>
-      <View style={{ marginTop: 16 }}>
+      <View style={{ backgroundColor: theme.componentBackground }}>
         <Calendar
           date={date}
           height={SCREEN_HEIGHT - 80}
@@ -94,7 +94,7 @@ function CalendarScreen (props: CelandarScreenProp) {
           dayHeaderHighlightColor={'#000'}
           weekDayHeaderHighlightColor={'#aaa'}
           headerComponent={
-            <Text style={{ color: '#aaa', fontSize: 25 }}>CalendarBody's headerComponent</Text>
+            <Text style={{ color: '#aaa', fontSize: 25,}}>CalendarBody's headerComponent</Text>
           }
           headerComponentStyle={{
             width: '100%',
@@ -113,6 +113,17 @@ function CalendarScreen (props: CelandarScreenProp) {
 export default React.memo(CalendarScreen);
 
 const styles = StyleSheet.create({
+  timecontrolContainer: {
+    // backgroundColor: 'grey',
+  },
+
+  buttonContainer: {
+    paddingVertical: 8, 
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: 240, 
+  },
+
   centeredView: {
     flex: 1,
     justifyContent: 'flex-end',
