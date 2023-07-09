@@ -67,9 +67,7 @@ export const importTestData = async (db: SQLiteDatabase): Promise<void> => {
     ]
 
     const transactions: Transaction[] = [
-        { id: 1, amount: 100, day: 1, month: 1, year: 2020, note: "Food", type: "Expense", category: categories[0], account: accounts[0] },
-        { id: 2, amount: 200, day: 1, month: 1, year: 2020, note: "Transport", type: "Expense", category: categories[1], account: accounts[0] },
-        { id: 3, amount: 300, day: 1, month: 1, year: 2020, note: "Food", type: "Expense", category: categories[0], account: accounts[1] },
+        
     ]
 
     for (let i = 0; i < accounts.length; i++) {
@@ -105,8 +103,22 @@ export const insertTransaction = async (db: SQLiteDatabase, transaction: Transac
     await db.executeSql('INSERT INTO transactions (amount, day, month, year, note, type, categoryId, accountId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [transaction.amount, transaction.day, transaction.month, transaction.year, transaction.note, transaction.type, transaction.category.id, transaction.account.id]);
 }
 
-export const updateTransaction = async (db: SQLiteDatabase, transaction: Transaction): Promise<void> => {
+export const updateAccountBalanceFormTransactions = async (db: SQLiteDatabase, account: Account): Promise<void> => {
+    const [resultIncome] = await db.executeSql('SELECT SUM(amount) AS total FROM transactions WHERE accountId = ? AND type = ?', [account.id, 'income']);
+    const [resultExpense] = await db.executeSql('SELECT SUM(amount) AS total FROM transactions WHERE accountId = ? AND type = ?', [account.id, 'expense']);
+    const total = (resultIncome.rows.raw()[0].total || 0) - (resultExpense.rows.raw()[0].total || 0);
+    console.log(total);
+    await db.executeSql('UPDATE accounts SET balance = ? WHERE id = ?', [total, account.id]);
+}
+
+export const updateTransaction = async (db: SQLiteDatabase, transaction: Transaction, oldTransaction: Transaction): Promise<void> => {
     await db.executeSql('UPDATE transactions SET amount = ?, day = ?, month = ?, year = ?, note = ?, type = ?, categoryId = ?, accountId = ? WHERE id = ?', [transaction.amount, transaction.day, transaction.month, transaction.year, transaction.note, transaction.type, transaction.category.id, transaction.account.id, transaction.id]);
+    if (transaction.account.id !== oldTransaction.account.id) {
+        await updateAccountBalanceFormTransactions(db, transaction.account);
+        await updateAccountBalanceFormTransactions(db, oldTransaction.account);
+    } else {
+        await updateAccountBalanceFormTransactions(db, transaction.account);
+    }
 }
 
 export const deleteTransaction = async (db: SQLiteDatabase, transaction: Transaction): Promise<void> => {
@@ -143,6 +155,37 @@ export const deleteCategory = async (db: SQLiteDatabase, category: Category): Pr
 
 export const getTransactionsFromDay = async (db: SQLiteDatabase, day: number, month: number, year: number): Promise<Transaction[]> => {
     const [result] = await db.executeSql('SELECT transactions.id as t_id , transactions.amount as t_amount, transactions.day as t_day, transactions.month as t_month, transactions.year as t_year, transactions.note as t_note, transactions.type as t_type, transactions.categoryId as t_categoryId, transactions.accountId as t_accountId, categories.id as c_id, categories.name as c_name, categories.color as c_color, accounts.id as a_id, accounts.name as a_name, accounts.balance as a_balance, accounts.account_group as a_account_group FROM transactions INNER JOIN categories ON transactions.categoryId = categories.id INNER JOIN accounts ON transactions.accountId = accounts.id WHERE transactions.day = ? AND transactions.month = ? AND transactions.year = ?', [day, month, year]);
+    let transactions: Transaction[] = [];
+    for (let i = 0; i < result.rows.length; i++) {
+        const row = result.rows.item(i);
+        const transaction: Transaction = {
+            id: row.t_id,
+            amount: row.t_amount,
+            day: row.t_day,
+            month: row.t_month,
+            year: row.t_year,
+            note: row.t_note,
+            type: row.t_type,
+            category: {
+                id: row.c_id,
+                name: row.c_name,
+                color: row.c_color,
+                icon: "",
+            },
+            account: {
+                id: row.a_id,
+                name: row.a_name,
+                balance: row.a_balance,
+                group: row.a_account_group,
+            },
+        }
+        transactions.push(transaction);
+    }
+    return transactions;
+}
+
+export const getTransactionsFromDayWithAccount = async (db: SQLiteDatabase, day: number, month: number, year: number, account: Account): Promise<Transaction[]> => {
+    const [result] = await db.executeSql('SELECT transactions.id as t_id , transactions.amount as t_amount, transactions.day as t_day, transactions.month as t_month, transactions.year as t_year, transactions.note as t_note, transactions.type as t_type, transactions.categoryId as t_categoryId, transactions.accountId as t_accountId, categories.id as c_id, categories.name as c_name, categories.color as c_color, accounts.id as a_id, accounts.name as a_name, accounts.balance as a_balance, accounts.account_group as a_account_group FROM transactions INNER JOIN categories ON transactions.categoryId = categories.id INNER JOIN accounts ON transactions.accountId = accounts.id WHERE transactions.day = ? AND transactions.month = ? AND transactions.year = ? AND transactions.accountId = ?', [day, month, year, account.id]);
     let transactions: Transaction[] = [];
     for (let i = 0; i < result.rows.length; i++) {
         const row = result.rows.item(i);
@@ -222,7 +265,7 @@ export const getDayBoxByAccount = async (db: SQLiteDatabase, account: Account): 
     let dateModels: DayBox[] = [];
     for (let i = 0; i < days.length; i++) {
         const day = days[i];
-        const transactions = await getTransactionsFromDay(db, day.getDate(), day.getMonth(), day.getFullYear());
+        const transactions = await getTransactionsFromDayWithAccount(db, day.getDate(), day.getMonth(), day.getFullYear(), account);
         let totalIncome = 0;
         let totalExpense = 0;
         for (let j = 0; j < transactions.length; j++) {

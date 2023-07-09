@@ -81,20 +81,6 @@ function AddAccount(props: AddAccountProp) {
                 //  Đưa giá trị vô đây
                 />
             </View>
-            {/* Amount account */}
-            <View style={styles.input}>
-                <Text style={[styles.inputLabel, { color: theme.color }]}>Balance</Text>
-                <TextInput
-                    style={[styles.infoText, { color: theme.color }]}
-                    onPressIn={() => { }}
-                    onChangeText={(amount) => {
-                        setAccount({ ...account, balance: Number(amount) });
-                    }}
-                    keyboardType="number-pad"
-                //  Đưa giá trị vô đây
-                />
-                <Text style={[styles.currencySymbol, { color: theme.color }]}>{currency.symbol}</Text>
-            </View>
 
             {showGroup && (
                 <Modal

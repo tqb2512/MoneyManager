@@ -24,10 +24,14 @@ import {
   getDBConnection,
   getCategories,
   getAccounts,
+  updateTransaction,
+  deleteTransaction as deleteTransactionDB,
+  updateAccountBalanceFormTransactions,
 } from '../../services/db-services';
 import themeContext from '../../config/themeContext';
 import {themeInterface} from '../../config/themeInterface';
 import { color } from 'native-base/lib/typescript/theme/styled-system';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 function TransactionDetail(props: TransactionDetailProp) {
   const theme = useContext(themeContext) as themeInterface;
@@ -36,12 +40,14 @@ function TransactionDetail(props: TransactionDetailProp) {
   const [transaction, setTransaction] = React.useState<Transaction>(
     route.params.transaction,
   );
+  const [date, setDate] = React.useState(new Date(transaction.year, transaction.month - 1, transaction.day));
+  const [categories, setCategories] = React.useState<Category[]>([]);
+  const [accounts, setAccounts] = React.useState<Account[]>([]);
+  const [oldTransaction, setOldTransaction] = React.useState<Transaction>({} as Transaction);
+
   const [showDTP, setShowDTP] = React.useState(false);
   const [showCategories, setShowCategories] = React.useState(false);
   const [showAccounts, setShowAccounts] = React.useState(false);
-  const [categories, setCategories] = React.useState<Category[]>([]);
-  const [accounts, setAccounts] = React.useState<Account[]>([]);
-
   const [isDateClicked, setIsDateClicked] = React.useState(false);
   const [isCategoriesClicked, setIsCategoriesClicked] = React.useState(false);
   const [isAmountClicked, setIsAmountClicked] = React.useState(false);
@@ -51,7 +57,21 @@ function TransactionDetail(props: TransactionDetailProp) {
   const [selectedInput, setSelectedInput] = React.useState('');
 
   const saveTransaction = () => {
-    console.log(transaction);
+    getDBConnection().then(db => {
+      updateTransaction(db, transaction, oldTransaction).then(() => {
+        navigation.goBack();
+      });
+    });
+  };
+
+  const deleteTransaction = () => {
+    getDBConnection().then(db => {
+      deleteTransactionDB(db, transaction).then(() => {
+        updateAccountBalanceFormTransactions(db, transaction.account).then(() => {
+          navigation.goBack();
+        });
+      });
+    });
   };
 
   React.useEffect(() => {
@@ -67,6 +87,8 @@ function TransactionDetail(props: TransactionDetailProp) {
         setAccounts(accounts);
       });
     });
+
+    setOldTransaction(transaction);
   }, []);
 
   return (
@@ -181,11 +203,11 @@ function TransactionDetail(props: TransactionDetailProp) {
                   }
                   caretHidden={true}
                   value={
-                    transaction.day +
+                    date.getDate() +
                     '/' +
-                    transaction.month +
+                    (date.getMonth() + 1) +
                     '/' +
-                    transaction.year
+                    date.getFullYear()
                   }
                 />
               </View>
@@ -198,15 +220,16 @@ function TransactionDetail(props: TransactionDetailProp) {
                   is24Hour={true}
                   display="default"
                   onChange={(event, selectedDate) => {
-                    setSelectedInput('');
                     setShowDTP(false);
-                    if (selectedDate) {
+                    setSelectedInput('');
+                    if (selectedDate != undefined) {
                       setTransaction({
                         ...transaction,
                         day: selectedDate.getDate(),
                         month: selectedDate.getMonth() + 1,
                         year: selectedDate.getFullYear(),
                       });
+                      setDate(selectedDate);
                     }
                   }}
                 />
@@ -518,7 +541,7 @@ function TransactionDetail(props: TransactionDetailProp) {
                 <TouchableOpacity
                   style={styles.deleteButton}
                   onPress={() => {
-                    setTransaction({...transaction, amount: 0, note: ''});
+                    deleteTransaction();
                   }}>
                   <Text style={styles.deleteButtonText}>Delete</Text>
                 </TouchableOpacity>

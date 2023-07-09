@@ -45,6 +45,16 @@ export default function App() {
     }, []);
 
     useEffect(() => {
+        const getLanguageValue = async () => {
+            const value = await AsyncStorage.getItem('language')
+            if (value === null) {
+                await AsyncStorage.setItem('language', 'en')
+            }
+        };
+        getLanguageValue()
+    }, []);
+
+    useEffect(() => {
         getDBConnection().then((db) => {
             createTables(db)
             //dropTables(db)
