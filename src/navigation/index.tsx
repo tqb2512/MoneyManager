@@ -29,6 +29,9 @@ import { themeInterface } from '../config/themeInterface';
 import { useContext } from 'react';
 import Monthly from '../screens/Home/Monthly';
 import Language from '../screens/Settings/components/Language';
+import { Image, Platform } from 'react-native';
+import { Text } from 'react-native-svg';
+import { PlusCircleIcon, PlusIcon } from 'react-native-heroicons/outline'
 
 
 const HomeTopBar = createMaterialTopTabNavigator<HomeTopBarParamList>();
@@ -51,8 +54,6 @@ function BottomBarTabs()
           height: 60,
         },
         tabBarItemStyle:{
-          alignItems: 'center',
-          justifyContent: 'center',
           backgroundColor: theme.background
         },
       }}
@@ -65,7 +66,7 @@ function BottomBarTabs()
           headerTitle: '',
           // headerRight: () => (<Header />),
           tabBarIcon: ({focused}) => 
-            <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} color={focused ? '#2A7BDB': 'grey'} size={20} />
+            <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} color={focused ? '#2196f3': 'grey'} size={20} />
         }} 
         />
       <BottomBar.Screen 
@@ -74,7 +75,7 @@ function BottomBarTabs()
         options={{
           headerStyle: { backgroundColor: theme.componentBackground },
           tabBarIcon: ({focused}) => 
-            <Ionicons name={focused ? 'ios-pie-chart' : 'ios-pie-chart-outline'} color={focused ? '#2A7BDB': 'grey'} size={20} />
+            <Ionicons name={focused ? 'ios-pie-chart' : 'ios-pie-chart-outline'} color={focused ? '#2196f3': 'grey'} size={20} />
         }} 
       />
 
@@ -84,7 +85,25 @@ function BottomBarTabs()
         options={{
           headerStyle: { backgroundColor: theme.componentBackground },
           tabBarIcon: ({focused}) => 
-            <Ionicons name={focused ? 'add-circle' : 'add-circle-outline'} color={focused ? '#2A7BDB': 'grey'} size={36} />
+          { 
+            return (
+              <View style={{ 
+                top: Platform.OS === 'ios' ? -10 : -20,
+                width: Platform.OS === 'ios' ? 50 : 60,
+                height: Platform.OS === 'ios' ? 50 : 60,
+                borderRadius: Platform.OS === 'ios' ? 25 : 30,
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: focused ? '#2196f3' : 'grey',
+                position: 'relative',
+                borderWidth: 1, 
+                borderColor: theme.mode === 'dark' ? 'white' : ''
+              }}>
+                {/* <Image source={require('../../assets/icons/add.png') } style={{ width: '100%', height: '100%', zIndex: 100, tintColor: focused ? '#2196f3' : 'black'}} /> */}
+                <PlusIcon color='white' size={ focused ? 48 : 16} />
+              </View>
+            )
+          }
         }} 
         
       />
@@ -95,7 +114,7 @@ function BottomBarTabs()
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => 
-            <Ionicons name={focused ? 'ios-card' : 'ios-card-outline'} color={focused ? '#2A7BDB': 'grey'} size={20} />
+            <Ionicons name={focused ? 'ios-card' : 'ios-card-outline'} color={focused ? '#2196f3': 'grey'} size={20} />
         }} 
       />
       <BottomBar.Screen 
@@ -104,7 +123,7 @@ function BottomBarTabs()
         options={{
           headerShown: false,
           tabBarIcon: ({focused}) => 
-            <Ionicons name={focused ? 'settings' : 'settings-outline'} color={focused ? '#2A7BDB': 'grey'} size={20} />
+            <Ionicons name={focused ? 'settings' : 'settings-outline'} color={focused ? '#2196f3': 'grey'} size={20} />
         }} 
       />
     </BottomBar.Navigator>
@@ -126,7 +145,7 @@ function HomeScreenTopBar()
           tabBarActiveTintColor: theme.mode === 'dark' ?  theme.color : '#566573',
           tabBarInactiveTintColor: '#D5D8DC',
           tabBarBounces: false,
-          tabBarIndicatorStyle: {borderBottomColor: '#566573', borderBottomWidth: 1, backgroundColor: 'white'},
+          tabBarIndicatorStyle: {backgroundColor: 'white'},
           tabBarStyle: { backgroundColor: theme.background }
         }}
       />
@@ -139,7 +158,7 @@ function HomeScreenTopBar()
           tabBarActiveTintColor: theme.mode === 'dark' ?  theme.color : '#566573',
           tabBarInactiveTintColor: '#D5D8DC',
           tabBarBounces: false,
-          tabBarIndicatorStyle: {borderBottomColor: '#566573', borderBottomWidth: 1, backgroundColor: 'white'},
+          tabBarIndicatorStyle: { backgroundColor: 'white'},
           tabBarStyle: { backgroundColor: theme.background }
         }}
         />
@@ -163,8 +182,7 @@ function StatsScreenTopBar() {
             tabBarInactiveTintColor: '#D5D8DC',
             tabBarBounces: false,
             tabBarIndicatorStyle: {
-              borderBottomColor: '#7DCEA0',
-              borderBottomWidth: 1,
+
               backgroundColor: 'white',
             },
             tabBarStyle: {backgroundColor: theme.componentBackground},
@@ -180,8 +198,8 @@ function StatsScreenTopBar() {
             tabBarInactiveTintColor: '#D5D8DC',
             tabBarBounces: false,
             tabBarIndicatorStyle: {
-              borderBottomColor: '#F1948A',
-              borderBottomWidth: 1,
+
+              
               backgroundColor: 'white',
             },
             tabBarStyle: {backgroundColor: theme.componentBackground},
