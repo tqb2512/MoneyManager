@@ -83,7 +83,10 @@ function BottomBarTabs()
         component={AddTransaction}
         options={{
           headerStyle: { backgroundColor: theme.componentBackground },
+          tabBarIcon: ({focused}) => 
+            <Ionicons name={focused ? 'add-circle' : 'add-circle-outline'} color={focused ? '#2A7BDB': 'grey'} size={36} />
         }} 
+        
       />
 
       <BottomBar.Screen 
