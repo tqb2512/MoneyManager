@@ -23,6 +23,8 @@ export type RootStackParamList = {
 
 export type BottomTabParamList = {
     bottom_bar_home: undefined;
+    home_top_bar_daily: undefined;
+    add_transaction: undefined;
     bottom_bar_accounts: undefined;
     bottom_bar_addTransaction: undefined;
     bottom_bar_stats: undefined;

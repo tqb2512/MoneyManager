@@ -58,8 +58,8 @@ function BottomBarTabs()
       }}
     >
       <BottomBar.Screen 
-        name="bottom_bar_home" 
-        component={HomeScreenTopBar}
+        name="home_top_bar_daily" 
+        component={DailyScreen}
         options={{
           headerShown: false,
           headerTitle: '',
@@ -75,6 +75,14 @@ function BottomBarTabs()
           headerStyle: { backgroundColor: theme.componentBackground },
           tabBarIcon: ({focused}) => 
             <Ionicons name={focused ? 'ios-pie-chart' : 'ios-pie-chart-outline'} color={focused ? '#2A7BDB': 'grey'} size={20} />
+        }} 
+      />
+
+      <BottomBar.Screen 
+        name="add_transaction"
+        component={AddTransaction}
+        options={{
+          headerStyle: { backgroundColor: theme.componentBackground },
         }} 
       />
 
