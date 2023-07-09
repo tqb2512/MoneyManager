@@ -27,6 +27,8 @@ import ChangeTheme from '../screens/Settings/components/ChangeTheme';
 import themeContext from '../config/themeContext';
 import { themeInterface } from '../config/themeInterface';
 import { useContext } from 'react';
+import Monthly from '../screens/Home/Monthly';
+import Language from '../screens/Settings/components/Language';
 
 
 const HomeTopBar = createMaterialTopTabNavigator<HomeTopBarParamList>();
@@ -118,10 +120,10 @@ function HomeScreenTopBar()
         }}
       />
       <HomeTopBar.Screen 
-        name="home_top_bar_celandar" 
-        component={CelandarScreen} 
+        name="home_top_bar_monthly" 
+        component={Monthly} 
         options={{
-          tabBarLabel: 'Calendar',
+          tabBarLabel: 'Monthly',
           tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
           tabBarActiveTintColor: theme.mode === 'dark' ?  theme.color : '#566573',
           tabBarInactiveTintColor: '#D5D8DC',
@@ -196,6 +198,7 @@ function AppNavigation()
       <AppStack.Screen name="bottom_bar" component={BottomBarTabs} />
       <AppStack.Screen name="change_currency" component={ChangeCurrency} />
       <AppStack.Screen name="change_theme" component={ChangeTheme} />
+      <AppStack.Screen name="language" component={Language} />
       <AppStack.Screen name="settings" component={Settings} />
     </AppStack.Navigator>
   );

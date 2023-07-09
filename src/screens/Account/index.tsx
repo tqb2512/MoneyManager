@@ -69,7 +69,7 @@ function AccountsScreen(props: AccountsScreenProp) {
                             </TouchableOpacity>
                         </View>
                     </View>
-
+{/* 
                     <View style={[styles.secondTopBar, { backgroundColor: theme.background, borderColor: theme.mode === 'dark' ? 'white' : 'rgba(229, 231, 235, 0.4)' }]}>
                         <View style={styles.totalCalc}>
                             <Text style={[styles.totalElement, { color: theme.color }]}>Assets</Text>
@@ -89,7 +89,7 @@ function AccountsScreen(props: AccountsScreenProp) {
                                 {currency.symbol} 35.00
                             </Text>
                         </View>
-                    </View>
+                    </View> */}
                 </View>
                 {/* List account */}
 
@@ -181,7 +181,6 @@ const styles = StyleSheet.create({
         right: 0,
         zIndex: 100,
         paddingTop: 4,
-        paddingBottom: 4,
         borderWidth: 1,
         borderColor: 'rgba(229, 231, 235, 1)',
         shadowRadius: 10,
@@ -193,7 +192,6 @@ const styles = StyleSheet.create({
     },
     addThreeDotsContainer: {
         borderColor: 'rgba(229, 231, 235, 1)',
-        borderBottomWidth: 1,
         padding: 8,
     },
 });

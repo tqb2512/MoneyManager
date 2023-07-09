@@ -18,6 +18,7 @@ export type RootStackParamList = {
     change_currency: undefined;
     settings: undefined;
     change_theme: undefined;
+    language: undefined;
 }
 
 export type BottomTabParamList = {
@@ -30,6 +31,7 @@ export type BottomTabParamList = {
 
 export type HomeTopBarParamList = {
     home_top_bar_daily: undefined;
+    home_top_bar_monthly: undefined;
     home_top_bar_celandar: undefined;
 }
 
@@ -41,6 +43,11 @@ export type StatsTopBarParamList = {
 export type DailyScreenProp = NativeStackScreenProps<
     HomeTopBarParamList,
     'home_top_bar_daily'
+>;
+
+export type MonthlyScreenProp = NativeStackScreenProps<
+    HomeTopBarParamList,
+    'home_top_bar_monthly'
 >;
 
 export type CelandarScreenProp = NativeStackScreenProps<
@@ -76,6 +83,11 @@ export type ChangeCurrencyProp = NativeStackScreenProps<
 export type ChangeThemeProp = NativeStackScreenProps<
     RootStackParamList,
     'change_theme'
+>;
+
+export type LanguageProp = NativeStackScreenProps<
+    RootStackParamList,
+    'language'
 >;
 
 export type AddTransactionProp = NativeStackScreenProps<
