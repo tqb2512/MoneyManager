@@ -33,12 +33,24 @@ function DailyScreen(props: DailyScreenProp) {
   const [date, setDate] = React.useState<Date>(new Date());
   const [dayBoxes, setDayBoxes] = React.useState<DayBoxModel[]>([]);
   const [currency, setCurrency] = React.useState<Currency>({} as Currency);
+  const [totalIncome, setTotalIncome] = React.useState<number>(0);
+  const [totalExpense, setTotalExpense] = React.useState<number>(0);
+  const [total, setTotal] = React.useState<number>(0);
   useEffect(() => {
 
     const unsubscribe = navigation.addListener('focus', () => {
       getDBConnection().then(db => {
         getDayBoxFromMonthYear(db, date.getMonth() + 1, date.getFullYear()).then(dayBoxes => {
           setDayBoxes(dayBoxes);
+          let tempTotalIncome = 0;
+          let tempTotalExpense = 0;
+          for (let i = 0; i < dayBoxes.length; i++) {
+            tempTotalIncome += dayBoxes[i].totalIncome;
+            tempTotalExpense += dayBoxes[i].totalExpense;
+          }
+          setTotalIncome(tempTotalIncome);
+          setTotalExpense(tempTotalExpense);
+          setTotal(totalIncome - totalExpense);
         });
       });
 
@@ -94,7 +106,7 @@ function DailyScreen(props: DailyScreenProp) {
               fontSize: 14,
               fontWeight: '500',
             }}>
-            {currency.symbol} 35.00
+            {currency.symbol} {totalIncome}
           </Text>
         </View>
         <View style={styles.totalCalc}>
@@ -108,7 +120,7 @@ function DailyScreen(props: DailyScreenProp) {
               fontSize: 14,
               fontWeight: '500',
             }}>
-            {currency.symbol} 35.00
+            {currency.symbol} {totalExpense}
           </Text>
         </View>
         <View style={styles.totalCalc}>
@@ -120,7 +132,7 @@ function DailyScreen(props: DailyScreenProp) {
               fontSize: 14,
               fontWeight: '500',
             }}>
-            {currency.symbol} 35.00
+            {currency.symbol} {total}
           </Text>
         </View>
       </View>

@@ -13,7 +13,7 @@ import { useIsFocused } from '@react-navigation/native';
 import DayBox from '../Daily/components/DayBox';
 import { ArrowLeftIcon, ArrowRightIcon, PlusIcon } from 'react-native-heroicons/outline';
 import { ChevronLeftIcon, ChevronRightIcon } from 'native-base';
-import { ScrollView } from 'react-native';
+import { ScrollView, Button, Dimensions } from 'react-native';
 import { CelandarScreenProp } from '../../../navigation/types';
 
 import themeContext from '../../../config/themeContext';
@@ -32,12 +32,17 @@ const events = [
   },
 ];
 
+const SCREEN_HEIGHT = Dimensions.get('window').height
+
 function CalendarScreen (props: CelandarScreenProp) {
   const theme = useContext(themeContext) as themeInterface
   const { navigation } = props;
   const [dayClicked, setDayClicked] = useState(false);
   const [mode, setMode] = useState<any>('month');
   const [dateValue, setDateValue] = React.useState(new Date());
+  const [date, setDate] = React.useState(new Date());
+  const [calendarEvents, setCalendarEvents] = React.useState(events);
+  
 
   const isFocused = useIsFocused();
 
@@ -57,101 +62,50 @@ function CalendarScreen (props: CelandarScreenProp) {
   }, [isFocused]);
 
   return (
-    <View style ={{ flex: 1, backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }}>
-      {/* Calendar */}
-      <Calendar
-        events={events}
-        height={600}
-        eventCellStyle={[
-          // {backgroundColor: 'white'},
-          { borderWidth: 1, borderColor: 'green' },
-        ]}
-        mode="month"
-        showAllDayEventCell={false}
-        swipeEnabled={true}
-        onPressCell={date => {
-          setDayClicked(true);
-          setDateValue(date);
-        }}
-      //sortedMonthView={true}
-      // headerContainerStyle={HeaderView}
-      />
-
-      {/* Hiện chi tiết ngày khi bấm  */}
-      {dayClicked && (
-        <Modal
-          animationType="slide"
-          transparent={true}
-          onRequestClose={() => setDayClicked(false)}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <DayBox date={dateValue} />
-
-              {/* Add transaction */}
-              <TouchableOpacity
-                style={{ margin: 8, bottom: 0, right: 0, backgroundColor: '#F1948A', width: 54, height: 54, borderRadius: 9999, position: 'absolute', shadowRadius: 16, shadowOffset: { width: 4, height: 4 }, alignItems: 'center', justifyContent: 'center' }}>
-                <PlusIcon style={{}} size={30} color='white' />
-              </TouchableOpacity>
-            </View>
+    <View>
+      <View>
+        <View>
+          <Button title="Today" />
+          <Button title="<" />
+          <Button title=">" />
+          <View>
+            <Text>MMMM YYYY</Text>
           </View>
-
-          <View
-            style={{
-              backgroundColor: 'white',
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              height: 50,
-              alignItems: 'center',
-              borderTopWidth: 0.2,
-            }}>
-
-            <View style={{ flexDirection: 'row', marginEnd: 16, padding: 4 }}>
-              <ChevronLeftIcon
-                onPress={() => {
-                  setDateValue(prevDate => {
-                    const newDate = new Date(prevDate);
-                    newDate.setDate(newDate.getDate() - 1);
-                    return newDate;
-                  });
-                }}
-                style={{
-                  marginLeft: 8,
-                  marginRight: 24,
-                  padding: 12,
-                  paddingLeft: 24,
-                }}
-                size={22}
-                color="black"
-              />
-              <ChevronRightIcon
-                onPress={() => {
-                  setDateValue(nextDate => {
-                    const newDate = new Date(nextDate);
-                    newDate.setDate(newDate.getDate() + 1);
-                    return newDate;
-                  });
-                }}
-                style={{
-                  marginLeft: 8,
-                  marginRight: 24,
-                  padding: 12,
-                  paddingLeft: 24,
-                }}
-                size={22}
-                color="black"
-              />
-            </View>
-            <Pressable
-              onPress={() => {
-                setDayClicked(false);
-              }}
-              style={{ marginEnd: 16, padding: 4 }}>
-              <Text style={{ fontSize: 20, fontWeight: '500' }}>Close</Text>
-            </Pressable>
-          </View>
-        </Modal>
-      )}
+        </View>
+      </View>
+      <View style={{ marginTop: 16 }}>
+        <Calendar
+          date={date}
+          height={SCREEN_HEIGHT - 80}
+          events={calendarEvents}
+          mode={mode}
+          headerContentStyle={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          dayHeaderStyle={{
+            marginLeft: 10,
+            backgroundColor: '#f1f1f1',
+            paddingVertical: 6,
+            paddingHorizontal: 12,
+            borderRadius: 12,
+          }}
+          dayHeaderHighlightColor={'#000'}
+          weekDayHeaderHighlightColor={'#aaa'}
+          headerComponent={
+            <Text style={{ color: '#aaa', fontSize: 25 }}>CalendarBody's headerComponent</Text>
+          }
+          headerComponentStyle={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}
+          hourStyle={{ color: '#355070', fontSize: 15 }}
+          showAllDayEventCell={false}
+        />
+      </View>
     </View>
   );
 };

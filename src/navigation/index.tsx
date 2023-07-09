@@ -60,7 +60,7 @@ function BottomBarTabs()
     >
       <BottomBar.Screen 
         name="home_top_bar_daily" 
-        component={DailyScreen}
+        component={HomeScreenTopBar}
         options={{
           headerShown: false,
           headerTitle: '',
@@ -69,6 +69,7 @@ function BottomBarTabs()
             <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} color={focused ? '#2196f3': 'grey'} size={20} />
         }} 
         />
+
       <BottomBar.Screen 
         name="bottom_bar_stats" 
         component={StatsScreenTopBar}
@@ -118,7 +119,7 @@ function BottomBarTabs()
         }} 
       />
       <BottomBar.Screen 
-        name="bottom_bat_settings"
+        name="bottom_bar_settings"
         component={Settings}
         options={{
           headerShown: false,
@@ -150,10 +151,10 @@ function HomeScreenTopBar()
         }}
       />
       <HomeTopBar.Screen 
-        name="home_top_bar_monthly" 
-        component={Monthly} 
+        name="home_top_bar_celandar"
+        component={CelandarScreen} 
         options={{
-          tabBarLabel: 'Monthly',
+          tabBarLabel: 'Celendar',
           tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
           tabBarActiveTintColor: theme.mode === 'dark' ?  theme.color : '#566573',
           tabBarInactiveTintColor: '#D5D8DC',
@@ -228,7 +229,6 @@ function AppNavigation()
       <AppStack.Screen name="change_currency" component={ChangeCurrency} />
       <AppStack.Screen name="change_theme" component={ChangeTheme} />
       <AppStack.Screen name="language" component={Language} />
-      <AppStack.Screen name="settings" component={Settings} />
     </AppStack.Navigator>
   );
 }

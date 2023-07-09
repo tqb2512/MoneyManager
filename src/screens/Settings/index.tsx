@@ -66,7 +66,7 @@ function Settings(props: SettingsScreenProp){
   )
 }
 
-export default Settings
+export default React.memo(Settings)
 
 const styles = StyleSheet.create({
     mainContainer: {

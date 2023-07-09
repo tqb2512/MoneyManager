@@ -28,7 +28,7 @@ export type BottomTabParamList = {
     bottom_bar_accounts: undefined;
     bottom_bar_addTransaction: undefined;
     bottom_bar_stats: undefined;
-    bottom_bat_settings: undefined;
+    bottom_bar_settings: undefined;
 }
 
 export type HomeTopBarParamList = {
@@ -70,11 +70,6 @@ export type AccountDetailProp = NativeStackScreenProps<
 export type EditAccountProp = NativeStackScreenProps<
     RootStackParamList,
     'edit_account'
->;
-
-export type SettingsScreenProp = NativeStackScreenProps<
-    RootStackParamList,
-    'settings'
 >;
 
 export type ChangeCurrencyProp = NativeStackScreenProps<
@@ -125,6 +120,11 @@ export type HomeScreenProp = CompositeScreenProps<
 
 export type StatsScreenProp = CompositeScreenProps<
     BottomTabScreenProps<BottomTabParamList, 'bottom_bar_stats'>,
+    NativeStackScreenProps<RootStackParamList>
+>;
+
+export type SettingsScreenProp = CompositeScreenProps<
+    BottomTabScreenProps<BottomTabParamList, 'bottom_bar_settings'>,
     NativeStackScreenProps<RootStackParamList>
 >;
 
