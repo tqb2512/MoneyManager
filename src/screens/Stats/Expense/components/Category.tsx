@@ -25,7 +25,7 @@ export default function Category({percentage, name, cost, color}: Props) {
                     paddingHorizontal: 10, 
                     borderRadius: 3,
                     color: 'white',
-                    backgroundColor: 'red'
+                    backgroundColor: color
                     }}>{percentage.toFixed(2)}%</Text>
                 <Text style={styles.nameText}>{name}</Text>
             </View>

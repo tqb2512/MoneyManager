@@ -4,6 +4,8 @@ import { Category } from '../models/category';
 import { Account } from '../models/account';
 import { DayBox } from '../models/dayBox';
 import { PieData } from '../models/pieData';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Currency } from '../models/currency';
 
 enablePromise(true);
 
@@ -254,6 +256,33 @@ export const getDayBoxFromMonthYear = async (db: SQLiteDatabase, month: number, 
     return dateModels;
 }
 
+
+export const getDayBoxFromDate = async (db: SQLiteDatabase, date: Date): Promise<DayBox> => {
+    let dateModel: DayBox = {
+        day: date.getDate(),
+        month: date.getMonth() + 1,
+        year: date.getFullYear(),
+        totalIncome: 0,
+        totalExpense: 0,
+        transactions: [],
+    }
+    const transactions = await getTransactionsFromDay(db, date.getDate(), date.getMonth() + 1, date.getFullYear());
+    let totalIncome = 0;
+    let totalExpense = 0;
+    for (let j = 0; j < transactions.length; j++) {
+        const transaction = transactions[j];
+        if (transaction.type === 'income') {
+            totalIncome += transaction.amount;
+        } else {
+            totalExpense += transaction.amount;
+        }
+    }
+    dateModel.totalIncome = totalIncome;
+    dateModel.totalExpense = totalExpense;
+    dateModel.transactions = transactions;
+    return dateModel;
+}
+
 export const getDayBoxByAccount = async (db: SQLiteDatabase, account: Account): Promise<DayBox[]> => {
     const [result] = await db.executeSql('SELECT DISTINCT day, month, year FROM transactions WHERE accountId = ? ORDER BY day DESC', [account.id]);
     let days: Date[] = [];
@@ -435,4 +464,43 @@ export const getChartDataByYear = async (db: SQLiteDatabase, year: number, type:
         chartData.push(chartDataItem);
     }
     return chartData;
+}
+
+export const getEventsFromMonth = async (db: SQLiteDatabase, month: number, year: number): Promise<Event[]> => {
+    let events: Event[] = [];
+    let currency: Currency;
+    const getCurrencyValue = async () => {
+        const value = await AsyncStorage.getItem('currency')
+        if (value !== null) {
+            currency = JSON.parse(value)
+        }
+    }
+    await getCurrencyValue();
+
+    const [days] = await db.executeSql('SELECT DISTINCT day FROM transactions WHERE month = ? AND year = ?', [month, year]);
+    for (let i = 0; i < days.rows.length; i++) {
+        const [income] = await db.executeSql('SELECT SUM(amount) as sum FROM transactions WHERE month = ? AND year = ? AND day = ? AND type = ?', [month, year, days.rows.item(i).day, 'income']);
+        const [expense] = await db.executeSql('SELECT SUM(amount) as sum FROM transactions WHERE month = ? AND year = ? AND day = ? AND type = ?', [month, year, days.rows.item(i).day, 'expense']);
+        
+        if (income.rows.item(0).sum != null) {
+            const event: Event = {
+            start: new Date(year, month - 1, days.rows.item(i).day),
+            end: new Date(year, month - 1, days.rows.item(i).day),
+            title: income.rows.item(0).sum + ' ' + currency.symbol,
+            color: '#7DCEA0',
+            }
+            events.push(event);
+        }
+        
+        if (expense.rows.item(0).sum != null) {
+            const event: Event = {
+            start: new Date(year, month - 1, days.rows.item(i).day),
+            end: new Date(year, month - 1, days.rows.item(i).day),
+            title: expense.rows.item(0).sum + ' ' + currency.symbol,
+            color: '#F1948A',
+            }
+            events.push(event);
+        }
+    }
+    return events;
 }

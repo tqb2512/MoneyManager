@@ -7,10 +7,13 @@ export type Language = {
     data: string;
     theme: string;
     language: string;
+    //home
+    total: string;
     //new transaction
     newTransaction: string;
     type: string;
     amount: string;
+    account: string;
     category: string;
     note: string;
     date: string;
@@ -35,9 +38,15 @@ export type Language = {
     thu: string;
     fri: string;
     sat: string;
+    //list category
+    categories: string[][];
 }
 
 export const languagePack = {
     en: en,
     vi: vi
 }
+
+export const CategoryList = [
+    "food", "transport", "play", "watch", "study", "entertainment", "salary"
+]

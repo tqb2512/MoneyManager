@@ -25,8 +25,6 @@ export default function AccountBox(props: { account: Account; navigation: any; c
     )
 }
 
-/* #7DCEA0 - green, #F1948A - red */
-
 const styles = StyleSheet.create({
     mainContainer: {
         marginTop: 16

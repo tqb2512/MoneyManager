@@ -78,7 +78,6 @@ function AddAccount(props: AddAccountProp) {
                     onChangeText={(name) => {
                         setAccount({ ...account, name: name });
                     }}
-                //  Đưa giá trị vô đây
                 />
             </View>
 

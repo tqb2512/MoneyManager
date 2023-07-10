@@ -4,10 +4,13 @@ export default {
     "data": "Dữ liệu",
     "theme": "Giao diện",
     "language": "Ngôn ngữ",
+    //home
+    "total": "Tổng",
     //new transaction
     "newTransaction": "Giao dịch mới",
     "type": "Loại",
     "amount": "Số tiền",
+    "account": "Tài khoản",
     "category": "Danh mục",
     "note": "Ghi chú",
     "date": "Ngày",
@@ -31,5 +34,15 @@ export default {
     "wed": "Th4",
     "thu": "Th5",
     "fri": "Th6",
-    "sat": "Th7"
+    "sat": "Th7",
+    //list category
+    categories: [
+        ["food", "Ăn uống"],
+        ["transport", "Di chuyển"],
+        ["play", "Chơi"],
+        ["watch", "Xem"],
+        ["study", "Học"],
+        ["entertainment", "Giải trí"],
+        ["salary", "Lương"],
+    ]
 }

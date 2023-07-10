@@ -59,7 +59,7 @@ function BottomBarTabs()
       }}
     >
       <BottomBar.Screen 
-        name="home_top_bar_daily" 
+        name="bottom_bar_home" 
         component={HomeScreenTopBar}
         options={{
           headerShown: false,

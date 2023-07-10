@@ -69,31 +69,8 @@ function AccountsScreen(props: AccountsScreenProp) {
                             </TouchableOpacity>
                         </View>
                     </View>
-{/* 
-                    <View style={[styles.secondTopBar, { backgroundColor: theme.background, borderColor: theme.mode === 'dark' ? 'white' : 'rgba(229, 231, 235, 0.4)' }]}>
-                        <View style={styles.totalCalc}>
-                            <Text style={[styles.totalElement, { color: theme.color }]}>Assets</Text>
-                            <Text style={{ color: '#7DCEA0', alignSelf: 'center', fontSize: 14, fontWeight: '500' }}>
-                                {currency.symbol} 35.00
-                            </Text>
-                        </View>
-                        <View style={styles.totalCalc}>
-                            <Text style={[styles.totalElement, { color: theme.color }]}>Liabilities</Text>
-                            <Text style={{ color: '#F1948A', alignSelf: 'center', fontSize: 14, fontWeight: '500' }}>
-                                {currency.symbol} 35.00
-                            </Text>
-                        </View>
-                        <View style={styles.totalCalc}>
-                            <Text style={[styles.totalElement, { color: theme.color }]}>Total</Text>
-                            <Text style={{ color: 'grey', alignSelf: 'center', fontSize: 14, fontWeight: '500' }}>
-                                {currency.symbol} 35.00
-                            </Text>
-                        </View>
-                    </View> */}
                 </View>
                 {/* List account */}
-
-
 
                 <FlatList
                     data={accounts}

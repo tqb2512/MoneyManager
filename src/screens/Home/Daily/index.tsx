@@ -25,6 +25,9 @@ import themeContext from '../../../config/themeContext';
 import { themeInterface } from '../../../config/themeInterface';
 import CalendarButton from '../CalendarButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Language } from '../../../models/language';
+import vi from '../../../config/language/vi';
+import en from '../../../config/language/en';
 
 function DailyScreen(props: DailyScreenProp) {
 
@@ -36,6 +39,7 @@ function DailyScreen(props: DailyScreenProp) {
   const [totalIncome, setTotalIncome] = React.useState<number>(0);
   const [totalExpense, setTotalExpense] = React.useState<number>(0);
   const [total, setTotal] = React.useState<number>(0);
+  const [languagePack, setLanguagePack] = React.useState<Language>({} as Language);
   useEffect(() => {
 
     const unsubscribe = navigation.addListener('focus', () => {
@@ -50,7 +54,6 @@ function DailyScreen(props: DailyScreenProp) {
           }
           setTotalIncome(tempTotalIncome);
           setTotalExpense(tempTotalExpense);
-          setTotal(totalIncome - totalExpense);
         });
       });
 
@@ -61,9 +64,25 @@ function DailyScreen(props: DailyScreenProp) {
         }
       }
       getCurrencyValue()
+
+      const getLanguageValue = async () => {
+        const value = await AsyncStorage.getItem('language')
+        if (value !== null) {
+          if (value === 'en') {
+            setLanguagePack(en)
+          } else {
+            setLanguagePack(vi)
+          }
+        }
+      }
+      getLanguageValue()
     });
     return unsubscribe;
   }, [navigation]);
+
+  useEffect(() => {
+    setTotal(totalIncome - totalExpense);
+  }, [totalIncome, totalExpense]);
 
   useEffect(() => {
     getDBConnection().then(db => {
@@ -97,7 +116,7 @@ function DailyScreen(props: DailyScreenProp) {
         ]}>
         <View style={styles.totalCalc}>
           <Text style={[styles.totalElement, {color: theme.color}]}>
-            Income
+            {languagePack.income}
           </Text>
           <Text
             style={{
@@ -111,7 +130,7 @@ function DailyScreen(props: DailyScreenProp) {
         </View>
         <View style={styles.totalCalc}>
           <Text style={[styles.totalElement, {color: theme.color}]}>
-            Expense
+            {languagePack.expense}
           </Text>
           <Text
             style={{
@@ -124,15 +143,14 @@ function DailyScreen(props: DailyScreenProp) {
           </Text>
         </View>
         <View style={styles.totalCalc}>
-          <Text style={[styles.totalElement, {color: theme.color}]}>Total</Text>
+          <Text style={[styles.totalElement, {color: theme.color}]}>{languagePack.total}</Text>
           <Text
-            style={{
-              color: 'grey',
+            style={[{
               alignSelf: 'center',
               fontSize: 14,
               fontWeight: '500',
-            }}>
-            {currency.symbol} {total}
+            }, total >= 0 ? { color: "#7DCEA0" } : { color: "#F1948A" }]}>
+            {currency.symbol} {total.toFixed(2)}
           </Text>
         </View>
       </View>

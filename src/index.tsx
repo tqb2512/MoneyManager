@@ -18,9 +18,8 @@ export default function App() {
     useEffect(() => {
         const getModeValue = async () => {
             const value = await AsyncStorage.getItem('switchValue')
-            if (value !== null) {
+            if (value !== null)
                 setMode(JSON.parse(value));
-            }
         };
         getModeValue()
         let eventListener = EventRegister.addEventListener(
@@ -37,19 +36,15 @@ export default function App() {
     useEffect(() => {
         const getCurrencyValue = async () => {
             const value = await AsyncStorage.getItem('currency')
-            if (value === null) {
+            if (value === null)
                 await AsyncStorage.setItem('currency', JSON.stringify({name: 'USD', fullName: 'US Dollar', symbol: '$'}))
-            }
         };
         getCurrencyValue()
-    }, []);
 
-    useEffect(() => {
         const getLanguageValue = async () => {
             const value = await AsyncStorage.getItem('language')
-            if (value === null) {
+            if (value === null)
                 await AsyncStorage.setItem('language', 'en')
-            }
         };
         getLanguageValue()
     }, []);

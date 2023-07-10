@@ -6,12 +6,18 @@ import {DayBox as DayBoxModel} from '../../../../models/dayBox';
 import themeContext from '../../../../config/themeContext';
 import { themeInterface } from '../../../../config/themeInterface';
 import { Currency } from '../../../../models/currency';
+import { Language } from '../../../../models/language';
+import vi from '../../../../config/language/vi';
+import en from '../../../../config/language/en';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react';
 
 function DayBox (props: { dayBoxModel: DayBoxModel, navigation: any, currency: Currency }) {
 
   const theme = useContext(themeContext) as themeInterface
-
+  const [languagePack, setLanguagePack] = React.useState<Language>({} as Language);
   const { navigation } = props;
+
   const getDayOfWeek = () => {
     const dayOfWeek = new Date(
       props.dayBoxModel.year,
@@ -21,15 +27,29 @@ function DayBox (props: { dayBoxModel: DayBoxModel, navigation: any, currency: C
     return isNaN(dayOfWeek)
       ? null
       : [
-          'Sun',
-          'Mon',
-          'Tue',
-          'Wed',
-          'Thu',
-          'Fri',
-          'Sat',
+          languagePack.sun,
+          languagePack.mon,
+          languagePack.tue,
+          languagePack.wed,
+          languagePack.thu,
+          languagePack.fri,
+          languagePack.sat,
         ][dayOfWeek];
   };
+
+  useEffect(() => {
+    const getLanguagePack = async () => {
+      const value = await AsyncStorage.getItem('language');
+      if (value !== null) {
+        if (value === 'vi') {
+          setLanguagePack(vi);
+        } else if (value === 'en') {
+          setLanguagePack(en);
+        }
+      }
+    };
+    getLanguagePack();
+  }, []);
 
   return (
     <View style={styles.mainContainer}>
