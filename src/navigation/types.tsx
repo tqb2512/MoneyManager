@@ -19,6 +19,7 @@ export type RootStackParamList = {
     settings: undefined;
     change_theme: undefined;
     language: undefined;
+    data: undefined;
 }
 
 export type BottomTabParamList = {
@@ -85,6 +86,11 @@ export type ChangeThemeProp = NativeStackScreenProps<
 export type LanguageProp = NativeStackScreenProps<
     RootStackParamList,
     'language'
+>;
+
+export type DataProp = NativeStackScreenProps<
+    RootStackParamList,
+    'data'
 >;
 
 export type AddTransactionProp = NativeStackScreenProps<

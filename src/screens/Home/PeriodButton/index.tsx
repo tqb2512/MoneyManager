@@ -5,38 +5,23 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import SelectDropdown from 'react-native-select-dropdown';
 import MonthPicker from 'react-native-month-year-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { CalendarIcon } from 'react-native-heroicons/outline'
+import { CalendarIcon, ClockIcon } from 'react-native-heroicons/outline'
 
 
-export default function CalendarButton(props: {date: Date, setDate: Function}) {
+export default function PeriodButton(props: { period: String, onPress: Function }) {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
 
-  const onValueChange = (event: any, newDate: any) => {
-    const selectedDate = newDate || date;
-    setShow(!show);
-    setDate(selectedDate);
-    props.setDate(selectedDate);
-  };
   return (
     <SafeAreaView style={styles.headerContainer}>
       <View style={styles.dropDownContainer}>
         <TouchableOpacity
           style={styles.selectDropDownContainer}
-          onPress={() => setShow(true)}>
-          <CalendarIcon size={20} color='white' />
+          onPress={props.onPress}>
           <Text style={styles.selectDropDownText}>
-            {date.getMonth() + 1}/{date.getFullYear()}
+            {props.period}
           </Text>
         </TouchableOpacity>
-        {show && (
-          <MonthPicker
-            mode='number'
-            onChange={onValueChange}
-            value={date}
-            locale="ko"
-          />
-        )}
       </View>
     </SafeAreaView>
   );
@@ -49,7 +34,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     position: 'absolute',
     bottom: 0,
-    left: 0,
+    right: 0,
     zIndex: 100,
   },
   titleContainer: {

@@ -11,8 +11,7 @@ import { Calendar } from 'react-native-big-calendar';
 import { getDBConnection, getEventsFromMonth, getDayBoxFromDate } from '../../../services/db-services';
 import { useIsFocused } from '@react-navigation/native';
 import DayBox from '../Daily/components/DayBox';
-import { ArrowLeftIcon, ArrowRightIcon, PlusIcon } from 'react-native-heroicons/outline';
-import { ChevronLeftIcon, ChevronRightIcon } from 'native-base';
+import { ArrowLeftIcon, ArrowRightIcon, PlusIcon, ChevronLeftIcon, ChevronRightIcon } from 'react-native-heroicons/outline';
 import { ScrollView, Button, Dimensions } from 'react-native';
 import { CelandarScreenProp } from '../../../navigation/types';
 import { Event } from '../../../models/event';
@@ -70,13 +69,23 @@ function CalendarScreen (props: CelandarScreenProp) {
   return (
     <View style ={{ flex: 1, backgroundColor: theme.mode === 'dark' ? theme.componentBackground : 'white' }}> 
       <View style={[styles.timecontrolContainer, { backgroundColor: theme.componentBackground }]} >
-        <View style={styles.buttonContainer}>
-          <Button color="#2196f3" title=" Today " onPress={() => {setDate(new Date())}}/>
-          <Button color="#2196f3" title=" < " onPress={prevMonth}/>
-          <Button color="#2196f3" title=" > " onPress={nextMonth}/>
-          <View style={{ alignItems:'center', justifyContent: 'center', marginStart: 8 }}>
-            <Text style={{ color: theme.color }} >{date.getMonth() + 1}/{date.getFullYear()}</Text>
+        <View style={styles.buttonContainer}>          
+          <TouchableOpacity onPress={() => {setDate(new Date())}} style={[styles.prevNextButton, {borderColor: theme.color}]} >
+            <Text style={{ fontWeight: '500', color: theme.color }}> Today </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={prevMonth} style={[styles.prevNextButton, {borderColor: theme.color}]} >
+            <ChevronLeftIcon size={20} color={theme.color} />
+          </TouchableOpacity>
+
+          <View style={{ alignItems:'center', justifyContent: 'center', marginStart: 0, }}>
+            <Text style={{ color: theme.color, fontWeight: '500' }} >{date.getMonth() + 1}/{date.getFullYear()}</Text>
           </View>
+
+          <TouchableOpacity onPress={nextMonth} style={[styles.prevNextButton, {borderColor: theme.color}]}>
+            <ChevronRightIcon size={20} color={theme.color} />
+          </TouchableOpacity>
+          
         </View>
       </View>
       <View style={{ backgroundColor: theme.componentBackground }}>
@@ -107,12 +116,16 @@ function CalendarScreen (props: CelandarScreenProp) {
           transparent={true}
           onRequestClose={() => setDayClicked(false)}>
           <View style={styles.centeredView}>
-            <View style={styles.modalView}>
+            <View style={[styles.modalView, { backgroundColor: theme.background }]}>
               <DayBox dayBoxModel={dayBox} currency={currency} navigation={navigation}/>
 
               {/* Add transaction */}
               <TouchableOpacity
-                style={{ margin: 8, bottom: 0, right: 0, backgroundColor: '#F1948A', width: 54, height: 54, borderRadius: 9999, position: 'absolute', shadowRadius: 16, shadowOffset: { width: 4, height: 4 }, alignItems: 'center', justifyContent: 'center' }}>
+                onPress={() => {
+                  setDayClicked(false)
+                  navigation.navigate('add_transaction')
+                }}
+                style={{ margin: 8, bottom: 3, right: 0, backgroundColor: 'rgba(192, 192, 192, 0.95)', width: 54, height: 54, borderRadius: 9999, position: 'absolute', shadowRadius: 16, shadowOffset: { width: 4, height: 4 }, alignItems: 'center', justifyContent: 'center' }}>
                 <PlusIcon style={{}} size={30} color='white' />
               </TouchableOpacity>
             </View>
@@ -120,7 +133,7 @@ function CalendarScreen (props: CelandarScreenProp) {
 
           <View
             style={{
-              backgroundColor: 'white',
+              backgroundColor: theme.componentBackground,
               width: '100%',
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -129,7 +142,7 @@ function CalendarScreen (props: CelandarScreenProp) {
               borderTopWidth: 0.2,
             }}>
 
-            <View style={{ flexDirection: 'row', marginEnd: 16, padding: 4 }}>
+            <View style={{ flexDirection: 'row', marginEnd: 16, padding: 4, }}>
               <ChevronLeftIcon
                 onPress={() => {
                   getDBConnection().then(db => {
@@ -146,7 +159,7 @@ function CalendarScreen (props: CelandarScreenProp) {
                   paddingLeft: 24,
                 }}
                 size={22}
-                color="black"
+                color={theme.color}
               />
               <ChevronRightIcon
                 onPress={() => {
@@ -164,7 +177,7 @@ function CalendarScreen (props: CelandarScreenProp) {
                   paddingLeft: 24,
                 }}
                 size={22}
-                color="black"
+                color={theme.color}
               />
             </View>
             <Pressable
@@ -172,7 +185,7 @@ function CalendarScreen (props: CelandarScreenProp) {
                 setDayClicked(false);
               }}
               style={{ marginEnd: 16, padding: 4 }}>
-              <Text style={{ fontSize: 20, fontWeight: '500' }}>Close</Text>
+              <Text style={{ fontSize: 20, fontWeight: '500', color: theme.color }}>Close</Text>
             </Pressable>
           </View>
         </Modal>
@@ -205,7 +218,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
-    padding: 4,
     // alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -214,5 +226,14 @@ const styles = StyleSheet.create({
     },
     width: '100%',
     height: '75%',
+  },
+
+  prevNextButton: {
+    borderWidth: 0.6,
+    borderRadius: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 6, 
+    padding: 6, 
   },
 });

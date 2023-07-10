@@ -46,15 +46,15 @@ function Settings(props: SettingsScreenProp){
 
         <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('change_currency') }}>
-                <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/currency.png')} />
+                <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/exchange-rate.png')} />
                 <Text style={{ color: theme.color }}>{languagePack.currency}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-                <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/export.png')} />
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('data')} >
+                <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/file-export.png')} />
                 <Text style={{ color: theme.color }}>{languagePack.data}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => {navigation.navigate("change_theme")}}>
-                <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/palette.png')} />
+                <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/theme.png')} />
                 <Text style={{ color: theme.color }}>{languagePack.theme}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("language") }}>

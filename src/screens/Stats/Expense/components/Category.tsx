@@ -18,7 +18,7 @@ export default function Category({percentage, name, cost, color}: Props) {
 
     return (
     <SafeAreaView>
-        <TouchableOpacity style={[styles.container, { backgroundColor: theme.background }]}>
+        <TouchableOpacity style={[styles.container, { backgroundColor: theme.componentBackground }]}>
             <View style={styles.percentageNameContainer}>
                 <Text style={{
                     fontSize: 18, 
@@ -27,10 +27,10 @@ export default function Category({percentage, name, cost, color}: Props) {
                     color: 'white',
                     backgroundColor: color
                     }}>{percentage.toFixed(2)}%</Text>
-                <Text style={styles.nameText}>{name}</Text>
+                <Text style={[styles.nameText, { color: theme.color }]}>{name}</Text>
             </View>
             <View style={styles.costContainer}>
-                <Text style={styles.costText}>$ {cost}</Text>
+                <Text style={[styles.costText, { color: theme.color }]}>$ {cost}</Text>
             </View>
         </TouchableOpacity>
     </SafeAreaView>
@@ -40,7 +40,7 @@ export default function Category({percentage, name, cost, color}: Props) {
 const styles = StyleSheet.create({
     container:{
         flexDirection:'row',
-        borderWidth: 0.3,
+        borderWidth: 0.6,
         borderColor:'#EEEEEE',
         backgroundColor:'white',
         padding: 15,

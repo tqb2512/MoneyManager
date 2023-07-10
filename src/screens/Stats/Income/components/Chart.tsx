@@ -9,6 +9,7 @@ import themeContext from "../../../../config/themeContext";
 import { themeInterface } from "../../../../config/themeInterface";
 import CalendarButton from "../../../Home/CalendarButton";
 import { PieData } from "../../../../models/pieData";
+import PeriodButton from "../../../Home/PeriodButton";
 
 export type ChartData = {
   name: string,
@@ -76,11 +77,13 @@ export default function Chart(props: { navigation: any }) {
     return unsubscribe;
   }, [navigation]);
 
-
+  function handlePress() {
+    setShowTimeOptions(!showTimeOptions)
+  }
 
   return (
-    <SafeAreaView style={styles.mainContainer}>
-      <View style={styles.chartContainer}>
+    <SafeAreaView style={[styles.mainContainer, { backgroundColor: theme.background }]}>
+      <View style={[styles.chartContainer, { backgroundColor: theme.componentBackground }]}>
         {isLoaded && (<PieChart
           data={chartData}
           showText
@@ -108,7 +111,7 @@ export default function Chart(props: { navigation: any }) {
         />)}
       </View>
 
-      <ScrollView style={styles.pieDataContainer}>
+      <ScrollView style={[styles.pieDataContainer, { backgroundColor: theme.mode === 'dark' ?  theme.background: '#f2f2f2' }]}>
         {chartData.map((data, index) => {
           return (
             <Category
@@ -124,6 +127,7 @@ export default function Chart(props: { navigation: any }) {
 
       {/* Calendar button */}
       <CalendarButton date={date} setDate={setDate} />
+      <PeriodButton  onPress={handlePress} period={timeOptionsValue} />
 
       {showTimeOptions && (
         <View>
@@ -142,9 +146,9 @@ export default function Chart(props: { navigation: any }) {
         </View>
       )}
 
-      <TouchableOpacity onPress={() => setShowTimeOptions(!showTimeOptions)} style={styles.periodButton}>
+      {/* <TouchableOpacity onPress={() => setShowTimeOptions(!showTimeOptions)} style={styles.periodButton}>
         <Text style={{ fontSize: 16, fontWeight: '500', padding: 6, color: 'white' }}>{timeOptionsValue}</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
     </SafeAreaView>
   )
@@ -173,19 +177,22 @@ const styles = StyleSheet.create({
 
   periodButton: {
     position: 'absolute',
-    bottom: 22,
+    bottom: '3.8%',
     right: 16,
-    backgroundColor: 'rgb(99, 99, 99)',
-    borderRadius: 16,
-    width: 80,
-    alignItems: 'center'
-  },
+    backgroundColor: 'rgba(178, 178, 178, 0.95)',
+    borderRadius: 25,
+    alignItems: 'center',
+    paddingVertical: 0.8 ,
+    paddingHorizontal: 10, 
+    // padding: 20, 
+    width: 110
+},
 
   periodButton1: {
     position: 'absolute',
-    bottom: 60,
+    bottom: 63,
     right: 16,
-    backgroundColor: 'rgb(99, 99, 99)',
+    backgroundColor: 'rgba(178, 178, 178, 0.95)',
     borderRadius: 16,
     width: 75,
     alignItems: 'center'
@@ -193,9 +200,9 @@ const styles = StyleSheet.create({
 
   periodButton2: {
     position: 'absolute',
-    bottom: 96,
+    bottom: 98,
     right: 16,
-    backgroundColor: 'rgb(99, 99, 99)',
+    backgroundColor: 'rgba(178, 178, 178, 0.95)',
     borderRadius: 16,
     width: 75,
     alignItems: 'center'

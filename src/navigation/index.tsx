@@ -32,6 +32,7 @@ import Language from '../screens/Settings/components/Language';
 import { Image, Platform } from 'react-native';
 import { Text } from 'react-native-svg';
 import { PlusCircleIcon, PlusIcon } from 'react-native-heroicons/outline'
+import Data from '../screens/Settings/components/Data';
 
 
 const HomeTopBar = createMaterialTopTabNavigator<HomeTopBarParamList>();
@@ -78,35 +79,6 @@ function BottomBarTabs()
           tabBarIcon: ({focused}) => 
             <Ionicons name={focused ? 'ios-pie-chart' : 'ios-pie-chart-outline'} color={focused ? '#2196f3': 'grey'} size={20} />
         }} 
-      />
-
-      <BottomBar.Screen 
-        name="add_transaction"
-        component={AddTransaction}
-        options={{
-          headerStyle: { backgroundColor: theme.componentBackground },
-          tabBarIcon: ({focused}) => 
-          { 
-            return (
-              <View style={{ 
-                top: Platform.OS === 'ios' ? -10 : -20,
-                width: Platform.OS === 'ios' ? 50 : 60,
-                height: Platform.OS === 'ios' ? 50 : 60,
-                borderRadius: Platform.OS === 'ios' ? 25 : 30,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: focused ? '#2196f3' : 'grey',
-                position: 'relative',
-                borderWidth: 1, 
-                borderColor: theme.mode === 'dark' ? 'white' : ''
-              }}>
-                {/* <Image source={require('../../assets/icons/add.png') } style={{ width: '100%', height: '100%', zIndex: 100, tintColor: focused ? '#2196f3' : 'black'}} /> */}
-                <PlusIcon color='white' size={ focused ? 48 : 16} />
-              </View>
-            )
-          }
-        }} 
-        
       />
 
       <BottomBar.Screen 
@@ -229,6 +201,7 @@ function AppNavigation()
       <AppStack.Screen name="change_currency" component={ChangeCurrency} />
       <AppStack.Screen name="change_theme" component={ChangeTheme} />
       <AppStack.Screen name="language" component={Language} />
+      <AppStack.Screen name="data" component={Data} />
     </AppStack.Navigator>
   );
 }

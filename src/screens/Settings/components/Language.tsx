@@ -2,6 +2,7 @@ import {Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'rea
 import React, { useContext } from 'react';
 import {LanguageProp} from '../../../navigation/types';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline'
+import { CheckCircleIcon } from 'react-native-heroicons/solid'
 import themeContext from '../../../config/themeContext';
 import { themeInterface } from '../../../config/themeInterface';
 import { Language as LanguageModel } from '../../../models/language';
