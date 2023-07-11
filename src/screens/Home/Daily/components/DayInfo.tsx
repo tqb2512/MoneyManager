@@ -13,7 +13,7 @@ import { CategoryList, Language } from '../../../../models/language';
 import en from '../../../../config/language/en';
 import vi from '../../../../config/language/vi';
 
-function DayInfo (props: {transaction : Transaction, navigation: any, currency: Currency}) {
+function DayInfo(props: { transaction: Transaction, navigation: any, currency: Currency }) {
 
   const theme = useContext(themeContext) as themeInterface
   const [languagePack, setLanguagePack] = React.useState<Language>({} as Language);
@@ -23,7 +23,7 @@ function DayInfo (props: {transaction : Transaction, navigation: any, currency: 
 
   const onPress = () => {
     setTimeout(() => {
-      props.navigation.navigate('transaction_detail', {transaction: transaction});
+      props.navigation.navigate('transaction_detail', { transaction: transaction });
     }, 50);
   }
 
@@ -61,14 +61,14 @@ function DayInfo (props: {transaction : Transaction, navigation: any, currency: 
 
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={{flexDirection: 'row', backgroundColor: theme.componentBackground, padding: 4}}>
-        <View style={{width: 100,flexDirection: 'row', alignItems: 'center', padding: 8, marginLeft: "3%"}}>
-          
+      <View style={{ flexDirection: 'row', backgroundColor: theme.componentBackground, padding: 4 }}>
+        <View style={{ width: 100, flexDirection: 'row', alignItems: 'center', padding: 8, marginLeft: "3%" }}>
+
           <Text style={{ marginStart: "5%", color: theme.color }}>{loaded == true ? languagePack.categories[CategoryList.indexOf(transaction.category.name.toLowerCase())][1] : ' '}</Text>
         </View>
-        <View style={{flex: 1, marginStart: "5%", justifyContent: 'center'}}>
-          {props.transaction.note !== null && (<Text style={{fontSize: 16, fontWeight: 'bold', color: theme.color}}>{props.transaction.note}</Text>) }
-          <Text style={{fontSize: 12, color: theme.color === 'dark' ? theme.color : 'grey', justifyContent: 'center'}}>{props.transaction.account.name}</Text>
+        <View style={{ flex: 1, marginStart: "5%", justifyContent: 'center' }}>
+          {props.transaction.note !== null && (<Text style={{ fontSize: 16, fontWeight: 'bold', color: theme.color }}>{props.transaction.note}</Text>)}
+          <Text style={{ fontSize: 12, color: theme.color === 'dark' ? theme.color : 'grey', justifyContent: 'center' }}>{props.transaction.account.name}</Text>
         </View>
         <Text
           style={{

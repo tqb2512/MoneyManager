@@ -85,21 +85,21 @@ export default function Chart(props: { navigation: any }) {
         const getLanguagePack = async () => {
             const language = await AsyncStorage.getItem('language');
             if (language === 'vi') {
-              setLanguagePack(vi);
+                setLanguagePack(vi);
             } else {
-              setLanguagePack(en);
+                setLanguagePack(en);
             }
-          }
-          getLanguagePack();
-          
-          const getCurrency = async () => {
+        }
+        getLanguagePack();
+
+        const getCurrency = async () => {
             const currency = await AsyncStorage.getItem('currency');
             if (currency) {
-              setCurrency(JSON.parse(currency));
+                setCurrency(JSON.parse(currency));
             }
-          }
-          getCurrency();
-        
+        }
+        getCurrency();
+
         return unsubscribe;
     }, [navigation]);
 
@@ -120,7 +120,7 @@ export default function Chart(props: { navigation: any }) {
                     textSize={26}
                     focusOnPress
                     onPress={(value: any) => {
-                        const result = {name: languagePack.categories[CategoryList.indexOf(value.name.toLowerCase())][1], percentage: value.percentage, value: value.value, color: value.color}
+                        const result = { name: languagePack.categories[CategoryList.indexOf(value.name.toLowerCase())][1], percentage: value.percentage, value: value.value, color: value.color }
                         setChartPressValue(result)
                     }}
                     showValuesAsLabels={false}
@@ -137,7 +137,7 @@ export default function Chart(props: { navigation: any }) {
                     }}
                 />)}
             </View>
-            <ScrollView style={[styles.pieDataContainer, { backgroundColor: theme.mode === 'dark' ?  theme.background: '#f2f2f2' }]}>
+            <ScrollView style={[styles.pieDataContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }]}>
                 {chartData.map((data, index) => {
                     return (
                         <Category
@@ -208,8 +208,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(178, 178, 178, 0.95)',
         borderRadius: 25,
         alignItems: 'center',
-        paddingVertical: 0.8 ,
-        paddingHorizontal: 10, 
+        paddingVertical: 0.8,
+        paddingHorizontal: 10,
         // padding: 20, 
         width: 110
     },
@@ -222,9 +222,9 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         width: 75,
         alignItems: 'center'
-      },
-    
-      periodButton2: {
+    },
+
+    periodButton2: {
         position: 'absolute',
         bottom: 98,
         right: 16,
@@ -232,5 +232,5 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         width: 75,
         alignItems: 'center'
-      }
+    }
 })

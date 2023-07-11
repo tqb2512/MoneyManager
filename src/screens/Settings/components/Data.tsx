@@ -1,9 +1,9 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View, PermissionsAndroid} from 'react-native';
-import React, {useContext} from 'react';
-import {ChevronLeftIcon} from 'react-native-heroicons/outline';
+import { Image, StyleSheet, Text, TouchableOpacity, View, PermissionsAndroid } from 'react-native';
+import React, { useContext } from 'react';
+import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import themeContext from '../../../config/themeContext';
-import {themeInterface} from '../../../config/themeInterface';
-import {DataProp} from '../../../navigation/types';
+import { themeInterface } from '../../../config/themeInterface';
+import { DataProp } from '../../../navigation/types';
 import { getDBConnection, getAccounts, getTransactions, insertAccounts, insertTransactions, dropTransactionsAndAccounts, createTables } from '../../../services/db-services';
 import { Account } from '../../../models/account';
 import { Transaction } from '../../../models/transaction';
@@ -13,7 +13,7 @@ import RNFS from 'react-native-fs';
 
 
 const Data = (props: DataProp) => {
-  const {navigation} = props;
+  const { navigation } = props;
   const theme = useContext(themeContext) as themeInterface;
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -85,12 +85,12 @@ const Data = (props: DataProp) => {
     <View
       style={[
         styles.mainContainer,
-        {backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2'},
+        { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' },
       ]}>
       <View
         style={[
           styles.navigateHeader,
-          {backgroundColor: theme.componentBackground},
+          { backgroundColor: theme.componentBackground },
         ]}>
         <View style={styles.backButton}>
           <ChevronLeftIcon
@@ -100,7 +100,7 @@ const Data = (props: DataProp) => {
             size={20}
             color={theme.color}
           />
-          <Text style={[styles.accountNameTxt, {color: theme.color}]}>
+          <Text style={[styles.accountNameTxt, { color: theme.color }]}>
             Data
           </Text>
         </View>
@@ -113,10 +113,10 @@ const Data = (props: DataProp) => {
             importFromJson();
           }}>
           <Image
-            style={[styles.img, {tintColor: theme.color}]}
+            style={[styles.img, { tintColor: theme.color }]}
             source={require('../../../../assets/settingImage/file-import.png')}
           />
-          <Text style={{color: theme.color}}>Import Data</Text>
+          <Text style={{ color: theme.color }}>Import Data</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -124,10 +124,10 @@ const Data = (props: DataProp) => {
             exportToJson();
           }}>
           <Image
-            style={[styles.img, {tintColor: theme.color}]}
+            style={[styles.img, { tintColor: theme.color }]}
             source={require('../../../../assets/settingImage/file-export.png')}
           />
-          <Text style={{color: theme.color}}>Export Data</Text>
+          <Text style={{ color: theme.color }}>Export Data</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -136,10 +136,10 @@ const Data = (props: DataProp) => {
             deleteAllData();
           }}>
           <Image
-            style={[styles.img, {tintColor: theme.color}]}
+            style={[styles.img, { tintColor: theme.color }]}
             source={require('../../../../assets/settingImage/file-export.png')}
           />
-          <Text style={{color: theme.color}}>Delete Data</Text>
+          <Text style={{ color: theme.color }}>Delete Data</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Account } from '../../../models/account';
 import themeContext from '../../../config/themeContext';
@@ -13,12 +13,12 @@ export default function AccountBox(props: { account: Account; navigation: any; c
 
     return (
         <TouchableOpacity onPress={() => navigation.navigate('account_detail', { account })}>
-            <View style={[styles.accountButton,  { backgroundColor: theme.componentBackground }]}>
+            <View style={[styles.accountButton, { backgroundColor: theme.componentBackground }]}>
                 <View style={styles.accountLabel}>
                     <Text style={[styles.accountText, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>{account.name}</Text>
                 </View>
                 <View style={styles.moneyLabel}>
-                    <Text style={account.balance >= 0 ? [styles.moneyText, {color: "#7DCEA0"}] : [styles.moneyText, {color: "#F1948A"}]}>{props.currency.symbol} {account.balance}</Text>
+                    <Text style={account.balance >= 0 ? [styles.moneyText, { color: "#7DCEA0" }] : [styles.moneyText, { color: "#F1948A" }]}>{props.currency.symbol} {account.balance}</Text>
                 </View>
             </View>
         </TouchableOpacity>

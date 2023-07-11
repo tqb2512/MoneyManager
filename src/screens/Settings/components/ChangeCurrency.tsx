@@ -60,7 +60,7 @@ function ChangeCurrency(props: ChangeCurrencyProp) {
           setCurrency(newCurrency);
         })
       })
-    })        
+    })
   }
 
   // const changeCurrency = async (newCurrency: Currency) => {
@@ -82,7 +82,7 @@ function ChangeCurrency(props: ChangeCurrencyProp) {
             size={20}
             color={theme.color}
           />
-          <Text style={[styles.accountNameTxt,  { color: theme.color }]}>Change Currency</Text>
+          <Text style={[styles.accountNameTxt, { color: theme.color }]}>Change Currency</Text>
         </View>
       </View>
 
@@ -94,25 +94,25 @@ function ChangeCurrency(props: ChangeCurrencyProp) {
       </View> */}
 
       {/* <FlatList /> */}
-        <FlatList
-          data={currencyList}
-          renderItem={({ item }) => (
-            <TouchableOpacity style={[styles.currencyButton, { backgroundColor: theme.componentBackground }]} onPress={() => {changeCurrency(item); console.log(currency)}}>
-              <View>
-                <Text style={[styles.currencyNameText, { color: theme.color }]}>{item.fullName}</Text>
-                <Text style={[styles.currencyShortNameText, { color: theme.color }]}>{item.name}</Text>
-              </View>
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={[styles.currencySymbol, { color: theme.color }]}>{item.symbol}</Text>
-                { currency.fullName === item.fullName && (
-                  <CheckCircleIcon style={{ alignSelf: 'center', marginStart: 12 }} size={20} color='#1056B4' />
-                )}
-              </View>
-            </TouchableOpacity>
-          )}
-          keyExtractor={(item) => item.name}
-        />
-        
+      <FlatList
+        data={currencyList}
+        renderItem={({ item }) => (
+          <TouchableOpacity style={[styles.currencyButton, { backgroundColor: theme.componentBackground }]} onPress={() => { changeCurrency(item); console.log(currency) }}>
+            <View>
+              <Text style={[styles.currencyNameText, { color: theme.color }]}>{item.fullName}</Text>
+              <Text style={[styles.currencyShortNameText, { color: theme.color }]}>{item.name}</Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={[styles.currencySymbol, { color: theme.color }]}>{item.symbol}</Text>
+              {currency.fullName === item.fullName && (
+                <CheckCircleIcon style={{ alignSelf: 'center', marginStart: 12 }} size={20} color='#1056B4' />
+              )}
+            </View>
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item) => item.name}
+      />
+
     </View>
   );
 }
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
     paddingVertical: 16,
-    paddingEnd: 24, 
+    paddingEnd: 24,
     justifyContent: 'space-between',
     borderBottomWidth: 1,
     borderBottomColor: 'grey'
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center'
   },
-  
+
   currencyNameText: {
     fontSize: 16,
     fontWeight: '500'

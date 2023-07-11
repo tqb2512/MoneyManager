@@ -70,7 +70,7 @@ export default function Chart(props: { navigation: any }) {
         }
         )
         break;
-      }
+    }
   }
 
   useEffect(() => {
@@ -90,7 +90,7 @@ export default function Chart(props: { navigation: any }) {
         }
       }
       getLanguagePack();
-      
+
       const getCurrency = async () => {
         const currency = await AsyncStorage.getItem('currency');
         if (currency) {
@@ -98,7 +98,7 @@ export default function Chart(props: { navigation: any }) {
         }
       }
       getCurrency();
-    
+
     });
     return unsubscribe;
   }, [navigation]);
@@ -120,7 +120,7 @@ export default function Chart(props: { navigation: any }) {
           textSize={26}
           focusOnPress
           onPress={(value: any) => {
-            const result = {name: languagePack.categories[CategoryList.indexOf(value.name.toLowerCase())][1], percentage: value.percentage, value: value.value, color: value.color}
+            const result = { name: languagePack.categories[CategoryList.indexOf(value.name.toLowerCase())][1], percentage: value.percentage, value: value.value, color: value.color }
             setChartPressValue(result)
           }}
           showValuesAsLabels={false}
@@ -138,7 +138,7 @@ export default function Chart(props: { navigation: any }) {
         />)}
       </View>
 
-      <ScrollView style={[styles.pieDataContainer, { backgroundColor: theme.mode === 'dark' ?  theme.background: '#f2f2f2' }]}>
+      <ScrollView style={[styles.pieDataContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }]}>
         {chartData.map((data, index) => {
           return (
             <Category
@@ -154,7 +154,7 @@ export default function Chart(props: { navigation: any }) {
 
       {/* Calendar button */}
       <CalendarButton date={date} setDate={setDate} />
-      <PeriodButton  onPress={handlePress} period={timeOptionsValue == 'Yearly' ? languagePack.yearly : languagePack.monthly} />
+      <PeriodButton onPress={handlePress} period={timeOptionsValue == 'Yearly' ? languagePack.yearly : languagePack.monthly} />
 
       {showTimeOptions && (
         <View>
@@ -209,11 +209,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(178, 178, 178, 0.95)',
     borderRadius: 25,
     alignItems: 'center',
-    paddingVertical: 0.8 ,
-    paddingHorizontal: 10, 
+    paddingVertical: 0.8,
+    paddingHorizontal: 10,
     // padding: 20, 
     width: 110
-},
+  },
 
   periodButton1: {
     position: 'absolute',

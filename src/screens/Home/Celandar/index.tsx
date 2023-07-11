@@ -26,7 +26,7 @@ import en from '../../../config/language/en';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
-function CalendarScreen (props: CelandarScreenProp) {
+function CalendarScreen(props: CelandarScreenProp) {
   const theme = useContext(themeContext) as themeInterface
   const { navigation } = props;
   const [dayClicked, setDayClicked] = useState(false);
@@ -96,25 +96,25 @@ function CalendarScreen (props: CelandarScreenProp) {
   };
 
   return (
-    <View style ={{ flex: 1, backgroundColor: theme.mode === 'dark' ? theme.componentBackground : 'white' }}> 
+    <View style={{ flex: 1, backgroundColor: theme.mode === 'dark' ? theme.componentBackground : 'white' }}>
       <View style={[styles.timecontrolContainer, { backgroundColor: theme.componentBackground }]} >
-        <View style={styles.buttonContainer}>          
-          <TouchableOpacity onPress={() => {setDate(new Date())}} style={[styles.prevNextButton, {borderColor: theme.color}]} >
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={() => { setDate(new Date()) }} style={[styles.prevNextButton, { borderColor: theme.color }]} >
             <Text style={{ fontWeight: '500', color: theme.color }}> {languagePack.today} </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={prevMonth} style={[styles.prevNextButton, {borderColor: theme.color}]} >
+          <TouchableOpacity onPress={prevMonth} style={[styles.prevNextButton, { borderColor: theme.color }]} >
             <ChevronLeftIcon size={20} color={theme.color} />
           </TouchableOpacity>
 
-          <View style={{ alignItems:'center', justifyContent: 'center', marginStart: 0, }}>
+          <View style={{ alignItems: 'center', justifyContent: 'center', marginStart: 0, }}>
             <Text style={{ color: theme.color, fontWeight: '500' }} >{date.getMonth() + 1}/{date.getFullYear()}</Text>
           </View>
 
-          <TouchableOpacity onPress={nextMonth} style={[styles.prevNextButton, {borderColor: theme.color}]}>
+          <TouchableOpacity onPress={nextMonth} style={[styles.prevNextButton, { borderColor: theme.color }]}>
             <ChevronRightIcon size={20} color={theme.color} />
           </TouchableOpacity>
-          
+
         </View>
       </View>
       <View style={{ backgroundColor: theme.componentBackground }}>
@@ -133,7 +133,7 @@ function CalendarScreen (props: CelandarScreenProp) {
           }}
         />
       </View>
-      
+
       {dayClicked && (
         <Modal
           animationType="slide"
@@ -142,7 +142,7 @@ function CalendarScreen (props: CelandarScreenProp) {
           onDismiss={() => navigation.goBack()}>
           <View style={styles.centeredView}>
             <View style={[styles.modalView, { backgroundColor: theme.background }]}>
-              <DayBox dayBoxModel={dayBox} currency={currency} navigation={navigation}/>
+              <DayBox dayBoxModel={dayBox} currency={currency} navigation={navigation} />
               {/* Add transaction */}
               <TouchableOpacity
                 onPress={() => {
@@ -216,10 +216,10 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    paddingVertical: 8, 
+    paddingVertical: 8,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    width: 240, 
+    width: 240,
   },
 
   centeredView: {
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 6, 
-    padding: 6, 
+    paddingHorizontal: 6,
+    padding: 6,
   },
 });

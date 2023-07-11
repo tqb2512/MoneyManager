@@ -362,7 +362,7 @@ function TransactionDetail(props: TransactionDetailProp) {
                               }}>
                               <Text>{
                                 languagePack.categories[CategoryList.indexOf(item.name.toLowerCase())][1]
-                                }</Text>
+                              }</Text>
                             </TouchableOpacity>
                           )}
                           keyExtractor={item => item.id.toString()}
@@ -559,7 +559,7 @@ function TransactionDetail(props: TransactionDetailProp) {
                       Alert.alert('Please choose category');
                     } else if (transaction.account == null) {
                       Alert.alert('Please choose account');
-                    } else if (transaction.type == null ) {
+                    } else if (transaction.type == null) {
                       Alert.alert('Please choose type');
                     } else {
                       saveTransaction();

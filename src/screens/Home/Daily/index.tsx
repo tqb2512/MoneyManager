@@ -6,12 +6,12 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import React, {useContext, useEffect} from 'react';
+import React, { useContext, useEffect } from 'react';
 import DayBox from './components/DayBox';
-import {DayBox as DayBoxModel} from '../../../models/dayBox';
+import { DayBox as DayBoxModel } from '../../../models/dayBox';
 import { Currency } from '../../../models/currency';
-import {DailyScreenProp} from '../../../navigation/types';
-import {NativeBaseProvider} from 'native-base';
+import { DailyScreenProp } from '../../../navigation/types';
+import { NativeBaseProvider } from 'native-base';
 import {
   getDBConnection,
   getDayBoxFromMonthYear,
@@ -32,7 +32,7 @@ import en from '../../../config/language/en';
 function DailyScreen(props: DailyScreenProp) {
 
   const theme = useContext(themeContext) as themeInterface
-  const {navigation} = props;
+  const { navigation } = props;
   const [date, setDate] = React.useState<Date>(new Date());
   const [dayBoxes, setDayBoxes] = React.useState<DayBoxModel[]>([]);
   const [currency, setCurrency] = React.useState<Currency>({} as Currency);
@@ -94,7 +94,7 @@ function DailyScreen(props: DailyScreenProp) {
       });
     });
   }, [date]);
-  
+
 
   return (
     <NativeBaseProvider>
@@ -109,72 +109,72 @@ function DailyScreen(props: DailyScreenProp) {
 
         {/* Income, expense, total, bar */}
         <View
-        style={[
-          styles.secondTopBar,
-          {
-            backgroundColor: theme.background,
-            borderColor:
-              theme.mode === 'dark' ? 'white' : 'rgba(229, 231, 235, 0.4)',
-          },
-        ]}>
-        <View style={styles.totalCalc}>
-          <Text style={[styles.totalElement, {color: theme.color}]}>
-            {languagePack.income}
-          </Text>
-          <Text
-            style={{
-              color: '#7DCEA0',
-              alignSelf: 'center',
-              fontSize: 14,
-              fontWeight: '500',
-            }}>
-            {currency.symbol} {totalIncome}
-          </Text>
+          style={[
+            styles.secondTopBar,
+            {
+              backgroundColor: theme.background,
+              borderColor:
+                theme.mode === 'dark' ? 'white' : 'rgba(229, 231, 235, 0.4)',
+            },
+          ]}>
+          <View style={styles.totalCalc}>
+            <Text style={[styles.totalElement, { color: theme.color }]}>
+              {languagePack.income}
+            </Text>
+            <Text
+              style={{
+                color: '#7DCEA0',
+                alignSelf: 'center',
+                fontSize: 14,
+                fontWeight: '500',
+              }}>
+              {currency.symbol} {totalIncome}
+            </Text>
+          </View>
+          <View style={styles.totalCalc}>
+            <Text style={[styles.totalElement, { color: theme.color }]}>
+              {languagePack.expense}
+            </Text>
+            <Text
+              style={{
+                color: '#F1948A',
+                alignSelf: 'center',
+                fontSize: 14,
+                fontWeight: '500',
+              }}>
+              {currency.symbol} {totalExpense}
+            </Text>
+          </View>
+          <View style={styles.totalCalc}>
+            <Text style={[styles.totalElement, { color: theme.color }]}>{languagePack.total}</Text>
+            <Text
+              style={[{
+                alignSelf: 'center',
+                fontSize: 14,
+                fontWeight: '500',
+              }, total >= 0 ? { color: "#7DCEA0" } : { color: "#F1948A" }]}>
+              {currency.symbol} {total.toFixed(2)}
+            </Text>
+          </View>
         </View>
-        <View style={styles.totalCalc}>
-          <Text style={[styles.totalElement, {color: theme.color}]}>
-            {languagePack.expense}
-          </Text>
-          <Text
-            style={{
-              color: '#F1948A',
-              alignSelf: 'center',
-              fontSize: 14,
-              fontWeight: '500',
-            }}>
-            {currency.symbol} {totalExpense}
-          </Text>
-        </View>
-        <View style={styles.totalCalc}>
-          <Text style={[styles.totalElement, {color: theme.color}]}>{languagePack.total}</Text>
-          <Text
-            style={[{
-              alignSelf: 'center',
-              fontSize: 14,
-              fontWeight: '500',
-            }, total >= 0 ? { color: "#7DCEA0" } : { color: "#F1948A" }]}>
-            {currency.symbol} {total.toFixed(2)}
-          </Text>
-        </View>
-      </View>
         {/* Show list view chi tiêt schi tiêu ngày */}
         <View>
           <FlatList
             data={dayBoxes}
-            renderItem={({item, index}) => (
+            renderItem={({ item, index }) => (
               <View>
                 <DayBox dayBoxModel={item} navigation={props.navigation} currency={currency} />
-                { index === dayBoxes.length - 1 ? 
-                (<View style={styles.footerView}>
-                  <Text>  </Text>
-                </View>) 
-                : null}
+                {index === dayBoxes.length - 1 ?
+                  (<View style={styles.footerView}>
+                    <Text>  </Text>
+                  </View>)
+                  : null}
               </View>
             )}
             keyExtractor={item => item.day.toString()}
           />
         </View>
-        <CalendarButton date={date} setDate={setDate}/>
+        <CalendarButton date={date} setDate={setDate} />
       </SafeAreaView>
     </NativeBaseProvider>
   );
@@ -196,18 +196,18 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 20,
     borderWidth: 1,
     borderColor: 'rgba(229, 231, 235, 0.4)',
-},
+  },
 
-totalCalc: {
+  totalCalc: {
     justifyContent: 'center',
     width: 100,
-},
+  },
 
-totalElement: {
+  totalElement: {
     alignSelf: 'center',
     fontSize: 16,
     fontWeight: "500",
-},
+  },
 
   addButtonText: {
     fontSize: 30,

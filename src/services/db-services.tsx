@@ -14,28 +14,28 @@ export const getDBConnection = async (): Promise<SQLiteDatabase> => {
 }
 
 export const createTables = async (db: SQLiteDatabase): Promise<void> => {
-    await db.executeSql('CREATE TABLE IF NOT EXISTS categories '+
-    '(id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
-    'name TEXT, ' +
-    'color TEXT)');
+    await db.executeSql('CREATE TABLE IF NOT EXISTS categories ' +
+        '(id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+        'name TEXT, ' +
+        'color TEXT)');
 
-    await db.executeSql('CREATE TABLE IF NOT EXISTS accounts '+
-    '(id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
-    'name TEXT, ' +
-    'balance INTEGER)');
+    await db.executeSql('CREATE TABLE IF NOT EXISTS accounts ' +
+        '(id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+        'name TEXT, ' +
+        'balance INTEGER)');
 
-    await db.executeSql('CREATE TABLE IF NOT EXISTS transactions '+
-    '(id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
-    'amount INTEGER, ' +
-    'day INTEGER, ' +
-    'month INTEGER, ' +
-    'year INTEGER, ' +
-    'note TEXT, ' +
-    'type TEXT, ' +
-    'categoryId INTEGER, ' +
-    'accountId INTEGER, ' +
-    'FOREIGN KEY(categoryId) REFERENCES categories(id), ' +
-    'FOREIGN KEY(accountId) REFERENCES accounts(id))');
+    await db.executeSql('CREATE TABLE IF NOT EXISTS transactions ' +
+        '(id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+        'amount INTEGER, ' +
+        'day INTEGER, ' +
+        'month INTEGER, ' +
+        'year INTEGER, ' +
+        'note TEXT, ' +
+        'type TEXT, ' +
+        'categoryId INTEGER, ' +
+        'accountId INTEGER, ' +
+        'FOREIGN KEY(categoryId) REFERENCES categories(id), ' +
+        'FOREIGN KEY(accountId) REFERENCES accounts(id))');
     console.log('Tables created');
 }
 
@@ -48,13 +48,13 @@ export const dropTables = async (db: SQLiteDatabase): Promise<void> => {
 
 export const importTestData = async (db: SQLiteDatabase): Promise<void> => {
     const accounts: Account[] = [
-        { id: 1, name: "Cash", balance: 0},
-        { id: 2, name: "Bank", balance: 0},
-        { id: 3, name: "Bank 1", balance: 0},
-        { id: 4, name: "Bank 2", balance: 0},
-        { id: 5, name: "Bank 3", balance: 0},
-        { id: 6, name: "Bank 4", balance: 0},
-        { id: 7, name: "Bank 5", balance: 0},
+        { id: 1, name: "Cash", balance: 0 },
+        { id: 2, name: "Bank", balance: 0 },
+        { id: 3, name: "Bank 1", balance: 0 },
+        { id: 4, name: "Bank 2", balance: 0 },
+        { id: 5, name: "Bank 3", balance: 0 },
+        { id: 6, name: "Bank 4", balance: 0 },
+        { id: 7, name: "Bank 5", balance: 0 },
     ]
 
     const categories: Category[] = [
@@ -68,7 +68,7 @@ export const importTestData = async (db: SQLiteDatabase): Promise<void> => {
     ]
 
     const transactions: Transaction[] = [
-        
+
     ]
 
     for (let i = 0; i < accounts.length; i++) {
@@ -398,8 +398,8 @@ export const changeAllTransactionsCurrency = async (db: SQLiteDatabase, oldCurre
             const rate = data[newCurrency.toLowerCase()];
             //round to 2 decimal places
             db.executeSql('UPDATE transactions SET amount = ROUND(amount * ?, 2)', [rate]);
-            
-        }); 
+
+        });
 }
 
 export const changeAllAccountsCurrency = async (db: SQLiteDatabase, oldCurrency: string, newCurrency: string): Promise<void> => {
@@ -412,7 +412,7 @@ export const changeAllAccountsCurrency = async (db: SQLiteDatabase, oldCurrency:
         });
 }
 
-export const getPieDataByMonth = async (db: SQLiteDatabase, month: number, year: number, type:  string): Promise<PieData[]> => {
+export const getPieDataByMonth = async (db: SQLiteDatabase, month: number, year: number, type: string): Promise<PieData[]> => {
     const [result] = await db.executeSql('SELECT categoryId, categories.name, categories.color, SUM(amount) as sum FROM transactions inner join categories on transactions.categoryId = categories.id WHERE month = ? AND year = ? AND type = ? GROUP BY categoryId', [month, year, type]);
     let pieData: PieData[] = [];
     for (let i = 0; i < result.rows.length; i++) {
@@ -447,7 +447,7 @@ export type ChartData = {
     color: string,
 }
 
-export const getChartDataByMonth = async (db: SQLiteDatabase, month: number, year: number, type:  string): Promise<ChartData[]> => {
+export const getChartDataByMonth = async (db: SQLiteDatabase, month: number, year: number, type: string): Promise<ChartData[]> => {
     let pieData: PieData[] = await getPieDataByMonth(db, month, year, type);
     let chartData: ChartData[] = [];
     for (let i = 0; i < pieData.length; i++) {
@@ -463,7 +463,7 @@ export const getChartDataByMonth = async (db: SQLiteDatabase, month: number, yea
     return chartData;
 }
 
-export const getPieDataByYear = async (db: SQLiteDatabase, year: number, type:  string): Promise<PieData[]> => {
+export const getPieDataByYear = async (db: SQLiteDatabase, year: number, type: string): Promise<PieData[]> => {
     const [result] = await db.executeSql('SELECT categoryId, categories.name, categories.color, SUM(amount) as sum FROM transactions inner join categories on transactions.categoryId = categories.id WHERE year = ? AND type = ? GROUP BY categoryId', [year, type]);
     let pieData: PieData[] = [];
     for (let i = 0; i < result.rows.length; i++) {
@@ -491,7 +491,7 @@ export const getPieDataByYear = async (db: SQLiteDatabase, year: number, type:  
     return pieData;
 }
 
-export const getChartDataByYear = async (db: SQLiteDatabase, year: number, type:  string): Promise<ChartData[]> => {
+export const getChartDataByYear = async (db: SQLiteDatabase, year: number, type: string): Promise<ChartData[]> => {
     let pieData: PieData[] = await getPieDataByYear(db, year, type);
     let chartData: ChartData[] = [];
     for (let i = 0; i < pieData.length; i++) {
@@ -522,23 +522,23 @@ export const getEventsFromMonth = async (db: SQLiteDatabase, month: number, year
     for (let i = 0; i < days.rows.length; i++) {
         const [income] = await db.executeSql('SELECT SUM(amount) as sum FROM transactions WHERE month = ? AND year = ? AND day = ? AND type = ?', [month, year, days.rows.item(i).day, 'income']);
         const [expense] = await db.executeSql('SELECT SUM(amount) as sum FROM transactions WHERE month = ? AND year = ? AND day = ? AND type = ?', [month, year, days.rows.item(i).day, 'expense']);
-        
+
         if (income.rows.item(0).sum != null) {
             const event: Event = {
-            start: new Date(year, month - 1, days.rows.item(i).day),
-            end: new Date(year, month - 1, days.rows.item(i).day),
-            title: income.rows.item(0).sum + ' ' + currency.symbol,
-            color: '#7DCEA0',
+                start: new Date(year, month - 1, days.rows.item(i).day),
+                end: new Date(year, month - 1, days.rows.item(i).day),
+                title: income.rows.item(0).sum + ' ' + currency.symbol,
+                color: '#7DCEA0',
             }
             events.push(event);
         }
-        
+
         if (expense.rows.item(0).sum != null) {
             const event: Event = {
-            start: new Date(year, month - 1, days.rows.item(i).day),
-            end: new Date(year, month - 1, days.rows.item(i).day),
-            title: expense.rows.item(0).sum + ' ' + currency.symbol,
-            color: '#F1948A',
+                start: new Date(year, month - 1, days.rows.item(i).day),
+                end: new Date(year, month - 1, days.rows.item(i).day),
+                title: expense.rows.item(0).sum + ' ' + currency.symbol,
+                color: '#F1948A',
             }
             events.push(event);
         }
@@ -571,4 +571,3 @@ export const dropTransactionsAndAccounts = async (db: SQLiteDatabase) => {
     await db.executeSql('DROP TABLE transactions');
     await db.executeSql('DROP TABLE accounts');
 }
-    

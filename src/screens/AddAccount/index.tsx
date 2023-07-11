@@ -16,7 +16,7 @@ function AddAccount(props: AddAccountProp) {
     const theme = useContext(themeContext) as themeInterface
 
     const { navigation } = props;
-    const [account, setAccount] = React.useState<Account>({balance: 0} as Account);
+    const [account, setAccount] = React.useState<Account>({ balance: 0 } as Account);
     const [showGroup, setShowGroup] = React.useState<boolean>(false);
     const groupList = ["Cash", "Bank", "Credit Card", "Savings", "Loan", "Insurance", "E-Wallet", "Others"];
     const [currency, setCurrency] = React.useState<Currency>({} as Currency);
@@ -24,16 +24,16 @@ function AddAccount(props: AddAccountProp) {
     useEffect(() => {
 
         const unsubscribe = navigation.addListener('focus', () => {
-          const getCurrencyValue = async () => {
-            const value = await AsyncStorage.getItem('currency')
-            if (value !== null) {
-              setCurrency(JSON.parse(value));
+            const getCurrencyValue = async () => {
+                const value = await AsyncStorage.getItem('currency')
+                if (value !== null) {
+                    setCurrency(JSON.parse(value));
+                }
             }
-          }
-          getCurrencyValue()
+            getCurrencyValue()
         });
         return unsubscribe;
-      }, [navigation]);
+    }, [navigation]);
 
     const saveAccount = () => {
         getDBConnection().then(db => {

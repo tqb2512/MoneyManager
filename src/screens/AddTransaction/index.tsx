@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,12 +14,12 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import {NativeBaseProvider, KeyboardAvoidingView, CloseIcon} from 'native-base';
-import {ChevronLeftIcon} from 'react-native-heroicons/outline';
-import {AddTransactionProp} from '../../navigation/types';
-import {Transaction} from '../../models/transaction';
-import {Category} from '../../models/category';
-import {Account} from '../../models/account';
+import { NativeBaseProvider, KeyboardAvoidingView, CloseIcon } from 'native-base';
+import { ChevronLeftIcon } from 'react-native-heroicons/outline';
+import { AddTransactionProp } from '../../navigation/types';
+import { Transaction } from '../../models/transaction';
+import { Category } from '../../models/category';
+import { Account } from '../../models/account';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {
   getDBConnection,
@@ -30,7 +30,7 @@ import {
 } from '../../services/db-services';
 
 import themeContext from '../../config/themeContext';
-import {themeInterface} from '../../config/themeInterface';
+import { themeInterface } from '../../config/themeInterface';
 import { Currency } from '../../models/currency';
 import { CategoryList, Language } from '../../models/language';
 import vi from '../../config/language/vi';
@@ -40,7 +40,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function AddTransaction(props: AddTransactionProp) {
   const theme = useContext(themeContext) as themeInterface;
-  const {navigation} = props;
+  const { navigation } = props;
   const [transaction, setTransaction] = React.useState<Transaction>({
     day: new Date().getDate(),
     month: new Date().getMonth() + 1,
@@ -62,7 +62,7 @@ function AddTransaction(props: AddTransactionProp) {
   const [selectedInput, setSelectedInput] = React.useState('');
   const [currency, setCurrency] = React.useState<Currency>({} as Currency);
   const [languagePack, setLanguagePack] = React.useState<Language>({} as Language);
-  
+
 
   const saveTransaction = () => {
     if (transaction.type == 'expense') {
@@ -146,7 +146,7 @@ function AddTransaction(props: AddTransactionProp) {
         <View
           style={[
             styles.navigateHeader,
-            {backgroundColor: theme.componentBackground},
+            { backgroundColor: theme.componentBackground },
           ]}>
           <View style={styles.backButton}>
             <ChevronLeftIcon
@@ -154,23 +154,23 @@ function AddTransaction(props: AddTransactionProp) {
               size={20}
               color={theme.color}
             />
-            <Text style={[styles.accountNameTxt, {color: theme.color}]}>
+            <Text style={[styles.accountNameTxt, { color: theme.color }]}>
               {languagePack.newTransaction}
             </Text>
           </View>
         </View>
-        <View style={{backgroundColor: theme.background}}>
+        <View style={{ backgroundColor: theme.background }}>
           <View
             style={{
               backgroundColor:
                 theme.mode === 'dark' ? theme.background : '#f2f2f2',
             }}>
             {/*select type*/}
-            <View style={{backgroundColor: theme.background}}>
+            <View style={{ backgroundColor: theme.background }}>
               <View
                 style={[
                   styles.buttonContainer,
-                  {backgroundColor: theme.componentBackground},
+                  { backgroundColor: theme.componentBackground },
                 ]}>
                 <Text
                   style={{
@@ -180,28 +180,28 @@ function AddTransaction(props: AddTransactionProp) {
                   {languagePack.type}
                 </Text>
 
-                <View style={{flexDirection: 'row', marginLeft: '15%'}}>
+                <View style={{ flexDirection: 'row', marginLeft: '15%' }}>
                   <TouchableOpacity
                     onPress={() => {
-                      setTransaction({...transaction, type: 'income'});
+                      setTransaction({ ...transaction, type: 'income' });
                     }}>
                     <View
                       style={
                         transaction.type == 'income'
-                          ? [styles.typeButton, {borderColor: '#7DCEA0'}]
+                          ? [styles.typeButton, { borderColor: '#7DCEA0' }]
                           : styles.typeButton
                       }>
                       <Text
                         style={
                           transaction.type == 'income'
-                            ? [styles.typeText, {color: '#7DCEA0'}]
+                            ? [styles.typeText, { color: '#7DCEA0' }]
                             : [
-                                styles.typeText,
-                                {
-                                  color:
-                                    theme.mode === 'dark' ? 'grey' : 'black',
-                                },
-                              ]
+                              styles.typeText,
+                              {
+                                color:
+                                  theme.mode === 'dark' ? 'grey' : 'black',
+                              },
+                            ]
                         }>
                         {languagePack.income}
                       </Text>
@@ -210,25 +210,25 @@ function AddTransaction(props: AddTransactionProp) {
 
                   <TouchableOpacity
                     onPress={() => {
-                      setTransaction({...transaction, type: 'expense'});
+                      setTransaction({ ...transaction, type: 'expense' });
                     }}>
                     <View
                       style={
                         transaction.type == 'expense'
-                          ? [styles.typeButton, {borderColor: '#F1948A'}]
+                          ? [styles.typeButton, { borderColor: '#F1948A' }]
                           : styles.typeButton
                       }>
                       <Text
                         style={
                           transaction.type == 'expense'
-                            ? [styles.typeText, {color: '#F1948A'}]
+                            ? [styles.typeText, { color: '#F1948A' }]
                             : [
-                                styles.typeText,
-                                {
-                                  color:
-                                    theme.mode === 'dark' ? 'grey' : 'black',
-                                },
-                              ]
+                              styles.typeText,
+                              {
+                                color:
+                                  theme.mode === 'dark' ? 'grey' : 'black',
+                              },
+                            ]
                         }>
                         {languagePack.expense}
                       </Text>
@@ -250,12 +250,12 @@ function AddTransaction(props: AddTransactionProp) {
                 <Text
                   style={[
                     styles.inputLabel,
-                    {color: theme.mode === 'dark' ? theme.color : 'grey'},
+                    { color: theme.mode === 'dark' ? theme.color : 'grey' },
                   ]}>
                   {languagePack.date}
                 </Text>
                 <TextInput
-                  style={[styles.infoText, {color: theme.color}]}
+                  style={[styles.infoText, { color: theme.color }]}
                   onPressIn={() => {
                     setShowDTP(true);
                     setIsDateClicked(true);
@@ -310,12 +310,12 @@ function AddTransaction(props: AddTransactionProp) {
                 <Text
                   style={[
                     styles.inputLabel,
-                    {color: theme.mode === 'dark' ? theme.color : 'grey'},
+                    { color: theme.mode === 'dark' ? theme.color : 'grey' },
                   ]}>
                   {languagePack.category}
                 </Text>
                 <TextInput
-                  style={[styles.infoText, {color: theme.color}]}
+                  style={[styles.infoText, { color: theme.color }]}
                   placeholder=""
                   onPressIn={() => {
                     setShowCategories(true);
@@ -377,7 +377,7 @@ function AddTransaction(props: AddTransactionProp) {
                         </Text>
                         <CloseIcon
                           color="white"
-                          style={{marginEnd: 12}}
+                          style={{ marginEnd: 12 }}
                           onPress={() => {
                             setShowCategories(false);
                             setSelectedInput('');
@@ -387,10 +387,10 @@ function AddTransaction(props: AddTransactionProp) {
 
                       <View>
                         <FlatList
-                          contentContainerStyle={{alignSelf: 'flex-start'}}
+                          contentContainerStyle={{ alignSelf: 'flex-start' }}
                           numColumns={3 / 1}
                           data={categories}
-                          renderItem={({item}) => (
+                          renderItem={({ item }) => (
                             <TouchableOpacity
                               style={{
                                 width: '33.33%',
@@ -409,7 +409,7 @@ function AddTransaction(props: AddTransactionProp) {
                               {/* test image */}
                               <Image
                                 source={require('../../../assets/icons/money.png')}
-                                style={{width: 48, height: 48}}
+                                style={{ width: 48, height: 48 }}
                               />
                               <Text>{languagePack.categories[CategoryList.indexOf(item.name.toLowerCase())][1]}</Text>
                             </TouchableOpacity>
@@ -427,12 +427,12 @@ function AddTransaction(props: AddTransactionProp) {
                 <Text
                   style={[
                     styles.inputLabel,
-                    {color: theme.mode === 'dark' ? theme.color : 'grey'},
+                    { color: theme.mode === 'dark' ? theme.color : 'grey' },
                   ]}>
                   {languagePack.account}
                 </Text>
                 <TextInput
-                  style={[styles.infoText, {color: theme.color}]}
+                  style={[styles.infoText, { color: theme.color }]}
                   placeholder=""
                   onPressIn={() => {
                     setShowAccounts(true);
@@ -492,7 +492,7 @@ function AddTransaction(props: AddTransactionProp) {
                         </Text>
                         <CloseIcon
                           color="white"
-                          style={{marginEnd: 12}}
+                          style={{ marginEnd: 12 }}
                           onPress={() => {
                             setShowAccounts(false);
                             setSelectedInput('');
@@ -502,10 +502,10 @@ function AddTransaction(props: AddTransactionProp) {
 
                       <View>
                         <FlatList
-                          contentContainerStyle={{alignSelf: 'flex-start'}}
+                          contentContainerStyle={{ alignSelf: 'flex-start' }}
                           numColumns={3 / 1}
                           data={accounts}
-                          renderItem={({item}) => (
+                          renderItem={({ item }) => (
                             <TouchableOpacity
                               style={{
                                 width: '33.33%',
@@ -514,7 +514,7 @@ function AddTransaction(props: AddTransactionProp) {
                                 borderWidth: 0.2,
                               }}
                               onPress={() => {
-                                setTransaction({...transaction, account: item});
+                                setTransaction({ ...transaction, account: item });
                                 setSelectedInput('');
                                 setShowAccounts(false);
                               }}>
@@ -537,16 +537,16 @@ function AddTransaction(props: AddTransactionProp) {
                   <Text
                     style={[
                       styles.inputLabel,
-                      {color: theme.mode === 'dark' ? theme.color : 'grey'},
+                      { color: theme.mode === 'dark' ? theme.color : 'grey' },
                     ]}>
                     {languagePack.amount}
                   </Text>
                   <TextInput
-                    style={[styles.infoText, {color: theme.color}]}
+                    style={[styles.infoText, { color: theme.color }]}
                     placeholder=""
                     value={transaction.amount.toString()}
                     onChangeText={text => {
-                      setTransaction({...transaction, amount: Number(text)});
+                      setTransaction({ ...transaction, amount: Number(text) });
                     }}
                     keyboardType="number-pad"
                     onPressIn={() => {
@@ -575,15 +575,15 @@ function AddTransaction(props: AddTransactionProp) {
                 <Text
                   style={[
                     styles.inputLabel,
-                    {color: theme.mode === 'dark' ? theme.color : 'grey'},
+                    { color: theme.mode === 'dark' ? theme.color : 'grey' },
                   ]}>
                   {languagePack.note}
                 </Text>
                 <TextInput
-                  style={[styles.infoText, {color: theme.color}]}
+                  style={[styles.infoText, { color: theme.color }]}
                   value={transaction.note}
                   onChangeText={text => {
-                    setTransaction({...transaction, note: text});
+                    setTransaction({ ...transaction, note: text });
                   }}
                   onPressIn={() => {
                     setSelectedInput('note');
@@ -610,16 +610,16 @@ function AddTransaction(props: AddTransactionProp) {
             <View
               style={[
                 styles.bottomContainer,
-                {backgroundColor: theme.componentBackground},
+                { backgroundColor: theme.componentBackground },
               ]}>
               <View
-                style={{flexDirection: 'row', padding: '4%', marginTop: '1%'}}>
+                style={{ flexDirection: 'row', padding: '4%', marginTop: '1%' }}>
                 <TouchableOpacity
                   style={
                     transaction.type != null
                       ? transaction.type == 'expense'
-                        ? [styles.saveButton, {backgroundColor: '#F1948A'}]
-                        : [styles.saveButton, {backgroundColor: '#7DCEA0'}]
+                        ? [styles.saveButton, { backgroundColor: '#F1948A' }]
+                        : [styles.saveButton, { backgroundColor: '#7DCEA0' }]
                       : styles.saveButton
                   }
                   onPress={() => {
@@ -640,7 +640,7 @@ function AddTransaction(props: AddTransactionProp) {
                 <TouchableOpacity
                   style={styles.continueButton}
                   onPress={() => {
-                    setTransaction({...transaction, amount: 0, note: ''});
+                    setTransaction({ ...transaction, amount: 0, note: '' });
                   }}>
                   <Text style={styles.continueButtonText}>{languagePack.continue}</Text>
                 </TouchableOpacity>

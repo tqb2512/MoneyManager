@@ -1,15 +1,15 @@
-import {StyleSheet, Switch, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState, useContext, useEffect} from 'react';
+import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ChevronLeftIcon} from 'react-native-heroicons/outline';
+import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 
-import {EventRegister} from 'react-native-event-listeners';
+import { EventRegister } from 'react-native-event-listeners';
 import themeContext from '../../../config/themeContext';
-import {themeInterface} from '../../../config/themeInterface';
-import {ChangeThemeProp} from '../../../navigation/types';
+import { themeInterface } from '../../../config/themeInterface';
+import { ChangeThemeProp } from '../../../navigation/types';
 
 const ChangeTheme = (props: ChangeThemeProp) => {
-  const {navigation} = props;
+  const { navigation } = props;
 
   const theme = useContext(themeContext) as themeInterface;
 
@@ -41,11 +41,11 @@ const ChangeTheme = (props: ChangeThemeProp) => {
   }, []);
 
   return (
-    <View style={[styles.mainContainer, {backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2'}]}>
+    <View style={[styles.mainContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }]}>
       <View
         style={[
           styles.navigateHeader,
-          {backgroundColor: theme.componentBackground},
+          { backgroundColor: theme.componentBackground },
         ]}>
         <View style={styles.backButton}>
           <ChevronLeftIcon
@@ -55,23 +55,23 @@ const ChangeTheme = (props: ChangeThemeProp) => {
             size={20}
             color={theme.color}
           />
-          <Text style={[styles.accountNameTxt, {color: theme.color}]}>
+          <Text style={[styles.accountNameTxt, { color: theme.color }]}>
             Change Theme
           </Text>
         </View>
       </View>
 
       <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: theme.componentBackground, padding: 16, borderBottomWidth: 0.2, borderBottomColor: theme.color }}>
-        <Text style={[styles.descriptionText, {color: theme.color}]}>
-        { mode ? (
-                  <Text style={[styles.descriptionText, {color: theme.color}]}>
-                  Switch to change to Light mode
-                </Text>
-        ) : (
-          <Text style={[styles.descriptionText, {color: theme.color}]}>
-          Switch to change to Dark mode
-        </Text>
-        ) }
+        <Text style={[styles.descriptionText, { color: theme.color }]}>
+          {mode ? (
+            <Text style={[styles.descriptionText, { color: theme.color }]}>
+              Switch to change to Light mode
+            </Text>
+          ) : (
+            <Text style={[styles.descriptionText, { color: theme.color }]}>
+              Switch to change to Dark mode
+            </Text>
+          )}
         </Text>
 
         <Switch

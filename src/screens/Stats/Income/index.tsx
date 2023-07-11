@@ -10,7 +10,7 @@ function IncomeScreen(props: IncomeStatsProp) {
   const { navigation } = props;
   return (
     <SafeAreaView>
-      <Chart navigation={navigation}/>
+      <Chart navigation={navigation} />
     </SafeAreaView>
   )
 }

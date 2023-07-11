@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Pressable} from 'react-native';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
 import React from 'react';
 
 export type Props = {
@@ -7,7 +7,7 @@ export type Props = {
   onClose: (bool: boolean) => void;
 };
 
-const Accounts: React.FC<Props> = ({accountName, onSelect, onClose}) => {
+const Accounts: React.FC<Props> = ({ accountName, onSelect, onClose }) => {
   return (
     <View style={[styles.button]}>
       <Pressable
@@ -27,10 +27,10 @@ const styles = StyleSheet.create({
   button: {
     padding: 10,
     elevation: 2,
-    alignContent: 'center', 
+    alignContent: 'center',
     alignItems: 'center'
   },
-  textStyle:{
+  textStyle: {
     fontSize: 18,
     color: "grey",
     fontWeight: "500",

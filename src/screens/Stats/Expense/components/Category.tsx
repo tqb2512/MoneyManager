@@ -18,8 +18,8 @@ export type Props = {
     color: any
 };
 
-export default function Category({percentage, name, cost, color}: Props) {
-  
+export default function Category({ percentage, name, cost, color }: Props) {
+
     const theme = useContext(themeContext) as themeInterface
 
     const [languagePack, setLanguagePack] = useState<Language>({} as Language);
@@ -27,7 +27,7 @@ export default function Category({percentage, name, cost, color}: Props) {
     const [loaded, setLoaded] = useState<boolean>(false);
 
     useEffect(() => {
-        
+
         AsyncStorage.getItem('language').then(language => {
             setLoaded(false);
             if (language == 'vi') {
@@ -40,60 +40,60 @@ export default function Category({percentage, name, cost, color}: Props) {
         AsyncStorage.getItem('currency').then(currency => {
             setCurrency(JSON.parse(currency || '{}'));
         })
-        
+
     }, [])
 
 
     return (
-    <SafeAreaView>
-        <TouchableOpacity style={[styles.container, { backgroundColor: theme.componentBackground }]}>
-            <View style={styles.percentageNameContainer}>
-                <Text style={{
-                    fontSize: 18, 
-                    paddingHorizontal: 10, 
-                    borderRadius: 3,
-                    color: 'white',
-                    backgroundColor: color
+        <SafeAreaView>
+            <TouchableOpacity style={[styles.container, { backgroundColor: theme.componentBackground }]}>
+                <View style={styles.percentageNameContainer}>
+                    <Text style={{
+                        fontSize: 18,
+                        paddingHorizontal: 10,
+                        borderRadius: 3,
+                        color: 'white',
+                        backgroundColor: color
                     }}>{percentage.toFixed(2)}%</Text>
-                <Text style={[styles.nameText, { color: theme.color }]}>{loaded == true ? languagePack.categories[CategoryList.indexOf(name.toLowerCase())][1]: ''}</Text>
-            </View>
-            <View style={styles.costContainer}>
-                <Text style={[styles.costText, { color: theme.color }]}>{currency.symbol} {cost}</Text>
-            </View>
-        </TouchableOpacity>
-    </SafeAreaView>
-  )
+                    <Text style={[styles.nameText, { color: theme.color }]}>{loaded == true ? languagePack.categories[CategoryList.indexOf(name.toLowerCase())][1] : ''}</Text>
+                </View>
+                <View style={styles.costContainer}>
+                    <Text style={[styles.costText, { color: theme.color }]}>{currency.symbol} {cost}</Text>
+                </View>
+            </TouchableOpacity>
+        </SafeAreaView>
+    )
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flexDirection:'row',
+    container: {
+        flexDirection: 'row',
         borderWidth: 0.6,
-        borderColor:'#EEEEEE',
-        backgroundColor:'white',
+        borderColor: '#EEEEEE',
+        backgroundColor: 'white',
         padding: 15,
     },
-    percentageNameContainer:{
+    percentageNameContainer: {
         flex: 1,
-        flexDirection:'row',
+        flexDirection: 'row',
     },
-    costContainer:{
+    costContainer: {
         flex: 0,
-        flexDirection:'row',
+        flexDirection: 'row',
     },
-    percentageText:{
+    percentageText: {
         fontSize: 18,
         paddingHorizontal: 10,
         borderWidth: 0.5,
         borderRadius: 3
     },
-    costText:{
+    costText: {
         fontSize: 18,
         color: 'grey',
         fontWeight: '500',
         paddingRight: 15
     },
-    nameText:{
+    nameText: {
         fontSize: 18,
         color: 'grey',
         fontWeight: '500',

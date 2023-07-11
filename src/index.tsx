@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import AppNavigation from "./navigation";
 import BottomBarTabs from "./navigation";
@@ -37,7 +37,7 @@ export default function App() {
         const getCurrencyValue = async () => {
             const value = await AsyncStorage.getItem('currency')
             if (value === null)
-                await AsyncStorage.setItem('currency', JSON.stringify({name: 'USD', fullName: 'US Dollar', symbol: '$'}))
+                await AsyncStorage.setItem('currency', JSON.stringify({ name: 'USD', fullName: 'US Dollar', symbol: '$' }))
         };
         getCurrencyValue()
 
@@ -53,16 +53,14 @@ export default function App() {
         getDBConnection().then((db) => {
             createTables(db)
             firstLoad(db)
-            //dropTables(db)
-            //importTestData(db)
         })
     }, []);
 
     return (
-        <themeContext.Provider value = { mode === true ? theme.dark : theme.light } >
+        <themeContext.Provider value={mode === true ? theme.dark : theme.light} >
             <NativeBaseProvider>
                 <NavigationContainer>
-                    <AppNavigation/>
+                    <AppNavigation />
                 </NavigationContainer>
             </NativeBaseProvider>
         </themeContext.Provider>

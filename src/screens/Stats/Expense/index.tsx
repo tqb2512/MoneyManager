@@ -10,7 +10,7 @@ function ExpenseScreen(props: ExpenseStatsProp) {
   const { navigation } = props;
   return (
     <SafeAreaView>
-      <Chart navigation={navigation}/>
+      <Chart navigation={navigation} />
     </SafeAreaView>
   )
 }

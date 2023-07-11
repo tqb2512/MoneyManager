@@ -1,14 +1,14 @@
 import React from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {useState, useCallback} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useState, useCallback } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import SelectDropdown from 'react-native-select-dropdown';
 import MonthPicker from 'react-native-month-year-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { CalendarIcon } from 'react-native-heroicons/outline'
 
 
-export default function CalendarButton(props: {date: Date, setDate: Function}) {
+export default function CalendarButton(props: { date: Date, setDate: Function }) {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
 
@@ -78,14 +78,14 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     borderBottomColor: '#D5D8DC',
     paddingTop: '5%',
-    padding: 20, 
+    padding: 20,
     paddingBottom: '6.5%',
     justifyContent: 'center',
     shadowColor: '#171717',
     shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
-    height: 35, 
-    width: 120, 
+    height: 35,
+    width: 120,
   },
 });

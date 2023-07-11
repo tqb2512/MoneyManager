@@ -1,6 +1,6 @@
 export interface themeInterface {
-    mode: string;
-    background: string;
-    color: string;
-    componentBackground: string;
-  }
+  mode: string;
+  background: string;
+  color: string;
+  componentBackground: string;
+}
