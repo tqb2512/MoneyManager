@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {View, Text, StyleSheet, FlatList, Modal, TextInput} from 'react-native';
+import {View, Text, StyleSheet, FlatList, Modal, TextInput, Alert} from 'react-native';
 import {AccountDetailProp} from '../../navigation/types';
 import {
   ChevronLeftIcon,
@@ -11,6 +11,8 @@ import {
   getAccounts,
   getDBConnection,
   getDayBoxByAccount,
+  deleteAccount,
+  updateAccount
 } from '../../services/db-services';
 import {DayBox as DayBoxModel} from '../../models/dayBox';
 import DayBox from '../Home/Daily/components/DayBox';
@@ -95,6 +97,35 @@ function AccountDetail(props: AccountDetailProp) {
     return unsubscribe;
   }, [navigation]);
 
+  const deleteAccountFunction = () => {
+    Alert.alert('Delete Account', 'Are you sure to delete this account?', [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      {
+        text: 'Delete',
+        onPress: () => {
+          getDBConnection().then(db => {
+            deleteAccount(db, account).then(() => {
+              navigation.goBack();
+            });
+          });
+        },
+      },
+    ]);
+  };
+
+  const saveAccountName = () => {
+    getDBConnection().then(db => {
+      updateAccount(db, account).then(() => {
+        setShowEditAccount(false);
+        navigation.goBack();
+      });
+    });
+  };
+
   return (
     <View
       style={[
@@ -148,6 +179,7 @@ function AccountDetail(props: AccountDetailProp) {
           <TouchableOpacity
             style={[styles.addThreeDotsContainer, { borderTopWidth: 1, paddingTop: 8 }]}
             onPress={() => {
+              deleteAccountFunction();
               setMenuShow(false);
             }}>
             <Text style={[styles.threeDotsText, {color: theme.color}]}>
@@ -208,7 +240,7 @@ function AccountDetail(props: AccountDetailProp) {
                     <TextInput
                         value={account.name}
                         style={[styles.infoText, { color: 'black' }]}
-                        onPressIn={() => { }}
+                        onPressIn={() => {}}
                         onChangeText={(name) => {
                             setAccount({ ...account, name: name });
                         }}
@@ -217,7 +249,7 @@ function AccountDetail(props: AccountDetailProp) {
 
                 <TouchableOpacity
                   style={[styles.saveButton, {backgroundColor: '#2196f3', marginBottom: 16}]}
-                  onPress={() => {}}>
+                  onPress={() => {saveAccountName()}}>
                   <Text style={{fontWeight: '600', color: 'white'}}>Save</Text>
                 </TouchableOpacity>
               </View>

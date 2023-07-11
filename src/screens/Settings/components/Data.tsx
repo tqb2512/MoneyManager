@@ -1,10 +1,10 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View, PermissionsAndroid } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import React, { useContext } from 'react';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import themeContext from '../../../config/themeContext';
 import { themeInterface } from '../../../config/themeInterface';
 import { DataProp } from '../../../navigation/types';
-import { getDBConnection, getAccounts, getTransactions, insertAccounts, insertTransactions, dropTransactionsAndAccounts, createTables } from '../../../services/db-services';
+import { getDBConnection, getAccounts, getTransactions, insertAccounts, insertTransactions, dropTransactionsAndAccounts, createTables, consoleLogDB } from '../../../services/db-services';
 import { Account } from '../../../models/account';
 import { Transaction } from '../../../models/transaction';
 import { useState } from 'react';
@@ -34,7 +34,7 @@ const Data = (props: DataProp) => {
               transactions: transactions,
             };
             RNFS.writeFile(filetPath, JSON.stringify(data), 'utf8').then(() => {
-              console.log('file written');
+              Alert.alert('Success', 'Exported to ' + filetPath);
             }).catch((err) => {
               console.log(err);
             });
@@ -71,13 +71,29 @@ const Data = (props: DataProp) => {
   }
 
   const deleteAllData = async () => {
-    getDBConnection().then(db => {
-      dropTransactionsAndAccounts(db).then(() => {
-        createTables(db).then(() => {
-          console.log('deleted');
-        });
-      });
-    });
+    Alert.alert('Delete All Data', 'Are you sure you want to delete all data?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+        onPress: () => {
+          getDBConnection().then(db => {
+            consoleLogDB(db);
+          });
+        }
+      },
+      {
+        text: 'Delete',
+        onPress: () => {
+          getDBConnection().then(db => {
+            dropTransactionsAndAccounts(db).then(() => {
+              createTables(db).then(() => {
+                console.log('deleted');
+              });
+            });
+          });
+        },
+      },
+    ]);
   }
 
 

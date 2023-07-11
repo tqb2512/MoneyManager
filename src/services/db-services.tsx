@@ -34,8 +34,8 @@ export const createTables = async (db: SQLiteDatabase): Promise<void> => {
         'type TEXT, ' +
         'categoryId INTEGER, ' +
         'accountId INTEGER, ' +
-        'FOREIGN KEY(categoryId) REFERENCES categories(id), ' +
-        'FOREIGN KEY(accountId) REFERENCES accounts(id))');
+        'FOREIGN KEY(categoryId) REFERENCES categories(id),' +
+        'FOREIGN KEY(accountId) REFERENCES accounts(id) ON DELETE CASCADE) ');
     console.log('Tables created');
 }
 
@@ -131,6 +131,7 @@ export const updateTransaction = async (db: SQLiteDatabase, transaction: Transac
 
 export const deleteTransaction = async (db: SQLiteDatabase, transaction: Transaction): Promise<void> => {
     await db.executeSql('DELETE FROM transactions WHERE id = ?', [transaction.id]);
+    await updateAccountBalanceFormTransactions(db, transaction.account);
 }
 
 export const getTransactions = async (db: SQLiteDatabase): Promise<Transaction[]> => {
@@ -184,6 +185,7 @@ export const updateAccount = async (db: SQLiteDatabase, account: Account): Promi
 }
 
 export const deleteAccount = async (db: SQLiteDatabase, account: Account): Promise<void> => {
+    await db.executeSql('DELETE FROM transactions WHERE accountId = ?', [account.id]);
     await db.executeSql('DELETE FROM accounts WHERE id = ?', [account.id]);
 }
 
