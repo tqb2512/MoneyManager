@@ -1,4 +1,4 @@
-import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Image, StyleSheet, Text, View, Alert } from 'react-native';
 import React, { useContext } from 'react';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import { ChangeCurrencyProp } from '../../../navigation/types';
@@ -53,14 +53,24 @@ function ChangeCurrency(props: ChangeCurrencyProp) {
   }, []);
 
   const changeCurrency = async (newCurrency: Currency) => {
-    getDBConnection().then(db => {
-      changeAllTransactionsCurrency(db, currency.name, newCurrency.name).then(() => {
-        changeAllAccountsCurrency(db, currency.name, newCurrency.name).then(() => {
-          AsyncStorage.setItem('currency', JSON.stringify(newCurrency))
-          setCurrency(newCurrency);
-        })
-      })
-    })
+    Alert.alert('Change Currency', 'Are you sure you want to change currency to ' + newCurrency.name + '?\n\nChange currency will apply current exchange rate to all transaction and account', [
+      {
+        text: 'Cancel',
+        style: 'cancel'
+      },
+      {
+        text: 'OK',
+        onPress: () => {
+          getDBConnection().then(db => {
+            changeAllTransactionsCurrency(db, currency.name, newCurrency.name).then(() => {
+              changeAllAccountsCurrency(db, currency.name, newCurrency.name).then(() => {
+                AsyncStorage.setItem('currency', JSON.stringify(newCurrency))
+                setCurrency(newCurrency);
+              })
+            })
+          })
+        }
+      }])
   }
 
   // const changeCurrency = async (newCurrency: Currency) => {
