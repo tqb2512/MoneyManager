@@ -510,9 +510,11 @@ function TransactionDetail(props: TransactionDetailProp) {
                 </View>
               </TouchableWithoutFeedback>
 
-              <View style={styles.input}>
+              <View style={[styles.input, {  }]}>
                 <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>{languagePack.note}</Text>
                 <TextInput
+                  multiline={true}
+                  numberOfLines={4}
                   style={[styles.infoText, { color: theme.color }]}
                   value={transaction.note}
                   onChangeText={text => {

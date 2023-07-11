@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 2,
     borderRadius: 100,
-    backgroundColor: 'rgba(178, 178, 178, 0.95)',
+    backgroundColor: '#2196f3',
   },
 
   footerView: {

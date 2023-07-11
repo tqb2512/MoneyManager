@@ -361,9 +361,10 @@ function AddTransaction(props: AddTransactionProp) {
                           borderBottomColor: 'grba(0,0,0,0.1)',
                           borderBottomWidth: 0.2,
                           marginBottom: 6,
-                          backgroundColor: 'black',
+                          backgroundColor: theme.mode === 'dark' ? '#7d7f84' : 'black',
                           borderTopLeftRadius: 4,
                           borderTopRightRadius: 4,
+
                         }}>
                         <Text
                           style={{
@@ -474,11 +475,11 @@ function AddTransaction(props: AddTransactionProp) {
                           justifyContent: 'space-between',
                           alignItems: 'center',
                           paddingBottom: 2,
-                          borderBottomColor: 'grba(0,0,0,0.1)',
+                          backgroundColor: theme.mode === 'dark' ? '#7d7f84' : 'black',
                           borderBottomWidth: 0.2,
-                          backgroundColor: 'black',
                           borderTopLeftRadius: 4,
                           borderTopRightRadius: 4,
+
                         }}>
                         <Text
                           style={{

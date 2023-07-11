@@ -1,4 +1,4 @@
-import { StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Switch, Text, TouchableOpacity, View, Image, Animated } from 'react-native';
 import React, { useState, useContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
@@ -14,8 +14,19 @@ const ChangeTheme = (props: ChangeThemeProp) => {
   const theme = useContext(themeContext) as themeInterface;
 
   const [mode, setMode] = useState(false);
+  const [fadeAnim] = useState(new Animated.Value(0));
+
+  const startAnimation = () => {
+    fadeAnim.setValue(0);
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true
+    }).start();
+  };
 
   const toggleSwitch = async (value: any) => {
+    startAnimation();
     setMode(previousState => !previousState);
     try {
       await AsyncStorage.setItem('switchValue', JSON.stringify(value));
@@ -26,6 +37,7 @@ const ChangeTheme = (props: ChangeThemeProp) => {
   };
 
   useEffect(() => {
+    startAnimation();
     const getSwitchValue = async () => {
       try {
         const value = await AsyncStorage.getItem('switchValue');
@@ -41,7 +53,7 @@ const ChangeTheme = (props: ChangeThemeProp) => {
   }, []);
 
   return (
-    <View style={[styles.mainContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }]}>
+    <View style={[styles.mainContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : 'white' }]}>
       <View
         style={[
           styles.navigateHeader,
@@ -61,8 +73,8 @@ const ChangeTheme = (props: ChangeThemeProp) => {
         </View>
       </View>
 
-      <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: theme.componentBackground, padding: 16, borderBottomWidth: 0.2, borderBottomColor: theme.color }}>
-        <Text style={[styles.descriptionText, { color: theme.color }]}>
+      <View style={{ flexDirection: 'column', padding: 16, alignItems: 'center'}}> 
+        {/* <Text style={[styles.descriptionText, { color: theme.color }]}>
           {mode ? (
             <Text style={[styles.descriptionText, { color: theme.color }]}>
               Switch to change to Light mode
@@ -72,15 +84,27 @@ const ChangeTheme = (props: ChangeThemeProp) => {
               Switch to change to Dark mode
             </Text>
           )}
-        </Text>
+        </Text> */}
 
-        <Switch
-          // trackColor={{ false: '#767577', true: '#81b0ff' }}
-          // thumbColor={mode ? '#81b0ff' : '#f4f3f4'}
+      <Image style={{ width: 120, height: 120, marginBottom: 16, tintColor: theme.color}} source={ theme.mode === 'dark' ? require('../../../../assets/settingImage/moon.png') : require('../../../../assets/settingImage/sun.png') } />
+        {mode ? (
+              <Text style={[styles.descriptionText, { color: theme.color, marginBottom: 16,  }]}>
+                Switch to change to Light mode
+              </Text>
+            ) : (
+              <Text style={[styles.descriptionText, { color: theme.color, marginBottom: 16, }]}>
+                Switch to change to Dark mode
+              </Text>
+        )}
+      <Switch
+          trackColor={{ false: '#767577', true: '#81b0ff' }}
+          thumbColor={mode ? '#0E57D1' : '#f4f3f4'}
           value={mode}
           onValueChange={toggleSwitch}
-        />
-      </TouchableOpacity>
+          style={{ transform: [{ scaleX: 2 }, { scaleY: 2 }] }}
+      />
+
+      </View>
     </View>
   );
 };
@@ -90,6 +114,7 @@ export default ChangeTheme;
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
+    justifyContent: 'center',
   },
 
   navigateHeader: {
@@ -100,6 +125,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderBottomWidth: 1,
     borderBottomColor: 'grey',
+    position: 'absolute',
+    top: 0,
+    width: '100%'
   },
 
   backButton: {
@@ -111,6 +139,7 @@ const styles = StyleSheet.create({
     marginLeft: 24,
     fontSize: 18,
     color: 'black',
+    fontWeight: '600',
   },
 
   descriptionText: {

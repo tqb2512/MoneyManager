@@ -6,7 +6,7 @@ import { themeInterface } from '../../../config/themeInterface';
 import { Currency } from '../../../models/currency';
 
 
-export default function AccountBox(props: { account: Account; navigation: any; currency: Currency }) {
+export default function AccountBox(props: { account: Account; navigation: any; currency: Currency; }) {
     const { account, navigation } = props;
 
     const theme = useContext(themeContext) as themeInterface

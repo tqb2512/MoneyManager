@@ -104,7 +104,7 @@ export default function Chart(props: { navigation: any }) {
   }, [navigation]);
 
   function handlePress() {
-    setShowTimeOptions(!showTimeOptions)
+    timeOptionsValue === 'Monthly' ? setTimeOptionsValue('Yearly') : setTimeOptionsValue('Monthly')
   }
 
   return (
@@ -156,7 +156,7 @@ export default function Chart(props: { navigation: any }) {
       <CalendarButton date={date} setDate={setDate} />
       <PeriodButton onPress={handlePress} period={timeOptionsValue == 'Yearly' ? languagePack.yearly : languagePack.monthly} />
 
-      {showTimeOptions && (
+      {/* {showTimeOptions && (
         <View>
           <TouchableOpacity onPress={() => {
             setTimeOptionsValue('Yearly')
@@ -171,7 +171,7 @@ export default function Chart(props: { navigation: any }) {
             <Text style={{ fontSize: 14, padding: 6, color: 'white' }}>{languagePack.monthly}</Text>
           </TouchableOpacity>
         </View>
-      )}
+      )} */}
 
       {/* <TouchableOpacity onPress={() => setShowTimeOptions(!showTimeOptions)} style={styles.periodButton}>
         <Text style={{ fontSize: 16, fontWeight: '500', padding: 6, color: 'white' }}>{timeOptionsValue}</Text>

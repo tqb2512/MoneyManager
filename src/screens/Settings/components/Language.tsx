@@ -100,7 +100,8 @@ const styles = StyleSheet.create({
       accountNameTxt: {
         marginLeft: 24,
         fontSize: 18,
-        color: 'black',
+        color: 'black',  
+        fontWeight: '600',
       },
       button: {
         flexDirection: 'row',

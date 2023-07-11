@@ -24,7 +24,7 @@ export default function CalendarButton(props: { date: Date, setDate: Function })
         <TouchableOpacity
           style={styles.selectDropDownContainer}
           onPress={() => setShow(true)}>
-          <CalendarIcon size={20} color='white' />
+          <CalendarIcon style={{ alignSelf: 'center' }} size={20} color='white' />
           <Text style={styles.selectDropDownText}>
             {date.getMonth() + 1}/{date.getFullYear()}
           </Text>
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: 'white',
+    alignSelf: 'center'
   },
   headerText: {
     fontSize: 26,
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
   },
   selectDropDownContainer: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(178, 178, 178, 0.95)',
+    backgroundColor: '#2196f3',
     borderRadius: 25,
     borderBottomColor: '#D5D8DC',
     paddingTop: '5%',
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: -2, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
-    height: 35,
+    height: '70%', 
     width: 120,
   },
 });

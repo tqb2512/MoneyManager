@@ -149,7 +149,7 @@ function CalendarScreen(props: CelandarScreenProp) {
                   setDayClicked(false)
                   navigation.navigate('add_transaction')
                 }}
-                style={{ margin: 8, bottom: 3, right: 0, backgroundColor: 'rgba(192, 192, 192, 0.95)', width: 54, height: 54, borderRadius: 9999, position: 'absolute', shadowRadius: 16, shadowOffset: { width: 4, height: 4 }, alignItems: 'center', justifyContent: 'center' }}>
+                style={{ margin: 8, bottom: 3, right: 0, backgroundColor: '#2196f3', width: 54, height: 54, borderRadius: 9999, position: 'absolute', shadowRadius: 16, shadowOffset: { width: 4, height: 4 }, alignItems: 'center', justifyContent: 'center' }}>
                 <PlusIcon style={{}} size={30} color='white' />
               </TouchableOpacity>
             </View>

@@ -44,8 +44,8 @@ function AddAccount(props: AddAccountProp) {
     }
 
     return (
-        <View style={{ backgroundColor: theme.background, flex: 1 }}>
-            <View style={[styles.navigateHeader, { backgroundColor: theme.background, borderBottomColor: theme.color }]}>
+        <View style={{ backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2', flex: 1, }}>
+            <View style={[styles.navigateHeader, { backgroundColor: theme.componentBackground, borderBottomColor: theme.color }]}>
                 <View style={styles.backButton}>
                     <ChevronLeftIcon
                         onPress={() => navigation.goBack()}
@@ -56,58 +56,66 @@ function AddAccount(props: AddAccountProp) {
                 </View>
             </View>
             {/* Name account */}
-            <View style={styles.input}>
-                <Text style={[styles.inputLabel, { color: theme.color }]}>Name</Text>
-                <TextInput
-                    style={[styles.infoText, { color: theme.color }]}
-                    onPressIn={() => { }}
-                    onChangeText={(name) => {
-                        setAccount({ ...account, name: name });
-                    }}
-                />
-            </View>
 
-            {showGroup && (
-                <Modal
-                    animationType="fade"
-                    transparent={true}
-                    // visible={groupIsClicked}
-                    onRequestClose={() => {
-                        setShowGroup(!showGroup);
-                    }}>
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <View
-                                style={{
-                                    paddingBottom: 4,
-                                    borderBottomColor: 'grba(0,0,0,0.1)',
-                                    borderBottomWidth: 0.2,
-                                }}>
-                                <Text style={styles.textHeaderStyle}>Account Group</Text>
+            <View style={[styles.contentContainer, { backgroundColor: theme.componentBackground, paddingTop: 8, paddingBottom: '60%',} ]}>
+                <View style={styles.input}>
+                    <Text style={[styles.inputLabel, { color: theme.color }]}>Name</Text>
+                    <TextInput
+                        style={[styles.infoText, { color: theme.color }]}
+                        onPressIn={() => { }}
+                        onChangeText={(name) => {
+                            setAccount({ ...account, name: name });
+                        }}
+                    />
+                </View>
+
+                {showGroup && (
+                    <Modal
+                        animationType="fade"
+                        transparent={true}
+                        // visible={groupIsClicked}
+                        onRequestClose={() => {
+                            setShowGroup(!showGroup);
+                        }}>
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <View
+                                    style={{
+                                        paddingBottom: 4,
+                                        borderBottomColor: 'grba(0,0,0,0.1)',
+                                        borderBottomWidth: 0.2,
+                                    }}>
+                                    <Text style={styles.textHeaderStyle}>Account Group</Text>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                </Modal>
-            )}
+                    </Modal>
+                )}
 
-            {/* Nút save account */}
-            <TouchableOpacity
-                style={styles.saveButton}
-                onPress={() => saveAccount()}>
-                <Text style={styles.saveButtonText}>Save</Text>
-            </TouchableOpacity>
+                {/* Nút save account */}
+                <TouchableOpacity
+                    style={styles.saveButton}
+                    onPress={() => saveAccount()}>
+                    <Text style={styles.saveButtonText}>Save</Text>
+                </TouchableOpacity>
+            </View>
+
+
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    contentContainer:{
+
+    },
+
     navigateHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: 'white',
         padding: 12,
         textAlign: 'center',
-        marginBottom: 4,
     },
 
     backButton: {
@@ -119,6 +127,7 @@ const styles = StyleSheet.create({
         marginLeft: 24,
         fontSize: 18,
         color: 'black',
+        fontWeight: '600',
     },
 
     input: {
@@ -194,7 +203,7 @@ const styles = StyleSheet.create({
     },
 
     saveButton: {
-        backgroundColor: '#46CDCF',
+        backgroundColor: '#2196f3',
         borderRadius: 4,
         padding: 10,
         width: '90%',

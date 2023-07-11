@@ -39,27 +39,27 @@ function Settings(props: SettingsScreenProp) {
 
 
     return (
-        <View style={[styles.mainContainer, { backgroundColor: theme.background }]}>
-            <View style={styles.titleHeader}>
+        <View style={[styles.mainContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }]}>
+            <View style={[styles.titleHeader, { backgroundColor: theme.componentBackground, width: '100%' }]}>
                 <Text style={{ fontSize: 20, fontWeight: 'bold', color: theme.color, textAlign: 'center' }}>{languagePack.settings}</Text>
             </View>
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('change_currency') }}>
                     <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/exchange-rate.png')} />
-                    <Text style={{ color: theme.color }}>{languagePack.currency}</Text>
+                    <Text style={{ color: theme.color, fontSize: 16, fontWeight: '500' }}>{languagePack.currency}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('data')} >
                     <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/file-export.png')} />
-                    <Text style={{ color: theme.color }}>{languagePack.data}</Text>
+                    <Text style={{ color: theme.color, fontSize: 16, fontWeight: '500' }}>{languagePack.data}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("change_theme") }}>
                     <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/theme.png')} />
-                    <Text style={{ color: theme.color }}>{languagePack.theme}</Text>
+                    <Text style={{ color: theme.color, fontSize: 16, fontWeight: '500' }}>{languagePack.theme}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("language") }}>
                     <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/language.png')} />
-                    <Text style={{ color: theme.color }}>{languagePack.language}</Text>
+                    <Text style={{ color: theme.color, fontSize: 16, fontWeight: '500' }}>{languagePack.language}</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -72,12 +72,16 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
 
     titleHeader: {
         // width: "80%"
-        marginTop: 8,
+        paddingVertical: 8,
         marginBottom: 24,
+        position: 'absolute',
+        top: 0,
     },
 
     buttonContainer: {
@@ -88,15 +92,16 @@ const styles = StyleSheet.create({
     },
 
     button: {
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingVertical: 40, 
         width: '49%',
         alignItems: 'center',
         alignSelf: 'center'
     },
 
     img: {
-        width: 64,
-        height: 64,
+        width: 80,
+        height: 80,
         marginBottom: 8,
     }
 })

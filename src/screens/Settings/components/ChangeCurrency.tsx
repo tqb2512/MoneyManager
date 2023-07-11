@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     padding: 12,
     textAlign: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: 'grey'
+    borderBottomColor: 'grey',
   },
 
   backButton: {
@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
     marginLeft: 24,
     fontSize: 18,
     color: 'black',
+    fontWeight: '600',
   },
 
   currentCurrencyView: {

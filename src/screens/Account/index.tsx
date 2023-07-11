@@ -13,6 +13,7 @@ import { Language } from '../../models/language';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import vi from '../../config/language/vi';
 import en from '../../config/language/en';
+import { Pressable } from 'react-native';
 
 
 function AccountsScreen(props: AccountsScreenProp) {
@@ -29,6 +30,7 @@ function AccountsScreen(props: AccountsScreenProp) {
     useEffect(() => {
 
         const unsubscribe = navigation.addListener('focus', () => {
+            setMenuShow(false)
             const getCurrencyValue = async () => {
                 const value = await AsyncStorage.getItem('currency')
                 if (value !== null) {
@@ -90,7 +92,7 @@ function AccountsScreen(props: AccountsScreenProp) {
 
                 <FlatList
                     data={accounts}
-                    renderItem={({ item }) => <AccountBox account={item} navigation={navigation} currency={currency} />}
+                    renderItem={({ item }) => (<AccountBox account={item} navigation={navigation} currency={currency} />)}
                     keyExtractor={item => item.id.toString()}
                 />
 
@@ -185,7 +187,10 @@ const styles = StyleSheet.create({
     },
     addThreeDotsContainer: {
         borderColor: 'rgba(229, 231, 235, 1)',
-        padding: 8,
+        padding: 6,
+        paddingBottom: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
 
