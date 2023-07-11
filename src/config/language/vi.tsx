@@ -5,8 +5,12 @@ export default {
     "theme": "Giao diện",
     "language": "Ngôn ngữ",
     //home
+    "daily": "Tháng",
+    "celandar": "Lịch",
     "total": "Tổng",
+    "close": "Đóng",
     //new transaction
+    "add": "Thêm",
     "newTransaction": "Giao dịch mới",
     "type": "Loại",
     "amount": "Số tiền",
@@ -25,9 +29,10 @@ export default {
     "balance": "Số dư",
     "group": "Nhóm",
     //stats
-    "monthly": "Monthly",
-    "yearly": "Yearly",
+    "monthly": "Tháng",
+    "yearly": "Năm",
     //shorten day of week
+    "today": "Hôm nay",
     "sun": "CN",
     "mon": "Th2",
     "tue": "Th3",

@@ -10,6 +10,9 @@ import themeContext from '../../config/themeContext';
 import { themeInterface } from '../../config/themeInterface';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Account } from '../../models/account';
+import { Language } from '../../models/language';
+import vi from '../../config/language/vi';
+import en from '../../config/language/en';
 
 
 function AccountDetail(props: AccountDetailProp) {
@@ -23,6 +26,7 @@ function AccountDetail(props: AccountDetailProp) {
     const [dayBoxes, setDayBoxes] = React.useState<DayBoxModel[]>([]);
     const [totalIncome, setTotalIncome] = React.useState<number>(0);
     const [totalExpense, setTotalExpense] = React.useState<number>(0);
+    const [languagePack, setLanguagePack] = React.useState<Language>({} as Language);
 
     React.useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -59,6 +63,18 @@ function AccountDetail(props: AccountDetailProp) {
             }
             getCurrencyValue()
 
+            const getLanguageValue = async () => {
+                const value = await AsyncStorage.getItem('language')
+                if (value !== null) {
+                    if (value === 'vi') {
+                        setLanguagePack(vi);
+                    } else {
+                        setLanguagePack(en);
+                    }
+                }
+            }
+            getLanguageValue()
+
         });
 
         return unsubscribe;
@@ -78,17 +94,17 @@ function AccountDetail(props: AccountDetailProp) {
 
             <View style={[styles.totalColumns, { backgroundColor: theme.componentBackground }]}>
                 <View style={[styles.column]}>
-                    <Text style={{ color: theme.color }}>Income</Text>
+                    <Text style={{ color: theme.color }}>{languagePack.income}</Text>
                     <Text style={{ color: '#7DCEA0' }}>{currency.symbol} {totalIncome}</Text>
                 </View>
 
                 <View style={styles.column}>
-                    <Text style={{ color: theme.color }}>Expense</Text>
+                    <Text style={{ color: theme.color }}>{languagePack.expense}</Text>
                     <Text style={{ color: '#F1948A' }}>{currency.symbol} {totalExpense}</Text>
                 </View>
 
                 <View style={styles.column}>
-                    <Text style={{ color: theme.color }}>Balance</Text>
+                    <Text style={{ color: theme.color }}>{languagePack.balance}</Text>
                     <Text style={account.balance >= 0 ? { color: "#7DCEA0" } : { color: "#F1948A" }}>{currency.symbol} {account.balance}</Text>
                 </View>
             </View>

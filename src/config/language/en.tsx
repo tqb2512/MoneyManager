@@ -5,8 +5,12 @@ export default {
     "theme": "Theme",
     "language": "Language",
     //home
+    "daily": "Month",
+    "celandar": "Celandar",
     "total": "Total",
+    "close": "Close",
     //new transaction
+    "add": "Add",
     "newTransaction": "New Transaction",
     "type": "Type",
     "amount": "Amount",
@@ -28,6 +32,7 @@ export default {
     "monthly": "Monthly",
     "yearly": "Yearly",
     //shorten day of week
+    "today": "Today",
     "sun": "Sun",
     "mon": "Mon",
     "tue": "Tue",

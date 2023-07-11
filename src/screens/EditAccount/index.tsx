@@ -30,7 +30,6 @@ const EditAccount = (props: EditAccountProp) => {
   // const [description, setDescription] = useState('')
 
   useEffect(() => {
-    setGroup(ACC.group);
     setName(ACC.name);
     setAmount(ACC.balance.toString());
     //   setDescription(props.route.params.accountDescription.toString())

@@ -33,6 +33,11 @@ import { Image, Platform } from 'react-native';
 import { Text } from 'react-native-svg';
 import { PlusCircleIcon, PlusIcon } from 'react-native-heroicons/outline'
 import Data from '../screens/Settings/components/Data';
+import { Language as LanguageModel, languagePack } from '../models/language';
+import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import vi from '../config/language/vi';
+import en from '../config/language/en';
 
 
 const HomeTopBar = createMaterialTopTabNavigator<HomeTopBarParamList>();
@@ -44,6 +49,7 @@ const AppStack = createStackNavigator<RootStackParamList>();
 function BottomBarTabs()
 {
   const theme = useContext(themeContext) as themeInterface
+
   return (
     <BottomBar.Navigator
       initialRouteName='bottom_bar_home'
@@ -106,14 +112,28 @@ function BottomBarTabs()
 function HomeScreenTopBar()
 {
   const theme = useContext(themeContext) as themeInterface
+  const [languagePack, setLanguagePack] = React.useState<LanguageModel>({} as LanguageModel);
+
+  useEffect(() => {
+    const getLanguagePack = async () => {
+      const language = await AsyncStorage.getItem('language');
+      if(language === 'vi') {
+        setLanguagePack(vi);
+      } else {
+        setLanguagePack(en);
+      }
+    }
+    getLanguagePack();
+  }, [])
+
   return (
-      <View style={{flex: 1}}>
+    <View style={{flex: 1}}>
       <HomeTopBar.Navigator initialRouteName="home_top_bar_daily">
       <HomeTopBar.Screen 
         name="home_top_bar_daily" 
         component={DailyScreen}
         options={{
-          tabBarLabel: 'Daily',
+          tabBarLabel: languagePack.daily,
           tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
           tabBarActiveTintColor: theme.mode === 'dark' ?  theme.color : '#566573',
           tabBarInactiveTintColor: '#D5D8DC',
@@ -126,7 +146,7 @@ function HomeScreenTopBar()
         name="home_top_bar_celandar"
         component={CelandarScreen} 
         options={{
-          tabBarLabel: 'Celendar',
+          tabBarLabel: languagePack.celandar,
           tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
           tabBarActiveTintColor: theme.mode === 'dark' ?  theme.color : '#566573',
           tabBarInactiveTintColor: '#D5D8DC',
@@ -136,12 +156,26 @@ function HomeScreenTopBar()
         }}
         />
       </HomeTopBar.Navigator>
-      </View>
+    </View>
   ) 
 }
 
 function StatsScreenTopBar() {
   const theme = useContext(themeContext) as themeInterface;
+  const [languagePack, setLanguagePack] = React.useState<LanguageModel>({} as LanguageModel);
+
+  useEffect(() => {
+    const getLanguagePack = async () => {
+      const language = await AsyncStorage.getItem('language');
+      if(language === 'vi') {
+        setLanguagePack(vi);
+      } else {
+        setLanguagePack(en);
+      }
+    }
+    getLanguagePack();
+  }, [])
+
   return (
     <View style={{flex: 1}}>
       <StatsTopBar.Navigator>
@@ -149,7 +183,7 @@ function StatsScreenTopBar() {
           name="stats_top_bar_income"
           component={IncomeScreen}
           options={{
-            tabBarLabel: 'Income',
+            tabBarLabel: languagePack.income,
             tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
             tabBarActiveTintColor: '#7DCEA0',
             tabBarInactiveTintColor: '#D5D8DC',
@@ -165,7 +199,7 @@ function StatsScreenTopBar() {
           name="stats_top_bar_expense"
           component={ExpenseScreen}
           options={{
-            tabBarLabel: 'Expense',
+            tabBarLabel: languagePack.expense,
             tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
             tabBarActiveTintColor: '#F1948A',
             tabBarInactiveTintColor: '#D5D8DC',

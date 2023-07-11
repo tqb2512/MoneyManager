@@ -20,6 +20,9 @@ import { themeInterface } from '../../../config/themeInterface';
 import { Currency } from '../../../models/currency';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DayBox as DayBoxModel } from '../../../models/dayBox';
+import { Language } from '../../../models/language';
+import vi from '../../../config/language/vi';
+import en from '../../../config/language/en';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -32,14 +35,7 @@ function CalendarScreen (props: CelandarScreenProp) {
   const [calendarEvents, setCalendarEvents] = useState<Event[]>([]);
   const [currency, setCurrency] = useState<Currency>({} as Currency);
   const [dayBox, setDayBox] = useState<DayBoxModel>({} as DayBoxModel);
-
-  useEffect(() => {
-    getDBConnection().then(db => {
-      getEventsFromMonth(db, date.getMonth() + 1, date.getFullYear()).then(events => {
-        setCalendarEvents(events);
-      });
-    });
-  }, [date]);
+  const [languagePack, setLanguagePack] = useState<Language>({} as Language);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -50,11 +46,44 @@ function CalendarScreen (props: CelandarScreenProp) {
         }
       }
       getCurrencyValue()
+
+      const getLanguagePack = async () => {
+        const value = await AsyncStorage.getItem('language')
+        if (value === 'vi') {
+          setLanguagePack(vi);
+        } else {
+          setLanguagePack(en);
+        }
+      }
+      getLanguagePack()
+
+      getDBConnection().then(db => {
+        getEventsFromMonth(db, date.getMonth() + 1, date.getFullYear()).then(events => {
+          setCalendarEvents(events);
+        });
+      });
     });
     return unsubscribe;
   }, [navigation]);
 
+  useEffect(() => {
+    getDBConnection().then(db => {
+      getEventsFromMonth(db, date.getMonth() + 1, date.getFullYear()).then(events => {
+        setCalendarEvents(events);
+      });
+    });
+  }, [date]);
+
+  useEffect(() => {
+    getDBConnection().then(db => {
+      getDayBoxFromDate(db, dateValue).then(dayBox => {
+        setDayBox(dayBox);
+      });
+    });
+  }, [dateValue]);
+
   const prevMonth = () => {
+    console.log(date);
     setTimeout(() => {
       setDate(new Date(date.getFullYear(), date.getMonth() - 1, date.getDate()));
     }, 100);
@@ -71,7 +100,7 @@ function CalendarScreen (props: CelandarScreenProp) {
       <View style={[styles.timecontrolContainer, { backgroundColor: theme.componentBackground }]} >
         <View style={styles.buttonContainer}>          
           <TouchableOpacity onPress={() => {setDate(new Date())}} style={[styles.prevNextButton, {borderColor: theme.color}]} >
-            <Text style={{ fontWeight: '500', color: theme.color }}> Today </Text>
+            <Text style={{ fontWeight: '500', color: theme.color }}> {languagePack.today} </Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={prevMonth} style={[styles.prevNextButton, {borderColor: theme.color}]} >
@@ -99,26 +128,21 @@ function CalendarScreen (props: CelandarScreenProp) {
           }}
           swipeEnabled={false}
           onPressCell={(event) => {
-            getDBConnection().then(db => {
-              getDayBoxFromDate(db, event).then(dayBox => {
-                setDayBox(dayBox);
-                setDayClicked(true);
-                setDateValue(event);
-              });
-            });
+            setDateValue(event);
+            setDayClicked(true);
           }}
         />
       </View>
-
+      
       {dayClicked && (
         <Modal
           animationType="slide"
           transparent={true}
-          onRequestClose={() => setDayClicked(false)}>
+          onRequestClose={() => navigation.goBack()}
+          onDismiss={() => navigation.goBack()}>
           <View style={styles.centeredView}>
             <View style={[styles.modalView, { backgroundColor: theme.background }]}>
               <DayBox dayBoxModel={dayBox} currency={currency} navigation={navigation}/>
-
               {/* Add transaction */}
               <TouchableOpacity
                 onPress={() => {
@@ -145,12 +169,7 @@ function CalendarScreen (props: CelandarScreenProp) {
             <View style={{ flexDirection: 'row', marginEnd: 16, padding: 4, }}>
               <ChevronLeftIcon
                 onPress={() => {
-                  getDBConnection().then(db => {
-                    getDayBoxFromDate(db, new Date(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate() - 1)).then(dayBox => {
-                      setDateValue(new Date(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate() - 1));
-                      setDayBox(dayBox);
-                    });
-                  });
+                  setDateValue(new Date(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate() - 1));
                 }}
                 style={{
                   marginLeft: 8,
@@ -163,12 +182,7 @@ function CalendarScreen (props: CelandarScreenProp) {
               />
               <ChevronRightIcon
                 onPress={() => {
-                  getDBConnection().then(db => {
-                    getDayBoxFromDate(db, new Date(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate() + 1)).then(dayBox => {
-                      setDateValue(new Date(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate() + 1));
-                      setDayBox(dayBox);
-                    });
-                  });
+                  setDateValue(new Date(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate() + 1));
                 }}
                 style={{
                   marginLeft: 8,
@@ -185,7 +199,7 @@ function CalendarScreen (props: CelandarScreenProp) {
                 setDayClicked(false);
               }}
               style={{ marginEnd: 16, padding: 4 }}>
-              <Text style={{ fontSize: 20, fontWeight: '500', color: theme.color }}>Close</Text>
+              <Text style={{ fontSize: 20, fontWeight: '500', color: theme.color }}>{languagePack.close}</Text>
             </Pressable>
           </View>
         </Modal>

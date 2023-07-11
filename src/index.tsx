@@ -4,7 +4,7 @@ import AppNavigation from "./navigation";
 import BottomBarTabs from "./navigation";
 import { NativeBaseProvider } from "native-base";
 import { Text } from "react-native";
-import { getDBConnection, importTestData, createTables, dropTables } from "./services/db-services";
+import { getDBConnection, importTestData, createTables, dropTables, firstLoad } from "./services/db-services";
 
 import { EventRegister } from "react-native-event-listeners";
 import themeContext from "./config/themeContext";
@@ -52,6 +52,7 @@ export default function App() {
     useEffect(() => {
         getDBConnection().then((db) => {
             createTables(db)
+            firstLoad(db)
             //dropTables(db)
             //importTestData(db)
         })

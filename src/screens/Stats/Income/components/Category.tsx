@@ -4,6 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import themeContext from '../../../../config/themeContext';
 import { themeInterface } from '../../../../config/themeInterface';
 import { useContext } from 'react';
+import { Language, CategoryList } from '../../../../models/language';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import en from '../../../../config/language/en';
+import vi from '../../../../config/language/vi';
+import { Currency } from '../../../../models/currency';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 export type Props = {
     percentage: any,
@@ -16,6 +23,27 @@ export default function Category({percentage, name, cost, color}: Props) {
 
     const theme = useContext(themeContext) as themeInterface
 
+    const [languagePack, setLanguagePack] = useState<Language>({} as Language);
+    const [currency, setCurrency] = useState<Currency>({} as Currency);
+    const [loaded, setLoaded] = useState<boolean>(false);
+
+    useEffect(() => {
+        
+        AsyncStorage.getItem('language').then(language => {
+            setLoaded(false);
+            if (language == 'vi') {
+                setLanguagePack(vi);
+            } else {
+                setLanguagePack(en);
+            }
+            setLoaded(true);
+        })
+        AsyncStorage.getItem('currency').then(currency => {
+            setCurrency(JSON.parse(currency || '{}'));
+        })
+        
+    }, [])
+
   return (
     <SafeAreaView>
         <TouchableOpacity style={[styles.container, { backgroundColor: theme.componentBackground }]}>
@@ -27,10 +55,10 @@ export default function Category({percentage, name, cost, color}: Props) {
                     color: 'white',
                     backgroundColor:color
                     }}>{percentage.toFixed(2)}%</Text>
-                <Text style={[styles.nameText, { color: theme.color }]}>{name}</Text>
+                <Text style={[styles.nameText, { color: theme.color }]}>{loaded == true ? languagePack.categories[CategoryList.indexOf(name.toLowerCase())][1]: ''}</Text>
             </View>
             <View style={styles.costContainer}>
-                <Text style={[styles.costText, { color: theme.color }]}>$ {cost}</Text>
+                <Text style={[styles.costText, { color: theme.color }]}>{currency.symbol} {cost}</Text>
             </View>
         </TouchableOpacity>
     </SafeAreaView>

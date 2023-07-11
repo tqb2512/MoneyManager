@@ -10,6 +10,11 @@ import { themeInterface } from "../../../../config/themeInterface";
 import CalendarButton from "../../../Home/CalendarButton";
 import { PieData } from "../../../../models/pieData";
 import PeriodButton from "../../../Home/PeriodButton";
+import { CategoryList, Language } from "../../../../models/language";
+import vi from "../../../../config/language/vi";
+import en from "../../../../config/language/en";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Currency } from "../../../../models/currency";
 
 export type ChartData = {
     name: string,
@@ -30,6 +35,8 @@ export default function Chart(props: { navigation: any }) {
     const [timeOptionsValue, setTimeOptionsValue] = useState<any>('Monthly')
     const [date, setDate] = useState<Date>(new Date())
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
+    const [languagePack, setLanguagePack] = useState<Language>({} as Language);
+    const [currency, setCurrency] = useState<Currency>({} as Currency);
 
     const updateChart = () => {
         setIsLoaded(false);
@@ -40,7 +47,7 @@ export default function Chart(props: { navigation: any }) {
                         setChartData(chartData);
                         setIsLoaded(true);
                         setChartPressValue({
-                            name: 'Total',
+                            name: languagePack.total,
                             percentage: 1,
                             value: chartData.reduce((a, b) => a + (b.value || 0), 0),
                             color: 'white'
@@ -54,7 +61,7 @@ export default function Chart(props: { navigation: any }) {
                         setChartData(chartData);
                         setIsLoaded(true);
                         setChartPressValue({
-                            name: 'Total',
+                            name: languagePack.total,
                             percentage: 1,
                             value: chartData.reduce((a, b) => a + (b.value || 0), 0),
                             color: 'white'
@@ -74,6 +81,25 @@ export default function Chart(props: { navigation: any }) {
         const unsubscribe = navigation.addListener('focus', () => {
             updateChart()
         });
+
+        const getLanguagePack = async () => {
+            const language = await AsyncStorage.getItem('language');
+            if (language === 'vi') {
+              setLanguagePack(vi);
+            } else {
+              setLanguagePack(en);
+            }
+          }
+          getLanguagePack();
+          
+          const getCurrency = async () => {
+            const currency = await AsyncStorage.getItem('currency');
+            if (currency) {
+              setCurrency(JSON.parse(currency));
+            }
+          }
+          getCurrency();
+        
         return unsubscribe;
     }, [navigation]);
 
@@ -94,7 +120,8 @@ export default function Chart(props: { navigation: any }) {
                     textSize={26}
                     focusOnPress
                     onPress={(value: any) => {
-                        setChartPressValue(value);
+                        const result = {name: languagePack.categories[CategoryList.indexOf(value.name.toLowerCase())][1], percentage: value.percentage, value: value.value, color: value.color}
+                        setChartPressValue(result)
                     }}
                     showValuesAsLabels={false}
                     textBackgroundRadius={26}
@@ -103,7 +130,7 @@ export default function Chart(props: { navigation: any }) {
                             <View style={{ alignItems: "center" }}>
                                 <Text style={{ color: theme.mode === 'dark' ? "black" : 'grey', fontWeight: 'bold', fontSize: 20, textAlign: "center" }}>
                                     {chartPressValue.name}{"\n"}
-                                    $ {chartPressValue.value}
+                                    {currency.symbol} {chartPressValue.value}
                                 </Text>
                             </View>
                         )
@@ -126,7 +153,7 @@ export default function Chart(props: { navigation: any }) {
 
             {/* Calendar button */}
             <CalendarButton date={date} setDate={setDate} />
-            <PeriodButton onPress={handlePress} period={timeOptionsValue} />
+            <PeriodButton onPress={handlePress} period={timeOptionsValue == 'Yearly' ? languagePack.yearly : languagePack.monthly} />
 
             {showTimeOptions && (
                 <View>
@@ -134,13 +161,13 @@ export default function Chart(props: { navigation: any }) {
                         setTimeOptionsValue('Yearly')
                         setShowTimeOptions(false)
                     }} style={styles.periodButton1}>
-                        <Text style={{ fontSize: 14, padding: 6, color: 'white' }}>Yearly</Text>
+                        <Text style={{ fontSize: 14, padding: 6, color: 'white' }}>{languagePack.yearly}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => {
                         setTimeOptionsValue('Monthly')
                         setShowTimeOptions(false)
                     }} style={styles.periodButton2}>
-                        <Text style={{ fontSize: 14, padding: 6, color: 'white' }}>Monthly</Text>
+                        <Text style={{ fontSize: 14, padding: 6, color: 'white' }}>{languagePack.monthly}</Text>
                     </TouchableOpacity>
                 </View>
             )}

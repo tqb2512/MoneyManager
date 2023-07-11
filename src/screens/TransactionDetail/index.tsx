@@ -132,7 +132,9 @@ function TransactionDetail(props: TransactionDetailProp) {
             ]}>
             <View style={styles.backButton}>
               <ChevronLeftIcon
-                onPress={() => navigation.goBack()}
+                onPress={() => {
+                  navigation.goBack();
+                }}
                 size={20}
                 color={theme.color}
               />
@@ -289,7 +291,7 @@ function TransactionDetail(props: TransactionDetailProp) {
                   }
                   showSoftInputOnFocus={false}
                   caretHidden={true}
-                  value={transaction.category.name}
+                  value={transaction.category?.name}
                 />
               </View>
 

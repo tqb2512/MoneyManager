@@ -1,13 +1,86 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View, PermissionsAndroid} from 'react-native';
 import React, {useContext} from 'react';
 import {ChevronLeftIcon} from 'react-native-heroicons/outline';
 import themeContext from '../../../config/themeContext';
 import {themeInterface} from '../../../config/themeInterface';
 import {DataProp} from '../../../navigation/types';
+import { getDBConnection, getAccounts, getTransactions, insertAccounts, insertTransactions, dropTransactionsAndAccounts, createTables } from '../../../services/db-services';
+import { Account } from '../../../models/account';
+import { Transaction } from '../../../models/transaction';
+import { useState } from 'react';
+import DocumentPicker from 'react-native-document-picker'
+import RNFS from 'react-native-fs';
+
 
 const Data = (props: DataProp) => {
   const {navigation} = props;
   const theme = useContext(themeContext) as themeInterface;
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [showFolderDialog, setShowFolderDialog] = useState(false);
+
+  const exportToJson = async () => {
+    getDBConnection().then(db => {
+      getAccounts(db).then(accounts => {
+        setAccounts(accounts);
+        getTransactions(db).then(transactions => {
+          setTransactions(transactions);
+
+          const path = RNFS.ExternalStorageDirectoryPath + '/MoneyManager';
+          RNFS.mkdir(path).then(() => {
+            const filetPath = path + '/backup.json';
+            const data = {
+              accounts: accounts,
+              transactions: transactions,
+            };
+            RNFS.writeFile(filetPath, JSON.stringify(data), 'utf8').then(() => {
+              console.log('file written');
+            }).catch((err) => {
+              console.log(err);
+            });
+          });
+        });
+      });
+
+    });
+
+  }
+
+  const importFromJson = async () => {
+    DocumentPicker.pick({
+      type: [DocumentPicker.types.allFiles],
+    }).then((result) => {
+      const path = result[0].uri;
+      RNFS.readFile(path, 'utf8').then((data) => {
+        const jsonData = JSON.parse(data);
+        getDBConnection().then(db => {
+          insertAccounts(db, jsonData.accounts).then(() => {
+            insertTransactions(db, jsonData.transactions).then(() => {
+              console.log('inserted');
+            });
+          });
+        });
+      });
+    }).catch((err) => {
+      if (DocumentPicker.isCancel(err)) {
+        console.log('cancelled');
+      } else {
+        console.log(err);
+      }
+    });
+  }
+
+  const deleteAllData = async () => {
+    getDBConnection().then(db => {
+      dropTransactionsAndAccounts(db).then(() => {
+        createTables(db).then(() => {
+          console.log('deleted');
+        });
+      });
+    });
+  }
+
+
   return (
     <View
       style={[
@@ -37,7 +110,7 @@ const Data = (props: DataProp) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            navigation.navigate('change_currency');
+            importFromJson();
           }}>
           <Image
             style={[styles.img, {tintColor: theme.color}]}
@@ -47,12 +120,26 @@ const Data = (props: DataProp) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('data')}>
+          onPress={() => {
+            exportToJson();
+          }}>
           <Image
             style={[styles.img, {tintColor: theme.color}]}
             source={require('../../../../assets/settingImage/file-export.png')}
           />
           <Text style={{color: theme.color}}>Export Data</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            deleteAllData();
+          }}>
+          <Image
+            style={[styles.img, {tintColor: theme.color}]}
+            source={require('../../../../assets/settingImage/file-export.png')}
+          />
+          <Text style={{color: theme.color}}>Delete Data</Text>
         </TouchableOpacity>
       </View>
     </View>

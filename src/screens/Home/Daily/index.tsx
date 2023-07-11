@@ -73,6 +73,9 @@ function DailyScreen(props: DailyScreenProp) {
           } else {
             setLanguagePack(vi)
           }
+          navigation.setOptions({
+            title: languagePack.daily
+          })
         }
       }
       getLanguageValue()

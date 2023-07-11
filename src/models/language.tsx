@@ -8,8 +8,12 @@ export type Language = {
     theme: string;
     language: string;
     //home
+    daily: string;
+    celandar: string;
     total: string;
+    close: string;
     //new transaction
+    add: string;
     newTransaction: string;
     type: string;
     amount: string;
@@ -31,6 +35,7 @@ export type Language = {
     monthly: string;
     yearly: string;
     //shorten day of week
+    today: string;
     sun: string;
     mon: string;
     tue: string;

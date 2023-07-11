@@ -9,7 +9,10 @@ import AccountBox from './components/AccountBox';
 import themeContext from '../../config/themeContext';
 import { themeInterface } from '../../config/themeInterface';
 import { Currency } from '../../models/currency';
+import { Language } from '../../models/language';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import vi from '../../config/language/vi';
+import en from '../../config/language/en';
 
 
 function AccountsScreen(props: AccountsScreenProp) {
@@ -21,24 +24,37 @@ function AccountsScreen(props: AccountsScreenProp) {
     const [menuShow, setMenuShow] = React.useState(false);
     const [accounts, setAccounts] = React.useState<Account[]>([]);
     const [currency, setCurrency] = React.useState<Currency>({} as Currency);
+    const [languagePack, setLanguagePack] = React.useState<Language>({} as Language);
 
     useEffect(() => {
 
         const unsubscribe = navigation.addListener('focus', () => {
-          const getCurrencyValue = async () => {
-            const value = await AsyncStorage.getItem('currency')
-            if (value !== null) {
-              setCurrency(JSON.parse(value));
+            const getCurrencyValue = async () => {
+                const value = await AsyncStorage.getItem('currency')
+                if (value !== null) {
+                    setCurrency(JSON.parse(value));
+                }
             }
-          }
-          getCurrencyValue()
+            getCurrencyValue()
+
+            const getLanguageValue = async () => {
+                const value = await AsyncStorage.getItem('language')
+                if (value !== null) {
+                    if (value === 'vi') {
+                        setLanguagePack(vi);
+                    } else {
+                        setLanguagePack(en);
+                    }
+                }
+            }
+            getLanguageValue()
         });
         return unsubscribe;
-      }, [navigation]);
+    }, [navigation]);
 
     React.useEffect(() => {
         props.navigation.setOptions({
-            title: 'Accounts',
+            title: languagePack.account,
         });
 
         const unsubscribe = navigation.addListener('focus', () => {
@@ -53,12 +69,12 @@ function AccountsScreen(props: AccountsScreenProp) {
 
     return (
         <NativeBaseProvider>
-            <SafeAreaView style={[styles.mainContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2'} ]}>
+            <SafeAreaView style={[styles.mainContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }]}>
                 <View style={{ position: 'relative' }}>
-                    <View style={[styles.firstTopBar,  { backgroundColor: theme.background }]}>
+                    <View style={[styles.firstTopBar, { backgroundColor: theme.background }]}>
                         <View style={styles.titleHeader}>
-                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: theme.color , textAlign: 'center' }}>
-                                Accounts
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: theme.color, textAlign: 'center' }}>
+                                {languagePack.account}
                             </Text>
                         </View>
                         <View style={styles.threeDots}>
@@ -84,7 +100,7 @@ function AccountsScreen(props: AccountsScreenProp) {
                         <TouchableOpacity
                             style={styles.addThreeDotsContainer}
                             onPress={() => { navigation.navigate("add_account"); setMenuShow(false) }}>
-                            <Text style={[styles.threeDotsText, { color: theme.color }]}>Add</Text>
+                            <Text style={[styles.threeDotsText, { color: theme.color }]}>{languagePack.add}</Text>
                         </TouchableOpacity>
                     </View>
                 )}

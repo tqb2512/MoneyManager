@@ -16,7 +16,7 @@ function AddAccount(props: AddAccountProp) {
     const theme = useContext(themeContext) as themeInterface
 
     const { navigation } = props;
-    const [account, setAccount] = React.useState<Account>({} as Account);
+    const [account, setAccount] = React.useState<Account>({balance: 0} as Account);
     const [showGroup, setShowGroup] = React.useState<boolean>(false);
     const groupList = ["Cash", "Bank", "Credit Card", "Savings", "Loan", "Insurance", "E-Wallet", "Others"];
     const [currency, setCurrency] = React.useState<Currency>({} as Currency);
@@ -55,20 +55,6 @@ function AddAccount(props: AddAccountProp) {
                     <Text style={[styles.accountNameTxt, { color: theme.color }]}>Add Account</Text>
                 </View>
             </View>
-            {/* Group */}
-            <View style={styles.input}>
-                <Text style={[styles.inputLabel, { color: theme.color }]}>Group</Text>
-                <TextInput
-                    style={[styles.infoText, { color: theme.color }]}
-                    onPressIn={() => { setShowGroup(!showGroup) }}
-                    showSoftInputOnFocus={false}
-                    value={account.group}
-                    onChangeText={(groupValue) => {
-                        setAccount({ ...account, group: groupValue });
-                    }}
-                    caretHidden={true}
-                />
-            </View>
             {/* Name account */}
             <View style={styles.input}>
                 <Text style={[styles.inputLabel, { color: theme.color }]}>Name</Text>
@@ -99,27 +85,6 @@ function AddAccount(props: AddAccountProp) {
                                 }}>
                                 <Text style={styles.textHeaderStyle}>Account Group</Text>
                             </View>
-                            {/* Pressable cho giá trị của group */}
-                            <Pressable style={[styles.button]}>
-                                <FlatList
-                                    data={groupList}
-                                    renderItem={({ item }) => (
-                                        <TouchableOpacity
-                                            style={styles.accountGroupButton}
-                                            onPress={() => {
-                                                setAccount({ ...account, group: item });
-                                                setShowGroup(false);
-                                            }}>
-
-                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                                <Text style={[styles.accountGroupText, { color: item === account.group ? '#DD2F24' : 'grey', fontWeight: item === account.group ? '600' : '400' }]}>{item}</Text>
-                                                {item === account.group && <CheckIcon style={{ paddingLeft: '12 %' }} size={18} color='#DD2F24' />}
-                                            </View>
-                                        </TouchableOpacity>
-                                    )}
-                                    keyExtractor={(item) => item}
-                                />
-                            </Pressable>
                         </View>
                     </View>
                 </Modal>
