@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import {
   View,
   Text,
@@ -13,35 +13,48 @@ import {
   Alert,
   Image,
 } from 'react-native';
-import {NativeBaseProvider, KeyboardAvoidingView, CloseIcon} from 'native-base';
-import {TransactionDetailProp} from '../../navigation/types';
-import {Transaction} from '../../models/transaction';
-import {Category} from '../../models/category';
-import {Account} from '../../models/account';
+import { NativeBaseProvider, KeyboardAvoidingView, CloseIcon } from 'native-base';
+import { TransactionDetailProp } from '../../navigation/types';
+import { Transaction } from '../../models/transaction';
+import { Category } from '../../models/category';
+import { Account } from '../../models/account';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {ChevronLeftIcon} from 'react-native-heroicons/outline';
+import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import {
   getDBConnection,
   getCategories,
   getAccounts,
+  updateTransaction,
+  deleteTransaction as deleteTransactionDB,
+  updateAccountBalanceFormTransactions,
 } from '../../services/db-services';
 import themeContext from '../../config/themeContext';
-import {themeInterface} from '../../config/themeInterface';
-import { color } from 'native-base/lib/typescript/theme/styled-system';
+import { themeInterface } from '../../config/themeInterface';
+import { border, color } from 'native-base/lib/typescript/theme/styled-system';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Currency } from '../../models/currency';
+import { Language, CategoryList } from '../../models/language';
+import vi from '../../config/language/vi';
+import en from '../../config/language/en';
 
 function TransactionDetail(props: TransactionDetailProp) {
   const theme = useContext(themeContext) as themeInterface;
-  const {navigation, route} = props;
+  const { navigation, route } = props;
 
   const [transaction, setTransaction] = React.useState<Transaction>(
     route.params.transaction,
   );
+  const [date, setDate] = React.useState(new Date(transaction.year, transaction.month - 1, transaction.day));
+  const [categories, setCategories] = React.useState<Category[]>([]);
+  const [accounts, setAccounts] = React.useState<Account[]>([]);
+  const [oldTransaction, setOldTransaction] = React.useState<Transaction>({} as Transaction);
+  const [currency, setCurrency] = React.useState<Currency>({} as Currency);
+  const [languagePack, setLanguagePack] = React.useState<Language>({} as Language);
+
   const [showDTP, setShowDTP] = React.useState(false);
   const [showCategories, setShowCategories] = React.useState(false);
   const [showAccounts, setShowAccounts] = React.useState(false);
-  const [categories, setCategories] = React.useState<Category[]>([]);
-  const [accounts, setAccounts] = React.useState<Account[]>([]);
-
   const [isDateClicked, setIsDateClicked] = React.useState(false);
   const [isCategoriesClicked, setIsCategoriesClicked] = React.useState(false);
   const [isAmountClicked, setIsAmountClicked] = React.useState(false);
@@ -51,7 +64,21 @@ function TransactionDetail(props: TransactionDetailProp) {
   const [selectedInput, setSelectedInput] = React.useState('');
 
   const saveTransaction = () => {
-    console.log(transaction);
+    getDBConnection().then(db => {
+      updateTransaction(db, transaction, oldTransaction).then(() => {
+        navigation.goBack();
+      });
+    });
+  };
+
+  const deleteTransaction = () => {
+    getDBConnection().then(db => {
+      deleteTransactionDB(db, transaction).then(() => {
+        updateAccountBalanceFormTransactions(db, transaction.account).then(() => {
+          navigation.goBack();
+        });
+      });
+    });
   };
 
   React.useEffect(() => {
@@ -67,80 +94,105 @@ function TransactionDetail(props: TransactionDetailProp) {
         setAccounts(accounts);
       });
     });
+
+    setOldTransaction(transaction);
+
+    const getCurrencyValue = async () => {
+      const value = await AsyncStorage.getItem('currency')
+      if (value !== null) {
+        setCurrency(JSON.parse(value));
+      }
+    }
+    getCurrencyValue()
+
+    const getLanguageValue = async () => {
+      const value = await AsyncStorage.getItem('language')
+      if (value !== null) {
+        if (value === 'en') {
+          setLanguagePack(en);
+        } else {
+          setLanguagePack(vi);
+        }
+      }
+    }
+    getLanguageValue()
+
   }, []);
 
   return (
     <NativeBaseProvider>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={[styles.mainContainer, {backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2'}]}>
+        style={[styles.mainContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }]}>
         <View>
           <View
             style={[
               styles.navigateHeader,
-              {backgroundColor: theme.componentBackground},
+              { backgroundColor: theme.componentBackground },
             ]}>
             <View style={styles.backButton}>
               <ChevronLeftIcon
-                onPress={() => navigation.goBack()}
+                onPress={() => {
+                  navigation.goBack();
+                }}
                 size={20}
                 color={theme.color}
               />
-              <Text style={[styles.accountNameTxt, {color: theme.color}]}>
-                Detail Transaction
+              <Text style={[styles.accountNameTxt, { color: theme.color }]}>
+                {languagePack.detailTransaction}
               </Text>
             </View>
           </View>
 
-          <View style={{backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2'}}>
+          <View style={{ backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }}>
             {/*select type*/}
-            <View style={{backgroundColor: theme.background}}>
+            <View style={{ backgroundColor: theme.background }}>
               <View
                 style={[
                   styles.buttonContainer,
-                  {backgroundColor: theme.componentBackground},
+                  { backgroundColor: theme.componentBackground },
                 ]}>
-                <Text style={{alignSelf: 'center', color: theme.mode === 'dark' ? theme.color : 'grey'}}>Type</Text>
+                <Text style={{ alignSelf: 'center', color: theme.mode === 'dark' ? theme.color : 'grey' }}>{languagePack.type}</Text>
 
-                <View style={{flexDirection: 'row', marginLeft: '15%'}}>
+                <View style={{ flexDirection: 'row', marginLeft: '15%' }}>
                   <TouchableOpacity
                     onPress={() => {
-                      setTransaction({...transaction, type: 'income'});
+                      setTransaction({ ...transaction, type: 'income' });
                     }}>
                     <View
                       style={
                         transaction.type == 'income'
-                          ? [styles.typeButton, {borderColor: '#7DCEA0'}]
+                          ? [styles.typeButton, { borderColor: '#7DCEA0' }]
                           : styles.typeButton
                       }>
                       <Text
                         style={
                           transaction.type == 'income'
-                            ? [styles.typeText, {color: '#7DCEA0'}]
+                            ? [styles.typeText, { color: '#7DCEA0' }]
                             : [styles.typeText, { color: theme.mode === 'dark' ? 'grey' : 'black' }]
                         }>
-                        Income
+                        {languagePack.income}
                       </Text>
                     </View>
                   </TouchableOpacity>
 
                   <TouchableOpacity
                     onPress={() => {
-                      setTransaction({...transaction, type: 'expense'});
+                      setTransaction({ ...transaction, type: 'expense' });
                     }}>
                     <View
                       style={
                         transaction.type == 'expense'
-                          ? [styles.typeButton, {borderColor: '#F1948A'}]
+                          ? [styles.typeButton, { borderColor: '#F1948A' }]
                           : styles.typeButton
                       }>
                       <Text
                         style={
                           transaction.type == 'expense'
-                            ? [styles.typeText, {color: '#F1948A'}]
+                            ? [styles.typeText, { color: '#F1948A' }]
                             : [styles.typeText, { color: theme.mode === 'dark' ? 'grey' : 'black' }]
                         }>
-                        Expense
+                        {languagePack.expense}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -157,7 +209,7 @@ function TransactionDetail(props: TransactionDetailProp) {
               }}>
               {/* Date */}
               <View style={styles.input}>
-                <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>Date</Text>
+                <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>{languagePack.date}</Text>
                 <TextInput
                   style={[styles.infoText, { color: theme.color }]}
                   onPressIn={() => {
@@ -181,11 +233,11 @@ function TransactionDetail(props: TransactionDetailProp) {
                   }
                   caretHidden={true}
                   value={
-                    transaction.day +
+                    date.getDate() +
                     '/' +
-                    transaction.month +
+                    (date.getMonth() + 1) +
                     '/' +
-                    transaction.year
+                    date.getFullYear()
                   }
                 />
               </View>
@@ -198,15 +250,16 @@ function TransactionDetail(props: TransactionDetailProp) {
                   is24Hour={true}
                   display="default"
                   onChange={(event, selectedDate) => {
-                    setSelectedInput('');
                     setShowDTP(false);
-                    if (selectedDate) {
+                    setSelectedInput('');
+                    if (selectedDate != undefined) {
                       setTransaction({
                         ...transaction,
                         day: selectedDate.getDate(),
                         month: selectedDate.getMonth() + 1,
                         year: selectedDate.getFullYear(),
                       });
+                      setDate(selectedDate);
                     }
                   }}
                 />
@@ -214,7 +267,7 @@ function TransactionDetail(props: TransactionDetailProp) {
 
               {/* Category */}
               <View style={styles.input}>
-                <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>Category</Text>
+                <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>{languagePack.category}</Text>
                 <TextInput
                   style={[styles.infoText, { color: theme.color }]}
                   placeholder=""
@@ -273,11 +326,11 @@ function TransactionDetail(props: TransactionDetailProp) {
                             color: 'white',
                             marginStart: 4,
                           }}>
-                          Categories
+                          {languagePack.category}
                         </Text>
                         <CloseIcon
                           color="white"
-                          style={{marginEnd: 12}}
+                          style={{ marginEnd: 12 }}
                           onPress={() => {
                             setShowCategories(false);
                             setSelectedInput('');
@@ -287,16 +340,17 @@ function TransactionDetail(props: TransactionDetailProp) {
 
                       <View>
                         <FlatList
-                          contentContainerStyle={{alignSelf: 'flex-start'}}
+                          contentContainerStyle={{ alignSelf: 'flex-start' }}
                           numColumns={3 / 1}
                           data={categories}
-                          renderItem={({item}) => (
+                          renderItem={({ item }) => (
                             <TouchableOpacity
                               style={{
-                                width: '33.33%',
+                                margin: 5,
+                                width: '31.2%',
                                 alignItems: 'center',
-                                padding: 6,
-                                paddingVertical: 12,
+                                padding: 18,
+                                borderWidth: 0.3,
                               }}
                               onPress={() => {
                                 setTransaction({
@@ -306,12 +360,9 @@ function TransactionDetail(props: TransactionDetailProp) {
                                 setSelectedInput('');
                                 setShowCategories(false);
                               }}>
-                              {/* test image */}
-                              <Image
-                                source={require('../../../assets/icons/money.png')}
-                                style={{width: 48, height: 48}}
-                              />
-                              <Text>{item.name}</Text>
+                              <Text>{
+                                languagePack.categories[CategoryList.indexOf(item.name.toLowerCase())][1]
+                              }</Text>
                             </TouchableOpacity>
                           )}
                           keyExtractor={item => item.id.toString()}
@@ -324,7 +375,7 @@ function TransactionDetail(props: TransactionDetailProp) {
 
               {/* Account */}
               <View style={styles.input}>
-                <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>Account</Text>
+                <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>{languagePack.account}</Text>
                 <TextInput
                   style={[styles.infoText, { color: theme.color }]}
                   placeholder=""
@@ -382,11 +433,11 @@ function TransactionDetail(props: TransactionDetailProp) {
                             color: 'white',
                             marginStart: 4,
                           }}>
-                          Accounts
+                          {languagePack.account}
                         </Text>
                         <CloseIcon
                           color="white"
-                          style={{marginEnd: 12}}
+                          style={{ marginEnd: 12 }}
                           onPress={() => {
                             setShowAccounts(false);
                             setSelectedInput('');
@@ -396,19 +447,20 @@ function TransactionDetail(props: TransactionDetailProp) {
 
                       <View>
                         <FlatList
-                          contentContainerStyle={{alignSelf: 'flex-start'}}
+                          contentContainerStyle={{ alignSelf: 'flex-start' }}
                           numColumns={3 / 1}
                           data={accounts}
-                          renderItem={({item}) => (
+                          renderItem={({ item }) => (
                             <TouchableOpacity
                               style={{
-                                width: '33.33%',
+                                margin: 5,
+                                width: '31.2%',
                                 alignItems: 'center',
                                 padding: 18,
-                                borderWidth: 0.2,
+                                borderWidth: 0.3,
                               }}
                               onPress={() => {
-                                setTransaction({...transaction, account: item});
+                                setTransaction({ ...transaction, account: item });
                                 setSelectedInput('');
                                 setShowAccounts(false);
                               }}>
@@ -428,13 +480,13 @@ function TransactionDetail(props: TransactionDetailProp) {
                 onPress={Keyboard.dismiss}
                 accessible={false}>
                 <View style={styles.input}>
-                  <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>Amount</Text>
+                  <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>{languagePack.amount}</Text>
                   <TextInput
                     style={[styles.infoText, { color: theme.color }]}
                     placeholder=""
                     value={transaction.amount.toString()}
                     onChangeText={text => {
-                      setTransaction({...transaction, amount: Number(text)});
+                      setTransaction({ ...transaction, amount: Number(text) });
                     }}
                     keyboardType="number-pad"
                     onPressIn={() => {
@@ -459,12 +511,12 @@ function TransactionDetail(props: TransactionDetailProp) {
               </TouchableWithoutFeedback>
 
               <View style={styles.input}>
-                <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>Note</Text>
+                <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>{languagePack.note}</Text>
                 <TextInput
                   style={[styles.infoText, { color: theme.color }]}
                   value={transaction.note}
                   onChangeText={text => {
-                    setTransaction({...transaction, note: text});
+                    setTransaction({ ...transaction, note: text });
                   }}
                   onPressIn={() => {
                     setSelectedInput('note');
@@ -491,36 +543,36 @@ function TransactionDetail(props: TransactionDetailProp) {
             {/* Description + Save button + delete button */}
             <View style={[styles.bottomContainer, { backgroundColor: theme.componentBackground }]}>
               <View
-                style={{flexDirection: 'row', padding: '4%', marginTop: '1%'}}>
+                style={{ flexDirection: 'row', padding: '4%', marginTop: '1%' }}>
                 <TouchableOpacity
                   style={
                     transaction.type != null
                       ? transaction.type == 'expense'
-                        ? [styles.saveButton, {backgroundColor: '#F1948A'}]
-                        : [styles.saveButton, {backgroundColor: '#7DCEA0'}]
+                        ? [styles.saveButton, { backgroundColor: '#F1948A' }]
+                        : [styles.saveButton, { backgroundColor: '#7DCEA0' }]
                       : styles.saveButton
                   }
                   onPress={() => {
-                    if (transaction.amount === 0) {
+                    if (transaction.amount == 0) {
                       Alert.alert('Please enter amount');
-                    } else if (transaction.category === null) {
+                    } else if (transaction.category == null) {
                       Alert.alert('Please choose category');
-                    } else if (transaction.account === null) {
+                    } else if (transaction.account == null) {
                       Alert.alert('Please choose account');
-                    } else if (transaction.type === null) {
+                    } else if (transaction.type == null) {
                       Alert.alert('Please choose type');
                     } else {
                       saveTransaction();
                     }
                   }}>
-                  <Text style={styles.saveButtonText}>Save</Text>
+                  <Text style={styles.saveButtonText}>{languagePack.save}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.deleteButton}
                   onPress={() => {
-                    setTransaction({...transaction, amount: 0, note: ''});
+                    deleteTransaction();
                   }}>
-                  <Text style={styles.deleteButtonText}>Delete</Text>
+                  <Text style={styles.deleteButtonText}>{languagePack.delete}</Text>
                 </TouchableOpacity>
               </View>
             </View>

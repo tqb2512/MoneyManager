@@ -7,17 +7,17 @@ import {
   Modal,
   Pressable,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
-import {RouteProp, useRoute} from '@react-navigation/native';
-import {AccountDetailProp, EditAccountProp} from '../../navigation/types';
-import {TrashIcon, ChevronLeftIcon} from 'react-native-heroicons/outline';
+import React, { useContext, useEffect, useState } from 'react';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { AccountDetailProp, EditAccountProp } from '../../navigation/types';
+import { TrashIcon, ChevronLeftIcon } from 'react-native-heroicons/outline';
 import themeContext from '../../config/themeContext';
-import {themeInterface} from '../../config/themeInterface';
+import { themeInterface } from '../../config/themeInterface';
 
 const EditAccount = (props: EditAccountProp) => {
   const theme = useContext(themeContext) as themeInterface;
 
-  const {navigation} = props;
+  const { navigation } = props;
 
   const ACC = props.route.params.account;
 
@@ -30,7 +30,6 @@ const EditAccount = (props: EditAccountProp) => {
   // const [description, setDescription] = useState('')
 
   useEffect(() => {
-    setGroup(ACC.group);
     setName(ACC.name);
     setAmount(ACC.balance.toString());
     //   setDescription(props.route.params.accountDescription.toString())
@@ -39,14 +38,14 @@ const EditAccount = (props: EditAccountProp) => {
   return (
     <View style={{ flex: 1, backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }}>
       <View
-        style={[styles.navigateHeader, {backgroundColor: theme.componentBackground}]}>
+        style={[styles.navigateHeader, { backgroundColor: theme.componentBackground }]}>
         <View style={styles.backButton}>
           <ChevronLeftIcon
             onPress={() => navigation.goBack()}
             size={20}
             color={theme.color}
           />
-          <Text style={[styles.accountNameTxt, {color: theme.color}]}>
+          <Text style={[styles.accountNameTxt, { color: theme.color }]}>
             Edit Account Info
           </Text>
         </View>
@@ -68,9 +67,9 @@ const EditAccount = (props: EditAccountProp) => {
             onPressIn={() => setGroupIsClicked(!groupIsClicked)}
             showSoftInputOnFocus={false}
             value={group}
-            onChangeText={() => {}}
+            onChangeText={() => { }}
             caretHidden={true}
-            //  Đưa giá trị vô đây
+          //  Đưa giá trị vô đây
           />
         </View>
         {/* Name account */}
@@ -78,13 +77,13 @@ const EditAccount = (props: EditAccountProp) => {
           <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>Name</Text>
           <TextInput
             style={[styles.textInput, { color: theme.color }]}
-            onPressIn={() => {}}
+            onPressIn={() => { }}
             //   showSoftInputOnFocus={false}
             onChangeText={(text: any) => {
               setName(text);
             }}
             value={name}
-            //  Đưa giá trị vô đây
+          //  Đưa giá trị vô đây
           />
         </View>
         {/* Amount account */}
@@ -92,11 +91,11 @@ const EditAccount = (props: EditAccountProp) => {
           <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>Amount</Text>
           <TextInput
             style={[styles.textInput, { color: theme.color }]}
-            onPressIn={() => {}}
-            onChangeText={() => {}}
+            onPressIn={() => { }}
+            onChangeText={() => { }}
             keyboardType="number-pad"
             value={amount}
-            //  Đưa giá trị vô đây
+          //  Đưa giá trị vô đây
           />
         </View>
 
@@ -140,9 +139,9 @@ const EditAccount = (props: EditAccountProp) => {
 
         {/* Nút save account */}
         <TouchableOpacity
-          style={[styles.saveButton, {backgroundColor: '#46CDCF'}]}
-          onPress={() => {}}>
-          <Text style={{fontWeight: '600'}}>Save</Text>
+          style={[styles.saveButton, { backgroundColor: '#46CDCF' }]}
+          onPress={() => { }}>
+          <Text style={{ fontWeight: '600' }}>Save</Text>
         </TouchableOpacity>
       </View>
     </View>

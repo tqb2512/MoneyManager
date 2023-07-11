@@ -18,18 +18,23 @@ export type RootStackParamList = {
     change_currency: undefined;
     settings: undefined;
     change_theme: undefined;
+    language: undefined;
+    data: undefined;
 }
 
 export type BottomTabParamList = {
     bottom_bar_home: undefined;
+    home_top_bar_daily: undefined;
+    add_transaction: undefined;
     bottom_bar_accounts: undefined;
     bottom_bar_addTransaction: undefined;
     bottom_bar_stats: undefined;
-    bottom_bat_settings: undefined;
+    bottom_bar_settings: undefined;
 }
 
 export type HomeTopBarParamList = {
     home_top_bar_daily: undefined;
+    home_top_bar_monthly: undefined;
     home_top_bar_celandar: undefined;
 }
 
@@ -41,6 +46,11 @@ export type StatsTopBarParamList = {
 export type DailyScreenProp = NativeStackScreenProps<
     HomeTopBarParamList,
     'home_top_bar_daily'
+>;
+
+export type MonthlyScreenProp = NativeStackScreenProps<
+    HomeTopBarParamList,
+    'home_top_bar_monthly'
 >;
 
 export type CelandarScreenProp = NativeStackScreenProps<
@@ -63,11 +73,6 @@ export type EditAccountProp = NativeStackScreenProps<
     'edit_account'
 >;
 
-export type SettingsScreenProp = NativeStackScreenProps<
-    RootStackParamList,
-    'settings'
->;
-
 export type ChangeCurrencyProp = NativeStackScreenProps<
     RootStackParamList,
     'change_currency'
@@ -76,6 +81,16 @@ export type ChangeCurrencyProp = NativeStackScreenProps<
 export type ChangeThemeProp = NativeStackScreenProps<
     RootStackParamList,
     'change_theme'
+>;
+
+export type LanguageProp = NativeStackScreenProps<
+    RootStackParamList,
+    'language'
+>;
+
+export type DataProp = NativeStackScreenProps<
+    RootStackParamList,
+    'data'
 >;
 
 export type AddTransactionProp = NativeStackScreenProps<
@@ -111,6 +126,11 @@ export type HomeScreenProp = CompositeScreenProps<
 
 export type StatsScreenProp = CompositeScreenProps<
     BottomTabScreenProps<BottomTabParamList, 'bottom_bar_stats'>,
+    NativeStackScreenProps<RootStackParamList>
+>;
+
+export type SettingsScreenProp = CompositeScreenProps<
+    BottomTabScreenProps<BottomTabParamList, 'bottom_bar_settings'>,
     NativeStackScreenProps<RootStackParamList>
 >;
 

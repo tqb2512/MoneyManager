@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import AppNavigation from "./navigation";
 import BottomBarTabs from "./navigation";
 import { NativeBaseProvider } from "native-base";
 import { Text } from "react-native";
-import { getDBConnection, importTestData, createTables, dropTables } from "./services/db-services";
+import { getDBConnection, importTestData, createTables, dropTables, firstLoad } from "./services/db-services";
 
 import { EventRegister } from "react-native-event-listeners";
 import themeContext from "./config/themeContext";
@@ -18,9 +18,8 @@ export default function App() {
     useEffect(() => {
         const getModeValue = async () => {
             const value = await AsyncStorage.getItem('switchValue')
-            if (value !== null) {
+            if (value !== null)
                 setMode(JSON.parse(value));
-            }
         };
         getModeValue()
         let eventListener = EventRegister.addEventListener(
@@ -37,24 +36,31 @@ export default function App() {
     useEffect(() => {
         const getCurrencyValue = async () => {
             const value = await AsyncStorage.getItem('currency')
-            if (value === null) {
-                await AsyncStorage.setItem('currency', JSON.stringify({name: 'USD', fullName: 'US Dollar', symbol: '$'}))
-            }
+            if (value === null)
+                await AsyncStorage.setItem('currency', JSON.stringify({ name: 'USD', fullName: 'US Dollar', symbol: '$' }))
         };
         getCurrencyValue()
+
+        const getLanguageValue = async () => {
+            const value = await AsyncStorage.getItem('language')
+            if (value === null)
+                await AsyncStorage.setItem('language', 'en')
+        };
+        getLanguageValue()
     }, []);
 
     useEffect(() => {
         getDBConnection().then((db) => {
             createTables(db)
+            firstLoad(db)
         })
     }, []);
 
     return (
-        <themeContext.Provider value = { mode === true ? theme.dark : theme.light } >
+        <themeContext.Provider value={mode === true ? theme.dark : theme.light} >
             <NativeBaseProvider>
                 <NavigationContainer>
-                    <AppNavigation/>
+                    <AppNavigation />
                 </NavigationContainer>
             </NativeBaseProvider>
         </themeContext.Provider>

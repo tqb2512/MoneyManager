@@ -15,15 +15,15 @@ export type Props = {
   image_uri: string;
 };
 
-const Categories: React.FC<Props> = ({categoryName, image_uri, onSelect, onClose}) => {
+const Categories: React.FC<Props> = ({ categoryName, image_uri, onSelect, onClose }) => {
   return (
-    <View style={{alignContent: 'center', alignItems: 'center'}}>
+    <View style={{ alignContent: 'center', alignItems: 'center' }}>
       <TouchableOpacity
         onPress={() => {
           onSelect(categoryName);
           onClose(false);
         }}
-        style={{marginLeft: 14, marginRight: 14, marginTop: 14, width: 68}}>
+        style={{ marginLeft: 14, marginRight: 14, marginTop: 14, width: 68 }}>
         <Image
           style={{
             height: 32,
@@ -44,10 +44,10 @@ const Categories: React.FC<Props> = ({categoryName, image_uri, onSelect, onClose
 export default Categories;
 
 const styles = StyleSheet.create({
-    textStyle:{
-      fontSize: 15,
-      color: "grey",
-      fontWeight: "500",
-      textAlign: "center"
-    },
+  textStyle: {
+    fontSize: 15,
+    color: "grey",
+    fontWeight: "500",
+    textAlign: "center"
+  },
 })

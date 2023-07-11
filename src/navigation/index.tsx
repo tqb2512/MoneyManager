@@ -27,6 +27,17 @@ import ChangeTheme from '../screens/Settings/components/ChangeTheme';
 import themeContext from '../config/themeContext';
 import { themeInterface } from '../config/themeInterface';
 import { useContext } from 'react';
+import Monthly from '../screens/Home/Monthly';
+import Language from '../screens/Settings/components/Language';
+import { Image, Platform } from 'react-native';
+import { Text } from 'react-native-svg';
+import { PlusCircleIcon, PlusIcon } from 'react-native-heroicons/outline'
+import Data from '../screens/Settings/components/Data';
+import { Language as LanguageModel, languagePack } from '../models/language';
+import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import vi from '../config/language/vi';
+import en from '../config/language/en';
 
 
 const HomeTopBar = createMaterialTopTabNavigator<HomeTopBarParamList>();
@@ -35,9 +46,9 @@ const BottomBar = createBottomTabNavigator<BottomTabParamList>();
 const AppStack = createStackNavigator<RootStackParamList>();
 
 
-function BottomBarTabs()
-{
+function BottomBarTabs() {
   const theme = useContext(themeContext) as themeInterface
+
   return (
     <BottomBar.Navigator
       initialRouteName='bottom_bar_home'
@@ -45,133 +56,158 @@ function BottomBarTabs()
         headerShown: false,
         tabBarShowLabel: false,
         tabBarHideOnKeyboard: true,
-        tabBarStyle:{
+        tabBarStyle: {
           height: 60,
         },
-        tabBarItemStyle:{
-          alignItems: 'center',
-          justifyContent: 'center',
+        tabBarItemStyle: {
           backgroundColor: theme.background
         },
       }}
     >
-      <BottomBar.Screen 
-        name="bottom_bar_home" 
+      <BottomBar.Screen
+        name="bottom_bar_home"
         component={HomeScreenTopBar}
         options={{
           headerShown: false,
           headerTitle: '',
           // headerRight: () => (<Header />),
-          tabBarIcon: ({focused}) => 
-            <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} color={focused ? '#2A7BDB': 'grey'} size={20} />
-        }} 
-        />
-      <BottomBar.Screen 
-        name="bottom_bar_stats" 
+          tabBarIcon: ({ focused }) =>
+            <Ionicons name={focused ? 'ios-home' : 'ios-home-outline'} color={focused ? '#2196f3' : 'grey'} size={20} />
+        }}
+      />
+
+      <BottomBar.Screen
+        name="bottom_bar_stats"
         component={StatsScreenTopBar}
         options={{
           headerStyle: { backgroundColor: theme.componentBackground },
-          tabBarIcon: ({focused}) => 
-            <Ionicons name={focused ? 'ios-pie-chart' : 'ios-pie-chart-outline'} color={focused ? '#2A7BDB': 'grey'} size={20} />
-        }} 
+          tabBarIcon: ({ focused }) =>
+            <Ionicons name={focused ? 'ios-pie-chart' : 'ios-pie-chart-outline'} color={focused ? '#2196f3' : 'grey'} size={20} />
+        }}
       />
 
-      <BottomBar.Screen 
-        name="bottom_bar_accounts" 
+      <BottomBar.Screen
+        name="bottom_bar_accounts"
         component={AccountsScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({focused}) => 
-            <Ionicons name={focused ? 'ios-card' : 'ios-card-outline'} color={focused ? '#2A7BDB': 'grey'} size={20} />
-        }} 
+          tabBarIcon: ({ focused }) =>
+            <Ionicons name={focused ? 'ios-card' : 'ios-card-outline'} color={focused ? '#2196f3' : 'grey'} size={20} />
+        }}
       />
-      <BottomBar.Screen 
-        name="bottom_bat_settings"
+      <BottomBar.Screen
+        name="bottom_bar_settings"
         component={Settings}
         options={{
           headerShown: false,
-          tabBarIcon: ({focused}) => 
-            <Ionicons name={focused ? 'settings' : 'settings-outline'} color={focused ? '#2A7BDB': 'grey'} size={20} />
-        }} 
+          tabBarIcon: ({ focused }) =>
+            <Ionicons name={focused ? 'settings' : 'settings-outline'} color={focused ? '#2196f3' : 'grey'} size={20} />
+        }}
       />
     </BottomBar.Navigator>
   )
 }
 
-function HomeScreenTopBar()
-{
+function HomeScreenTopBar() {
   const theme = useContext(themeContext) as themeInterface
+  const [languagePack, setLanguagePack] = React.useState<LanguageModel>({} as LanguageModel);
+
+  useEffect(() => {
+    const getLanguagePack = async () => {
+      const language = await AsyncStorage.getItem('language');
+      if (language === 'vi') {
+        setLanguagePack(vi);
+      } else {
+        setLanguagePack(en);
+      }
+    }
+    getLanguagePack();
+  }, [])
+
   return (
-      <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <HomeTopBar.Navigator initialRouteName="home_top_bar_daily">
-      <HomeTopBar.Screen 
-        name="home_top_bar_daily" 
-        component={DailyScreen}
-        options={{
-          tabBarLabel: 'Daily',
-          tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
-          tabBarActiveTintColor: theme.mode === 'dark' ?  theme.color : '#566573',
-          tabBarInactiveTintColor: '#D5D8DC',
-          tabBarBounces: false,
-          tabBarIndicatorStyle: {borderBottomColor: '#566573', borderBottomWidth: 1, backgroundColor: 'white'},
-          tabBarStyle: { backgroundColor: theme.background }
-        }}
-      />
-      <HomeTopBar.Screen 
-        name="home_top_bar_celandar" 
-        component={CelandarScreen} 
-        options={{
-          tabBarLabel: 'Calendar',
-          tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
-          tabBarActiveTintColor: theme.mode === 'dark' ?  theme.color : '#566573',
-          tabBarInactiveTintColor: '#D5D8DC',
-          tabBarBounces: false,
-          tabBarIndicatorStyle: {borderBottomColor: '#566573', borderBottomWidth: 1, backgroundColor: 'white'},
-          tabBarStyle: { backgroundColor: theme.background }
-        }}
+        <HomeTopBar.Screen
+          name="home_top_bar_daily"
+          component={DailyScreen}
+          options={{
+            tabBarLabel: languagePack.daily,
+            tabBarLabelStyle: { fontSize: 18, fontWeight: 'bold' },
+            tabBarActiveTintColor: theme.mode === 'dark' ? theme.color : '#566573',
+            tabBarInactiveTintColor: '#D5D8DC',
+            tabBarBounces: false,
+            tabBarIndicatorStyle: { backgroundColor: 'white' },
+            tabBarStyle: { backgroundColor: theme.background }
+          }}
+        />
+        <HomeTopBar.Screen
+          name="home_top_bar_celandar"
+          component={CelandarScreen}
+          options={{
+            tabBarLabel: languagePack.celandar,
+            tabBarLabelStyle: { fontSize: 18, fontWeight: 'bold' },
+            tabBarActiveTintColor: theme.mode === 'dark' ? theme.color : '#566573',
+            tabBarInactiveTintColor: '#D5D8DC',
+            tabBarBounces: false,
+            tabBarIndicatorStyle: { backgroundColor: 'white' },
+            tabBarStyle: { backgroundColor: theme.background }
+          }}
         />
       </HomeTopBar.Navigator>
-      </View>
-  ) 
+    </View>
+  )
 }
 
 function StatsScreenTopBar() {
   const theme = useContext(themeContext) as themeInterface;
+  const [languagePack, setLanguagePack] = React.useState<LanguageModel>({} as LanguageModel);
+
+  useEffect(() => {
+    const getLanguagePack = async () => {
+      const language = await AsyncStorage.getItem('language');
+      if (language === 'vi') {
+        setLanguagePack(vi);
+      } else {
+        setLanguagePack(en);
+      }
+    }
+    getLanguagePack();
+  }, [])
+
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <StatsTopBar.Navigator>
         <StatsTopBar.Screen
           name="stats_top_bar_income"
           component={IncomeScreen}
           options={{
-            tabBarLabel: 'Income',
-            tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
+            tabBarLabel: languagePack.income,
+            tabBarLabelStyle: { fontSize: 18, fontWeight: 'bold' },
             tabBarActiveTintColor: '#7DCEA0',
             tabBarInactiveTintColor: '#D5D8DC',
             tabBarBounces: false,
             tabBarIndicatorStyle: {
-              borderBottomColor: '#7DCEA0',
-              borderBottomWidth: 1,
+
               backgroundColor: 'white',
             },
-            tabBarStyle: {backgroundColor: theme.componentBackground},
+            tabBarStyle: { backgroundColor: theme.componentBackground },
           }}
         />
         <StatsTopBar.Screen
           name="stats_top_bar_expense"
           component={ExpenseScreen}
           options={{
-            tabBarLabel: 'Expense',
-            tabBarLabelStyle: {fontSize: 18, fontWeight: 'bold'},
+            tabBarLabel: languagePack.expense,
+            tabBarLabelStyle: { fontSize: 18, fontWeight: 'bold' },
             tabBarActiveTintColor: '#F1948A',
             tabBarInactiveTintColor: '#D5D8DC',
             tabBarBounces: false,
             tabBarIndicatorStyle: {
-              borderBottomColor: '#F1948A',
-              borderBottomWidth: 1,
+
+
               backgroundColor: 'white',
             },
-            tabBarStyle: {backgroundColor: theme.componentBackground},
+            tabBarStyle: { backgroundColor: theme.componentBackground },
           }}
         />
       </StatsTopBar.Navigator>
@@ -179,15 +215,14 @@ function StatsScreenTopBar() {
   );
 }
 
-function AppNavigation()
-{
+function AppNavigation() {
   return (
-    <AppStack.Navigator 
+    <AppStack.Navigator
       initialRouteName="bottom_bar"
       screenOptions={{
         headerShown: false
       }}
-      >
+    >
       <AppStack.Screen name="add_account" component={AddAccountScreen} />
       <AppStack.Screen name="add_transaction" component={AddTransaction} />
       <AppStack.Screen name="edit_account" component={EditAccount} />
@@ -196,7 +231,8 @@ function AppNavigation()
       <AppStack.Screen name="bottom_bar" component={BottomBarTabs} />
       <AppStack.Screen name="change_currency" component={ChangeCurrency} />
       <AppStack.Screen name="change_theme" component={ChangeTheme} />
-      <AppStack.Screen name="settings" component={Settings} />
+      <AppStack.Screen name="language" component={Language} />
+      <AppStack.Screen name="data" component={Data} />
     </AppStack.Navigator>
   );
 }

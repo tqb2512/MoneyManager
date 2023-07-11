@@ -9,6 +9,12 @@ import themeContext from "../../../../config/themeContext";
 import { themeInterface } from "../../../../config/themeInterface";
 import CalendarButton from "../../../Home/CalendarButton";
 import { PieData } from "../../../../models/pieData";
+import PeriodButton from "../../../Home/PeriodButton";
+import { CategoryList, Language } from "../../../../models/language";
+import vi from "../../../../config/language/vi";
+import en from "../../../../config/language/en";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Currency } from "../../../../models/currency";
 
 export type ChartData = {
   name: string,
@@ -29,6 +35,8 @@ export default function Chart(props: { navigation: any }) {
   const [timeOptionsValue, setTimeOptionsValue] = useState<any>('Monthly')
   const [date, setDate] = useState<Date>(new Date())
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [languagePack, setLanguagePack] = useState<Language>({} as Language);
+  const [currency, setCurrency] = useState<Currency>({} as Currency);
 
   const updateChart = () => {
     setIsLoaded(false);
@@ -39,7 +47,7 @@ export default function Chart(props: { navigation: any }) {
             setChartData(chartData);
             setIsLoaded(true);
             setChartPressValue({
-              name: 'Total',
+              name: languagePack.total,
               percentage: 1,
               value: chartData.reduce((a, b) => a + (b.value || 0), 0),
               color: 'white'
@@ -53,7 +61,7 @@ export default function Chart(props: { navigation: any }) {
             setChartData(chartData);
             setIsLoaded(true);
             setChartPressValue({
-              name: 'Total',
+              name: languagePack.total,
               percentage: 1,
               value: chartData.reduce((a, b) => a + (b.value || 0), 0),
               color: 'white'
@@ -62,7 +70,7 @@ export default function Chart(props: { navigation: any }) {
         }
         )
         break;
-      }
+    }
   }
 
   useEffect(() => {
@@ -72,15 +80,36 @@ export default function Chart(props: { navigation: any }) {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       updateChart()
+
+      const getLanguagePack = async () => {
+        const language = await AsyncStorage.getItem('language');
+        if (language === 'vi') {
+          setLanguagePack(vi);
+        } else {
+          setLanguagePack(en);
+        }
+      }
+      getLanguagePack();
+
+      const getCurrency = async () => {
+        const currency = await AsyncStorage.getItem('currency');
+        if (currency) {
+          setCurrency(JSON.parse(currency));
+        }
+      }
+      getCurrency();
+
     });
     return unsubscribe;
   }, [navigation]);
 
-
+  function handlePress() {
+    setShowTimeOptions(!showTimeOptions)
+  }
 
   return (
-    <SafeAreaView style={styles.mainContainer}>
-      <View style={styles.chartContainer}>
+    <SafeAreaView style={[styles.mainContainer, { backgroundColor: theme.background }]}>
+      <View style={[styles.chartContainer, { backgroundColor: theme.componentBackground }]}>
         {isLoaded && (<PieChart
           data={chartData}
           showText
@@ -91,7 +120,8 @@ export default function Chart(props: { navigation: any }) {
           textSize={26}
           focusOnPress
           onPress={(value: any) => {
-            setChartPressValue(value);
+            const result = { name: languagePack.categories[CategoryList.indexOf(value.name.toLowerCase())][1], percentage: value.percentage, value: value.value, color: value.color }
+            setChartPressValue(result)
           }}
           showValuesAsLabels={false}
           textBackgroundRadius={26}
@@ -100,7 +130,7 @@ export default function Chart(props: { navigation: any }) {
               <View style={{ alignItems: "center" }}>
                 <Text style={{ color: theme.mode === 'dark' ? "black" : 'grey', fontWeight: 'bold', fontSize: 20, textAlign: "center" }}>
                   {chartPressValue.name}{"\n"}
-                  $ {chartPressValue.value}
+                  {currency.symbol} {chartPressValue.value}
                 </Text>
               </View>
             )
@@ -108,7 +138,7 @@ export default function Chart(props: { navigation: any }) {
         />)}
       </View>
 
-      <ScrollView style={styles.pieDataContainer}>
+      <ScrollView style={[styles.pieDataContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }]}>
         {chartData.map((data, index) => {
           return (
             <Category
@@ -124,6 +154,7 @@ export default function Chart(props: { navigation: any }) {
 
       {/* Calendar button */}
       <CalendarButton date={date} setDate={setDate} />
+      <PeriodButton onPress={handlePress} period={timeOptionsValue == 'Yearly' ? languagePack.yearly : languagePack.monthly} />
 
       {showTimeOptions && (
         <View>
@@ -131,20 +162,20 @@ export default function Chart(props: { navigation: any }) {
             setTimeOptionsValue('Yearly')
             setShowTimeOptions(false)
           }} style={styles.periodButton1}>
-            <Text style={{ fontSize: 14, padding: 6, color: 'white' }}>Yearly</Text>
+            <Text style={{ fontSize: 14, padding: 6, color: 'white' }}>{languagePack.yearly}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {
             setTimeOptionsValue('Monthly')
             setShowTimeOptions(false)
           }} style={styles.periodButton2}>
-            <Text style={{ fontSize: 14, padding: 6, color: 'white' }}>Monthly</Text>
+            <Text style={{ fontSize: 14, padding: 6, color: 'white' }}>{languagePack.monthly}</Text>
           </TouchableOpacity>
         </View>
       )}
 
-      <TouchableOpacity onPress={() => setShowTimeOptions(!showTimeOptions)} style={styles.periodButton}>
+      {/* <TouchableOpacity onPress={() => setShowTimeOptions(!showTimeOptions)} style={styles.periodButton}>
         <Text style={{ fontSize: 16, fontWeight: '500', padding: 6, color: 'white' }}>{timeOptionsValue}</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
     </SafeAreaView>
   )
@@ -173,19 +204,22 @@ const styles = StyleSheet.create({
 
   periodButton: {
     position: 'absolute',
-    bottom: 22,
+    bottom: '3.8%',
     right: 16,
-    backgroundColor: 'rgb(99, 99, 99)',
-    borderRadius: 16,
-    width: 80,
-    alignItems: 'center'
+    backgroundColor: 'rgba(178, 178, 178, 0.95)',
+    borderRadius: 25,
+    alignItems: 'center',
+    paddingVertical: 0.8,
+    paddingHorizontal: 10,
+    // padding: 20, 
+    width: 110
   },
 
   periodButton1: {
     position: 'absolute',
-    bottom: 60,
+    bottom: 63,
     right: 16,
-    backgroundColor: 'rgb(99, 99, 99)',
+    backgroundColor: 'rgba(178, 178, 178, 0.95)',
     borderRadius: 16,
     width: 75,
     alignItems: 'center'
@@ -193,9 +227,9 @@ const styles = StyleSheet.create({
 
   periodButton2: {
     position: 'absolute',
-    bottom: 96,
+    bottom: 98,
     right: 16,
-    backgroundColor: 'rgb(99, 99, 99)',
+    backgroundColor: 'rgba(178, 178, 178, 0.95)',
     borderRadius: 16,
     width: 75,
     alignItems: 'center'
