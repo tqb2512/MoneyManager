@@ -101,7 +101,7 @@ function DayBox(props: { dayBoxModel: DayBoxModel, navigation: any, currency: Cu
       </View>
       {/* Danh sách khoản thu chi */}
       <FlatList
-      showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         data={props.dayBoxModel.transactions}
         renderItem={({item, index}) => (
           <SafeAreaView>

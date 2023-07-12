@@ -150,7 +150,7 @@ function AccountDetail(props: AccountDetailProp) {
             size={20}
             color={theme.color}
           />
-          <Text style={[styles.accountNameTxt, {color: theme.color}]}>
+          <Text numberOfLines={1} ellipsizeMode='tail' style={[styles.accountNameTxt, {color: theme.color, width: '80%'}]}>
             {props.route.params.account.name}
           </Text>
         </View>

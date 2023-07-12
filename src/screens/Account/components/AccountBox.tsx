@@ -15,7 +15,7 @@ export default function AccountBox(props: { account: Account; navigation: any; c
         <TouchableOpacity onPress={() => navigation.navigate('account_detail', { account })}>
             <View style={[styles.accountButton, { backgroundColor: theme.componentBackground }]}>
                 <View style={styles.accountLabel}>
-                    <Text style={[styles.accountText, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>{account.name}</Text>
+                    <Text  numberOfLines={1} ellipsizeMode='tail' style={[styles.accountText, { color: theme.mode === 'dark' ? theme.color : 'grey', width: '85%' }]}>{account.name}</Text>
                 </View>
                 <View style={styles.moneyLabel}>
                     <Text style={account.balance >= 0 ? [styles.moneyText, { color: "#7DCEA0" }] : [styles.moneyText, { color: "#F1948A" }]}>{props.currency.symbol} {account.balance}</Text>
