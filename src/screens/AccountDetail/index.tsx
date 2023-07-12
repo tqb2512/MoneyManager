@@ -330,6 +330,7 @@ function AccountDetail(props: AccountDetailProp) {
               dayBoxModel={item}
               navigation={props.navigation}
               currency={currency}
+              showFooter={false}
             />
           )}
           keyExtractor={item => item.day.toString()}
