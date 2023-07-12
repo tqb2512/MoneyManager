@@ -313,8 +313,8 @@ function TransactionDetail(props: TransactionDetailProp) {
                           paddingBottom: 2,
                           borderBottomColor: 'grba(0,0,0,0.1)',
                           borderBottomWidth: 0.2,
-                          marginBottom: 6,
-                          backgroundColor: 'black',
+                          // marginBottom: 6,
+                          backgroundColor: theme.mode === 'dark' ? '#7d7f84' : 'black',
                           borderTopLeftRadius: 4,
                           borderTopRightRadius: 4,
                         }}>
@@ -345,25 +345,27 @@ function TransactionDetail(props: TransactionDetailProp) {
                           data={categories}
                           renderItem={({ item }) => (
                             <TouchableOpacity
-                              style={{
-                                margin: 5,
-                                width: '31.2%',
-                                alignItems: 'center',
-                                padding: 18,
-                                borderWidth: 0.3,
-                              }}
-                              onPress={() => {
-                                setTransaction({
-                                  ...transaction,
-                                  category: item,
-                                });
-                                setSelectedInput('');
-                                setShowCategories(false);
-                              }}>
-                              <Text>{
-                                languagePack.categories[CategoryList.indexOf(item.name.toLowerCase())][1]
-                              }</Text>
-                            </TouchableOpacity>
+                            style={{
+                              width: '33.33%',
+                              alignItems: 'center',
+                              padding: 6,
+                              paddingVertical: 12,
+                            }}
+                            onPress={() => {
+                              setTransaction({
+                                ...transaction,
+                                category: item,
+                              });
+                              setSelectedInput('');
+                              setShowCategories(false);
+                            }}>
+                            {/* test image */}
+                            <Image
+                              source={require('../../../assets/icons/money.png')}
+                              style={{ width: 48, height: 48, marginBottom: 4 }}
+                            />
+                            <Text>{languagePack.categories[CategoryList.indexOf(item.name.toLowerCase())][1]}</Text>
+                          </TouchableOpacity>
                           )}
                           keyExtractor={item => item.id.toString()}
                         />
@@ -421,7 +423,7 @@ function TransactionDetail(props: TransactionDetailProp) {
                           paddingBottom: 2,
                           borderBottomColor: 'grba(0,0,0,0.1)',
                           borderBottomWidth: 0.2,
-                          backgroundColor: 'black',
+                          backgroundColor: theme.mode === 'dark' ? '#7d7f84' : 'black',
                           borderTopLeftRadius: 4,
                           borderTopRightRadius: 4,
                         }}>
@@ -453,18 +455,18 @@ function TransactionDetail(props: TransactionDetailProp) {
                           renderItem={({ item }) => (
                             <TouchableOpacity
                               style={{
-                                margin: 5,
-                                width: '31.2%',
+                                width: accounts.length == 3 ? '33.33%' : accounts.length == 2 ? '50%' : '100%',
                                 alignItems: 'center',
                                 padding: 18,
-                                borderWidth: 0.3,
+                                borderWidth: 0.2,
+                                justifyContent: 'center'
                               }}
                               onPress={() => {
                                 setTransaction({ ...transaction, account: item });
                                 setSelectedInput('');
                                 setShowAccounts(false);
                               }}>
-                              <Text>{item.name}</Text>
+                              <Text numberOfLines={2} ellipsizeMode='tail' style={{ alignSelf: 'center', justifyContent: 'center' }}>{item.name}</Text>
                               {/* <View style={{ borderWidth: 0.2 }} ></View> */}
                             </TouchableOpacity>
                           )}
@@ -790,6 +792,7 @@ const styles = StyleSheet.create({
     marginLeft: 24,
     fontSize: 18,
     color: 'black',
+    fontWeight: '600',
   },
 });
 

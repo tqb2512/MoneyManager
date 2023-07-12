@@ -408,7 +408,7 @@ function AddTransaction(props: AddTransactionProp) {
                               {/* test image */}
                               <Image
                                 source={require('../../../assets/icons/money.png')}
-                                style={{ width: 48, height: 48 }}
+                                style={{ width: 48, height: 48, marginBottom: 4 }}
                               />
                               <Text>{languagePack.categories[CategoryList.indexOf(item.name.toLowerCase())][1]}</Text>
                             </TouchableOpacity>
