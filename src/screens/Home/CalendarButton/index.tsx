@@ -29,6 +29,7 @@ export default function CalendarButton(props: { date: Date, setDate: Function })
             {date.getMonth() + 1}/{date.getFullYear()}
           </Text>
         </TouchableOpacity>
+        
         {show && (
           <MonthPicker
             mode='number'
