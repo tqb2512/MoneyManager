@@ -40,6 +40,11 @@ export default {
     "thu": "Thu",
     "fri": "Fri",
     "sat": "Sat",
+    // No data available
+    "nodata": "No data available.",
+    // Change theme
+    "dark": "Switch to change to Light mode.",
+    "light": "Switch to change to Dark mode.",
     //list category
     categories: [
         ["food", "Food"],

@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {View, Text, StyleSheet, FlatList, Modal, TextInput, Alert} from 'react-native';
+import {View, Text, StyleSheet, FlatList, Modal, TextInput, Alert, Image} from 'react-native';
 import {AccountDetailProp} from '../../navigation/types';
 import {
   ChevronLeftIcon,
@@ -37,6 +37,7 @@ function AccountDetail(props: AccountDetailProp) {
   const [currency, setCurrency] = React.useState<Currency>({} as Currency);
   const [dayBoxes, setDayBoxes] = React.useState<DayBoxModel[]>([]);
   const [menuShow, setMenuShow] = React.useState(false);
+  const [isNoData, setIsNoData] = React.useState(false);
   const [accountName, setAccountName] = React.useState<String>('');
   const [totalIncome, setTotalIncome] = React.useState<number>(0);
   const [totalExpense, setTotalExpense] = React.useState<number>(0);
@@ -51,6 +52,7 @@ function AccountDetail(props: AccountDetailProp) {
       getDBConnection().then(db => {
         getDayBoxByAccount(db, props.route.params.account).then(dayBoxes => {
           setDayBoxes(dayBoxes);
+          { dayBoxes.length == 0 ? setIsNoData(true) : setIsNoData(false) }
           let tempTotalIncome = 0;
           let tempTotalExpense = 0;
           for (let i = 0; i < dayBoxes.length; i++) {
@@ -149,7 +151,7 @@ function AccountDetail(props: AccountDetailProp) {
             color={theme.color}
           />
           <Text style={[styles.accountNameTxt, {color: theme.color}]}>
-            { props.route.params.account.name  }
+            {props.route.params.account.name}
           </Text>
         </View>
         {/* navigation.navigate("edit_account", { account: props.route.params.account )}*/}
@@ -161,6 +163,7 @@ function AccountDetail(props: AccountDetailProp) {
           color={theme.color}
         />
       </View>
+
 
       {menuShow && (
         <View style={[styles.subView, {backgroundColor: theme.background}]}>
@@ -177,7 +180,10 @@ function AccountDetail(props: AccountDetailProp) {
           </TouchableOpacity>
           {/* Delete button */}
           <TouchableOpacity
-            style={[styles.addThreeDotsContainer, { borderTopWidth: 1, paddingTop: 8 }]}
+            style={[
+              styles.addThreeDotsContainer,
+              {borderTopWidth: 1, paddingTop: 8},
+            ]}
             onPress={() => {
               deleteAccountFunction();
               setMenuShow(false);
@@ -223,33 +229,40 @@ function AccountDetail(props: AccountDetailProp) {
                   Edit Account
                 </Text>
                 {/* Close icon */}
-               <View style={{ right: 4 }}>
-                <XMarkIcon
-                    color='white'
+                <View style={{right: 4}}>
+                  <XMarkIcon
+                    color="white"
                     style={{marginEnd: 0}}
                     onPress={() => {
                       setShowEditAccount(false);
                     }}
                   />
-               </View>
+                </View>
               </View>
 
               <View>
                 <View style={styles.input}>
-                    <Text style={[styles.inputLabel, { color: 'black' }]}>Name</Text>
-                    <TextInput
-                        value={account.name}
-                        style={[styles.infoText, { color: 'black' }]}
-                        onPressIn={() => {}}
-                        onChangeText={(name) => {
-                            setAccount({ ...account, name: name });
-                        }}
-                    />
+                  <Text style={[styles.inputLabel, {color: 'black'}]}>
+                    Name
+                  </Text>
+                  <TextInput
+                    value={account.name}
+                    style={[styles.infoText, {color: 'black'}]}
+                    onPressIn={() => {}}
+                    onChangeText={name => {
+                      setAccount({...account, name: name});
+                    }}
+                  />
                 </View>
 
                 <TouchableOpacity
-                  style={[styles.saveButton, {backgroundColor: '#2196f3', marginBottom: 16}]}
-                  onPress={() => {saveAccountName()}}>
+                  style={[
+                    styles.saveButton,
+                    {backgroundColor: '#2196f3', marginBottom: 16},
+                  ]}
+                  onPress={() => {
+                    saveAccountName();
+                  }}>
                   <Text style={{fontWeight: '600', color: 'white'}}>Save</Text>
                 </TouchableOpacity>
               </View>
@@ -287,6 +300,26 @@ function AccountDetail(props: AccountDetailProp) {
           </Text>
         </View>
       </View>
+
+      {/* No data view */}
+      { isNoData && (
+        <View>
+          <Image
+            source={require('../../../assets/settingImage/nodata.png')}
+            style={{
+              width: 80,
+              height: 80,
+              tintColor: theme.color,
+              alignSelf: 'center',
+              marginTop: '60%',
+            }}
+          />
+          <Text
+            style={{color: theme.color, alignSelf: 'center', paddingTop: 4}}>
+            {languagePack.nodata}
+          </Text>
+        </View>
+      )}
 
       {/* List các khoản thu của tài khoản này ở đây */}
       <View>

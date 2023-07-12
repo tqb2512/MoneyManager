@@ -183,10 +183,7 @@ function StatsScreenTopBar() {
             tabBarActiveTintColor: '#7DCEA0',
             tabBarInactiveTintColor: '#D5D8DC',
             tabBarBounces: false,
-            tabBarIndicatorStyle: {
-
-              backgroundColor: 'white',
-            },
+            tabBarIndicatorStyle: { backgroundColor: theme.mode === 'dark' ? 'white' : '#566573' },
             tabBarStyle: { backgroundColor: theme.componentBackground },
           }}
         />
@@ -199,11 +196,7 @@ function StatsScreenTopBar() {
             tabBarActiveTintColor: '#F1948A',
             tabBarInactiveTintColor: '#D5D8DC',
             tabBarBounces: false,
-            tabBarIndicatorStyle: {
-
-
-              backgroundColor: 'white',
-            },
+            tabBarIndicatorStyle: { backgroundColor: theme.mode === 'dark' ? 'white' : '#566573' },
             tabBarStyle: { backgroundColor: theme.componentBackground },
           }}
         />

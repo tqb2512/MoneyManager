@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   View,
+  Image
 } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 import DayBox from './components/DayBox';
@@ -98,7 +99,14 @@ function DailyScreen(props: DailyScreenProp) {
 
   return (
     <NativeBaseProvider>
-      <SafeAreaView style={[styles.mainContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }]}>
+      <SafeAreaView
+        style={[
+          styles.mainContainer,
+          {
+            backgroundColor:
+              theme.mode === 'dark' ? theme.background : '#f2f2f2',
+          },
+        ]}>
         <View style={styles.addButtonContainer}>
           <TouchableOpacity
             style={styles.addButton}
@@ -118,7 +126,7 @@ function DailyScreen(props: DailyScreenProp) {
             },
           ]}>
           <View style={styles.totalCalc}>
-            <Text style={[styles.totalElement, { color: theme.color }]}>
+            <Text style={[styles.totalElement, {color: theme.color}]}>
               {languagePack.income}
             </Text>
             <Text
@@ -132,7 +140,7 @@ function DailyScreen(props: DailyScreenProp) {
             </Text>
           </View>
           <View style={styles.totalCalc}>
-            <Text style={[styles.totalElement, { color: theme.color }]}>
+            <Text style={[styles.totalElement, {color: theme.color}]}>
               {languagePack.expense}
             </Text>
             <Text
@@ -146,29 +154,57 @@ function DailyScreen(props: DailyScreenProp) {
             </Text>
           </View>
           <View style={styles.totalCalc}>
-            <Text style={[styles.totalElement, { color: theme.color }]}>{languagePack.total}</Text>
+            <Text style={[styles.totalElement, {color: theme.color}]}>
+              {languagePack.total}
+            </Text>
             <Text
-              style={[{
-                alignSelf: 'center',
-                fontSize: 14,
-                fontWeight: '500',
-              }, total >= 0 ? { color: "#7DCEA0" } : { color: "#F1948A" }]}>
+              style={[
+                {
+                  alignSelf: 'center',
+                  fontSize: 14,
+                  fontWeight: '500',
+                },
+                total >= 0 ? {color: '#7DCEA0'} : {color: '#F1948A'},
+              ]}>
               {currency.symbol} {total.toFixed(2)}
             </Text>
           </View>
         </View>
+        {/* No data view */}
+        {dayBoxes.length <= 0 && (
+          <View>
+            <Image
+              source={require('../../../../assets/settingImage/nodata.png')}
+              style={{
+                width: 80,
+                height: 80,
+                tintColor: theme.color,
+                alignSelf: 'center',
+                marginTop: '50%',
+              }}
+            />
+            <Text
+              style={{color: theme.color, alignSelf: 'center', paddingTop: 4}}>
+              {languagePack.nodata}
+            </Text>
+          </View>
+        )}
         {/* Show list view chi tiêt schi tiêu ngày */}
         <View>
           <FlatList
             data={dayBoxes}
-            renderItem={({ item, index }) => (
+            renderItem={({item, index}) => (
               <View>
-                <DayBox dayBoxModel={item} navigation={props.navigation} currency={currency} />
-                {index === dayBoxes.length - 1 ?
-                  (<View style={styles.footerView}>
-                    <Text>  </Text>
-                  </View>)
-                  : null}
+                <DayBox
+                  dayBoxModel={item}
+                  navigation={props.navigation}
+                  currency={currency}
+                />
+                {index === dayBoxes.length - 1 ? (
+                  <View style={styles.footerView}>
+                    <Text> </Text>
+                  </View>
+                ) : null}
               </View>
             )}
             keyExtractor={item => item.day.toString()}

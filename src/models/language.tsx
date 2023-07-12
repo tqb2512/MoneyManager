@@ -43,6 +43,11 @@ export type Language = {
     thu: string;
     fri: string;
     sat: string;
+    // No data available
+    nodata: string;
+    // Change theme
+    dark: string,
+    light: string,
     //list category
     categories: string[][];
 }

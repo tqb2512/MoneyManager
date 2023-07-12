@@ -40,6 +40,11 @@ export default {
     "thu": "Th5",
     "fri": "Th6",
     "sat": "Th7",
+    // No data available
+    "nodata": "Chưa có dữ liệu.",
+    // Change theme
+    "dark": "Nhấn để chuyển sang chế độ sáng.",
+    "light": "Nhấn để chuyển sang chế độ tối.",
     //list category
     categories: [
         ["food", "Ăn uống"],

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { AccountsScreenProp } from '../../navigation/types';
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, StyleSheet, FlatList } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, StyleSheet, FlatList, Image } from 'react-native';
 import { NativeBaseProvider, ThreeDotsIcon } from 'native-base';
 import { getDBConnection, getAccounts } from '../../services/db-services';
 import { Account } from '../../models/account';
@@ -88,6 +88,27 @@ function AccountsScreen(props: AccountsScreenProp) {
                         </View>
                     </View>
                 </View>
+
+                {/* No data view */}
+                {accounts.length <= 0 && (
+                <View>
+                    <Image
+                    source={require('../../../assets/settingImage/nodata.png')}
+                    style={{
+                        width: 80,
+                        height: 80,
+                        tintColor: theme.color,
+                        alignSelf: 'center',
+                        marginTop: '60%',
+                    }}
+                    />
+                    <Text
+                    style={{color: theme.color, alignSelf: 'center', paddingTop: 4}}>
+                    {languagePack.nodata}
+                    </Text>
+                </View>
+                )}
+
                 {/* List account */}
 
                 <FlatList

@@ -15,6 +15,7 @@ function Language(props: LanguageProp) {
     const {navigation} = props;
     const theme = useContext(themeContext) as themeInterface 
     const [languagePack, setLanguagePack] = React.useState<LanguageModel>({} as LanguageModel);
+    const [currentLanguage, setCurrentLanguage] = React.useState<String>('')
 
     React.useEffect(() => {
         const getLanguageValue = async () => {
@@ -22,8 +23,10 @@ function Language(props: LanguageProp) {
             if (value !== null) {
                 if (value === 'en') {
                     setLanguagePack(en);
+                    setCurrentLanguage('en')
                 } else if (value === 'vi') {
                     setLanguagePack(vi);
+                    setCurrentLanguage('vi')
                 }
             }
         }
@@ -64,14 +67,20 @@ function Language(props: LanguageProp) {
         </View>
       </View>
 
-      <TouchableOpacity style={[styles.button, { backgroundColor: theme.componentBackground }]} onPress={() => changeLanguage("en")}>
-        <Image style={styles.img} source={require('../../../../assets/flagImage/united-kingdom.png')} />
-        <Text style={[styles.text, { color: theme.color }]}>English</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: theme.componentBackground }]} onPress={() => {changeLanguage("en"); setCurrentLanguage('en')}}>
+        <View style={{ flexDirection: 'row' }}>
+          <Image style={styles.img} source={require('../../../../assets/flagImage/united-kingdom.png')} />
+          <Text style={[styles.text, { color: theme.color }]}>English</Text>
+        </View>
+        {currentLanguage === 'en' ? <CheckCircleIcon style={{ alignSelf: 'center', marginStart: 12 }} size={20} color='#1056B4' /> : null}
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.button, { backgroundColor: theme.componentBackground }]} onPress={() => changeLanguage("vi")}>
-        <Image style={styles.img} source={require('../../../../assets/flagImage/vietnam.png')} />
-        <Text style={[styles.text, { color: theme.color }]}>Tiếng Việt</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: theme.componentBackground }]} onPress={() => {changeLanguage("vi"); setCurrentLanguage('vi')}}>
+        <View style={{ flexDirection: 'row' }}>
+          <Image style={styles.img} source={require('../../../../assets/flagImage/vietnam.png')} />
+          <Text style={[styles.text, { color: theme.color }]}>Tiếng Việt</Text>
+        </View>
+        {currentLanguage === 'vi' ? <CheckCircleIcon style={{ alignSelf: 'center', marginStart: 12 }} size={20} color='#1056B4' /> : null}
       </TouchableOpacity>
 
 
@@ -105,6 +114,7 @@ const styles = StyleSheet.create({
       },
       button: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
         padding: 12, 
         borderBottomWidth: 1,
         borderBottomColor: 'grey'

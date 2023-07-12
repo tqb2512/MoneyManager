@@ -5,6 +5,7 @@ import {
   View,
   Modal,
   Pressable,
+  Image
 } from 'react-native';
 import React, { useState, useEffect, useContext } from 'react';
 import { Calendar } from 'react-native-big-calendar';
@@ -96,41 +97,72 @@ function CalendarScreen(props: CelandarScreenProp) {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.mode === 'dark' ? theme.componentBackground : 'white' }}>
-      <View style={[styles.timecontrolContainer, { backgroundColor: theme.componentBackground }]} >
+    <View
+      style={{
+        flex: 1,
+        backgroundColor:
+          theme.mode === 'dark' ? theme.componentBackground : 'white',
+      }}>
+      <View
+        style={[
+          styles.timecontrolContainer,
+          {backgroundColor: theme.componentBackground},
+        ]}>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => { setDate(new Date()) }} style={[styles.prevNextButton, { borderColor: theme.color }]} >
-            <Text style={{ fontWeight: '500', color: theme.color }}> {languagePack.today} </Text>
+          <TouchableOpacity
+            onPress={() => {
+              setDate(new Date());
+            }}
+            style={[styles.prevNextButton, {borderColor: theme.color}]}>
+            <Text style={{fontWeight: '500', color: theme.color}}>
+              {' '}
+              {languagePack.today}{' '}
+            </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={prevMonth} style={[styles.prevNextButton, { borderColor: theme.color }]} >
+          <TouchableOpacity
+            onPress={prevMonth}
+            style={[styles.prevNextButton, {borderColor: theme.color}]}>
             <ChevronLeftIcon size={20} color={theme.color} />
           </TouchableOpacity>
 
-          <View style={{ alignItems: 'center', justifyContent: 'center', marginStart: 0, }}>
-            <Text style={{ color: theme.color, fontWeight: '500' }} >{date.getMonth() + 1}/{date.getFullYear()}</Text>
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginStart: 0,
+            }}>
+            <Text style={{color: theme.color, fontWeight: '500'}}>
+              {date.getMonth() + 1}/{date.getFullYear()}
+            </Text>
           </View>
 
-          <TouchableOpacity onPress={nextMonth} style={[styles.prevNextButton, { borderColor: theme.color }]}>
+          <TouchableOpacity
+            onPress={nextMonth}
+            style={[styles.prevNextButton, {borderColor: theme.color}]}>
             <ChevronRightIcon size={20} color={theme.color} />
           </TouchableOpacity>
-
         </View>
       </View>
-      <View style={{ backgroundColor: theme.componentBackground }}>
+      <View style={{backgroundColor: theme.componentBackground}}>
         <Calendar
           date={date}
           height={SCREEN_HEIGHT - 230}
           events={calendarEvents}
-          mode={'month'}
-          eventCellStyle={(event) => {
-            return { backgroundColor: event.color, alignItems: 'center' };
+          onPressEvent={() => {
+            setDateValue();
+            setDayClicked(true);
           }}
-          swipeEnabled={false}
-          onPressCell={(event) => {
+          onPressCell={event => {
             setDateValue(event);
             setDayClicked(true);
           }}
+          mode={'month'}
+          eventCellStyle={event => {
+            return {backgroundColor: event.color, alignItems: 'center'};
+          }}
+          swipeEnabled={false}
+          
         />
       </View>
 
@@ -141,16 +173,56 @@ function CalendarScreen(props: CelandarScreenProp) {
           onRequestClose={() => navigation.goBack()}
           onDismiss={() => navigation.goBack()}>
           <View style={styles.centeredView}>
-            <View style={[styles.modalView, { backgroundColor: theme.background }]}>
-              <DayBox dayBoxModel={dayBox} currency={currency} navigation={navigation} />
+            <View
+              style={[styles.modalView, {backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2'}]}>
+              <DayBox
+                dayBoxModel={dayBox}
+                currency={currency}
+                navigation={navigation}
+              />
+              {dayBox.transactions.length === 0 && (
+                <View>
+                  <Image
+                    source={require('../../../../assets/settingImage/notransacs.png')}
+                    style={{
+                      width: 80,
+                      height: 80,
+                      tintColor: theme.color,
+                      alignSelf: 'center',
+                      marginTop: '40%',
+                    }}
+                  />
+                  <Text
+                    style={{
+                      color: theme.color,
+                      alignSelf: 'center',
+                      paddingTop: 4,
+                    }}>
+                    {languagePack.nodata}
+                  </Text>
+                </View>
+              )}
               {/* Add transaction */}
               <TouchableOpacity
                 onPress={() => {
-                  setDayClicked(false)
-                  navigation.navigate('add_transaction')
+                  setDayClicked(false);
+                  navigation.navigate('add_transaction');
                 }}
-                style={{ margin: 8, bottom: 3, right: 0, backgroundColor: '#2196f3', width: 54, height: 54, borderRadius: 9999, position: 'absolute', shadowRadius: 16, shadowOffset: { width: 4, height: 4 }, alignItems: 'center', justifyContent: 'center' }}>
-                <PlusIcon style={{}} size={30} color='white' />
+                style={{
+                  margin: 8,
+                  bottom: 3,
+                  right: 0,
+                  backgroundColor: '#2196f3',
+                  width: 54,
+                  height: 54,
+                  borderRadius: 9999,
+                  position: 'absolute',
+                  shadowRadius: 16,
+                  shadowOffset: {width: 4, height: 4},
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <PlusIcon style={{}} size={30} color="white" />
               </TouchableOpacity>
             </View>
           </View>
@@ -165,11 +237,16 @@ function CalendarScreen(props: CelandarScreenProp) {
               alignItems: 'center',
               borderTopWidth: 0.2,
             }}>
-
-            <View style={{ flexDirection: 'row', marginEnd: 16, padding: 4, }}>
+            <View style={{flexDirection: 'row', marginEnd: 16, padding: 4}}>
               <ChevronLeftIcon
                 onPress={() => {
-                  setDateValue(new Date(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate() - 1));
+                  setDateValue(
+                    new Date(
+                      dateValue.getFullYear(),
+                      dateValue.getMonth(),
+                      dateValue.getDate() - 1,
+                    ),
+                  );
                 }}
                 style={{
                   marginLeft: 8,
@@ -182,7 +259,13 @@ function CalendarScreen(props: CelandarScreenProp) {
               />
               <ChevronRightIcon
                 onPress={() => {
-                  setDateValue(new Date(dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate() + 1));
+                  setDateValue(
+                    new Date(
+                      dateValue.getFullYear(),
+                      dateValue.getMonth(),
+                      dateValue.getDate() + 1,
+                    ),
+                  );
                 }}
                 style={{
                   marginLeft: 8,
@@ -198,8 +281,11 @@ function CalendarScreen(props: CelandarScreenProp) {
               onPress={() => {
                 setDayClicked(false);
               }}
-              style={{ marginEnd: 16, padding: 4 }}>
-              <Text style={{ fontSize: 20, fontWeight: '500', color: theme.color }}>{languagePack.close}</Text>
+              style={{marginEnd: 16, padding: 4}}>
+              <Text
+                style={{fontSize: 20, fontWeight: '500', color: theme.color}}>
+                {languagePack.close}
+              </Text>
             </Pressable>
           </View>
         </Modal>

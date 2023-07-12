@@ -63,7 +63,6 @@ function AddTransaction(props: AddTransactionProp) {
   const [currency, setCurrency] = React.useState<Currency>({} as Currency);
   const [languagePack, setLanguagePack] = React.useState<Language>({} as Language);
 
-
   const saveTransaction = () => {
     if (transaction.type == 'expense') {
       transaction.account.balance =
@@ -92,7 +91,6 @@ function AddTransaction(props: AddTransactionProp) {
   };
 
   useEffect(() => {
-
     const unsubscribe = navigation.addListener('focus', () => {
       const getCurrencyValue = async () => {
         const value = await AsyncStorage.getItem('currency')
@@ -127,7 +125,7 @@ function AddTransaction(props: AddTransactionProp) {
         setCategories(categories);
       });
       getAccounts(db).then(accounts => {
-        setAccounts(accounts);
+        setAccounts(accounts);     
       });
     });
   }, []);
@@ -509,7 +507,7 @@ function AddTransaction(props: AddTransactionProp) {
                           renderItem={({ item }) => (
                             <TouchableOpacity
                               style={{
-                                width: '33.33%',
+                                width: accounts.length == 3 ? '33.33%' : accounts.length == 2 ? '50%' : '100%',
                                 alignItems: 'center',
                                 padding: 18,
                                 borderWidth: 0.2,
@@ -861,6 +859,7 @@ const styles = StyleSheet.create({
     marginLeft: 24,
     fontSize: 18,
     color: 'black',
+    fontWeight: '600',
   },
 
   currencySymbol: {

@@ -57,7 +57,7 @@ function AddAccount(props: AddAccountProp) {
             </View>
             {/* Name account */}
 
-            <View style={[styles.contentContainer, { backgroundColor: theme.componentBackground, paddingTop: 8, paddingBottom: '60%',} ]}>
+            <View style={[styles.contentContainer, { backgroundColor: theme.componentBackground, paddingTop: 8, paddingBottom: '10%',} ]}>
                 <View style={styles.input}>
                     <Text style={[styles.inputLabel, { color: theme.color }]}>Name</Text>
                     <TextInput
