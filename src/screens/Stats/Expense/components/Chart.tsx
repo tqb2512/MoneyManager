@@ -151,7 +151,7 @@ export default function Chart(props: { navigation: any }) {
                         </View>
                     );
                 })}
-                <SafeAreaView style={{ backgroundColor: theme.componentBackground, width: '100%' }}>
+                <SafeAreaView style={{ backgroundColor: theme.background, width: '100%' }}>
                     <Text style={{ color: 'blue', padding: '10%' }}>    </Text>
                 </SafeAreaView>
             </ScrollView>
