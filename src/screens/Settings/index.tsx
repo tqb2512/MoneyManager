@@ -51,7 +51,7 @@ function Settings(props: SettingsScreenProp) {
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('data')} >
                     <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/file-export.png')} />
-                    <Text style={{ color: theme.color, fontSize: 16, fontWeight: '500' }}>{languagePack.data}</Text>
+                    <Text style={{ color: theme.color, fontSize: 16, fontWeight: '500' }}>{languagePack.backup}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("change_theme") }}>
                     <Image style={[styles.img, { tintColor: theme.color }]} source={require('../../../assets/settingImage/theme.png')} />

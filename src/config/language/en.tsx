@@ -28,6 +28,12 @@ export default {
     //account
     "balance": "Balance",
     "group": "Group",
+    "edit": "Edit",
+    "editAccount": "Edit Account",
+    "name": "string",
+    "deleteAccount": "Delete Account",
+    "deleteAccountAlert": "Are you sure you want to delete this account?",
+    "cancel": "Cancel",
     //stats
     "monthly": "Monthly",
     "yearly": "Yearly",
@@ -54,5 +60,17 @@ export default {
         ["study", "Study"],
         ["entertainment", "Entertainment"],
         ["salary", "Salary"],
-    ]
+    ],
+    //data
+    "import": "Import",
+    "export": "Export",
+    "backup": "Backup",
+    "deleteData": "Delete Data",
+    "success": "Success",
+    "exportSuccessMessage": "Export data successfully to ",
+    "deleteDataAlert": "Are you sure you want to delete all data?",
+    //change currency
+    "changeCurrency": "Change Currency",
+    "changeCurrencyAlert1": "Are you sure you want to change currency to ",
+    "changeCurrencyAlert2": "?\n\nChange currency will apply current exchange rate to all transaction and account",
 }

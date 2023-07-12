@@ -10,11 +10,16 @@ import { getDBConnection, changeAllTransactionsCurrency, changeAllAccountsCurren
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import themeContext from '../../../config/themeContext';
 import { themeInterface } from '../../../config/themeInterface';
+import { Language } from '../../../models/language';
+import vi from '../../../config/language/vi';
+import en from '../../../config/language/en';
 
 function ChangeCurrency(props: ChangeCurrencyProp) {
   const { navigation } = props;
   const theme = useContext(themeContext) as themeInterface
   const [currency, setCurrency] = React.useState<Currency>({} as Currency);
+  const [languagePack, setLanguagePack] = React.useState<Language>({} as Language);
+
   const currencyList: Currency[] = [
     {
       name: 'VND',
@@ -50,12 +55,24 @@ function ChangeCurrency(props: ChangeCurrencyProp) {
       }
     }
     getCurrencyValue()
+
+    const getLanguagePack = async () => {
+      const value = await AsyncStorage.getItem('language')
+      if (value !== null) {
+        if (value === 'vi') {
+          setLanguagePack(vi);
+        } else {
+          setLanguagePack(en);
+        }
+      }
+    }
+    getLanguagePack()
   }, []);
 
   const changeCurrency = async (newCurrency: Currency) => {
-    Alert.alert('Change Currency', 'Are you sure you want to change currency to ' + newCurrency.name + '?\n\nChange currency will apply current exchange rate to all transaction and account', [
+    Alert.alert(languagePack.changeCurrency, languagePack.changeCurrencyAlert1 + newCurrency.name + languagePack.changeCurrencyAlert2, [
       {
-        text: 'Cancel',
+        text: languagePack.cancel,
         style: 'cancel'
       },
       {
@@ -107,7 +124,7 @@ function ChangeCurrency(props: ChangeCurrencyProp) {
       <FlatList
         data={currencyList}
         renderItem={({ item }) => (
-          <TouchableOpacity style={[styles.currencyButton, { backgroundColor: theme.componentBackground }]} onPress={() => { changeCurrency(item); console.log(currency) }}>
+          <TouchableOpacity style={[styles.currencyButton, { backgroundColor: theme.componentBackground }]} onPress={() => { changeCurrency(item) }}>
             <View>
               <Text style={[styles.currencyNameText, { color: theme.color }]}>{item.fullName}</Text>
               <Text style={[styles.currencyShortNameText, { color: theme.color }]}>{item.name}</Text>

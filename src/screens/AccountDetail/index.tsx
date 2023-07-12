@@ -100,14 +100,14 @@ function AccountDetail(props: AccountDetailProp) {
   }, [navigation]);
 
   const deleteAccountFunction = () => {
-    Alert.alert('Delete Account', 'Are you sure to delete this account?', [
+    Alert.alert(languagePack.deleteAccount, languagePack.deleteAccountAlert, [
       {
-        text: 'Cancel',
+        text: languagePack.cancel,
         onPress: () => {},
         style: 'cancel',
       },
       {
-        text: 'Delete',
+        text: languagePack.delete,
         onPress: () => {
           getDBConnection().then(db => {
             deleteAccount(db, account).then(() => {
@@ -175,7 +175,7 @@ function AccountDetail(props: AccountDetailProp) {
               setMenuShow(false);
             }}>
             <Text style={[styles.threeDotsText, {color: theme.color}]}>
-              Edit
+              {languagePack.edit}
             </Text>
           </TouchableOpacity>
           {/* Delete button */}
@@ -189,7 +189,7 @@ function AccountDetail(props: AccountDetailProp) {
               setMenuShow(false);
             }}>
             <Text style={[styles.threeDotsText, {color: theme.color}]}>
-              Delete
+              {languagePack.delete}
             </Text>
           </TouchableOpacity>
         </View>
@@ -226,7 +226,7 @@ function AccountDetail(props: AccountDetailProp) {
                     color: 'white',
                     marginStart: 4,
                   }}>
-                  Edit Account
+                  {languagePack.editAccount}
                 </Text>
                 {/* Close icon */}
                 <View style={{right: 4}}>
@@ -243,7 +243,7 @@ function AccountDetail(props: AccountDetailProp) {
               <View>
                 <View style={styles.input}>
                   <Text style={[styles.inputLabel, {color: 'black'}]}>
-                    Name
+                    {languagePack.name}
                   </Text>
                   <TextInput
                     value={account.name}
@@ -263,7 +263,7 @@ function AccountDetail(props: AccountDetailProp) {
                   onPress={() => {
                     saveAccountName();
                   }}>
-                  <Text style={{fontWeight: '600', color: 'white'}}>Save</Text>
+                  <Text style={{fontWeight: '600', color: 'white'}}>{languagePack.save}</Text>
                 </TouchableOpacity>
               </View>
             </View>

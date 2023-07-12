@@ -29,6 +29,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Language } from '../../../models/language';
 import vi from '../../../config/language/vi';
 import en from '../../../config/language/en';
+import AddButton from './components/AddButton';
 
 function DailyScreen(props: DailyScreenProp) {
 
@@ -107,13 +108,6 @@ function DailyScreen(props: DailyScreenProp) {
               theme.mode === 'dark' ? theme.background : '#f2f2f2',
           },
         ]}>
-        <View style={styles.addButtonContainer}>
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => navigation.navigate('add_transaction')}>
-            <Text style={styles.addButtonText}>+</Text>
-          </TouchableOpacity>
-        </View>
 
         {/* Income, expense, total, bar */}
         <View
@@ -213,6 +207,7 @@ function DailyScreen(props: DailyScreenProp) {
           />
         </View>
         <CalendarButton date={date} setDate={setDate} />
+        <AddButton onPress={() => navigation.navigate('add_transaction')} />
       </SafeAreaView>
     </NativeBaseProvider>
   );

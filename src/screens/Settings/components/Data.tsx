@@ -10,6 +10,11 @@ import { Transaction } from '../../../models/transaction';
 import { useState } from 'react';
 import DocumentPicker from 'react-native-document-picker'
 import RNFS from 'react-native-fs';
+import { Language } from '../../../models/language';
+import vi from '../../../config/language/vi';
+import en from '../../../config/language/en';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react';
 
 
 const Data = (props: DataProp) => {
@@ -18,6 +23,7 @@ const Data = (props: DataProp) => {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [showFolderDialog, setShowFolderDialog] = useState(false);
+  const [languagePack, setLanguagePack] = useState<Language>({} as Language);
 
   const exportToJson = async () => {
     getDBConnection().then(db => {
@@ -70,10 +76,22 @@ const Data = (props: DataProp) => {
     });
   }
 
+  useEffect(() => {
+    const getLanguagePack = async () => {
+      const language = await AsyncStorage.getItem('language');
+      if (language === 'vi') {
+        setLanguagePack(vi);
+      } else {
+        setLanguagePack(en);
+      }
+    }
+    getLanguagePack();
+  }, []);
+
   const deleteAllData = async () => {
-    Alert.alert('Delete All Data', 'Are you sure you want to delete all data?', [
+    Alert.alert(languagePack.deleteData, languagePack.deleteDataAlert, [
       {
-        text: 'Cancel',
+        text: languagePack.cancel,
         style: 'cancel',
         onPress: () => {
           getDBConnection().then(db => {
@@ -82,7 +100,7 @@ const Data = (props: DataProp) => {
         }
       },
       {
-        text: 'Delete',
+        text: languagePack.delete,
         onPress: () => {
           getDBConnection().then(db => {
             dropTransactionsAndAccounts(db).then(() => {
@@ -117,7 +135,7 @@ const Data = (props: DataProp) => {
             color={theme.color}
           />
           <Text style={[styles.accountNameTxt, { color: theme.color }]}>
-            Data
+            {languagePack.backup}
           </Text>
         </View>
       </View>
@@ -132,7 +150,7 @@ const Data = (props: DataProp) => {
             style={[styles.img, { tintColor: theme.color }]}
             source={require('../../../../assets/settingImage/file-import.png')}
           />
-          <Text style={{ color: theme.color, fontSize: 18, fontWeight: '500' }}>Import Data</Text>
+          <Text style={{ color: theme.color, fontSize: 18, fontWeight: '500' }}>{languagePack.import}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -143,7 +161,7 @@ const Data = (props: DataProp) => {
             style={[styles.img, { tintColor: theme.color }]}
             source={require('../../../../assets/settingImage/file-export.png')}
           />
-          <Text style={{ color: theme.color, fontSize: 18, fontWeight: '500', }}>Export Data</Text>
+          <Text style={{ color: theme.color, fontSize: 18, fontWeight: '500', }}>{languagePack.export}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -155,7 +173,7 @@ const Data = (props: DataProp) => {
             style={[styles.img, { tintColor: theme.color }]}
             source={require('../../../../assets/settingImage/trash.png')}
           />
-          <Text style={{ color: theme.color, fontSize: 18, fontWeight: '500' }}>Delete Data</Text>
+          <Text style={{ color: theme.color, fontSize: 18, fontWeight: '500' }}>{languagePack.deleteData}</Text>
         </TouchableOpacity>
       </View>
     </View>
