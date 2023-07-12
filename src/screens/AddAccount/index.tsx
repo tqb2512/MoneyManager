@@ -57,7 +57,7 @@ function AddAccount(props: AddAccountProp) {
             </View>
             {/* Name account */}
 
-            <View style={[styles.contentContainer, { backgroundColor: theme.componentBackground, paddingTop: 8, paddingBottom: '10%',} ]}>
+            <View style={[styles.contentContainer, { backgroundColor: theme.componentBackground, paddingTop: 8, paddingBottom: 32, marginTop: '50%', borderWidth: 0.5, borderColor: theme.color} ]}>
                 <View style={styles.input}>
                     <Text style={[styles.inputLabel, { color: theme.color }]}>Name</Text>
                     <TextInput
@@ -69,7 +69,7 @@ function AddAccount(props: AddAccountProp) {
                     />
                 </View>
 
-                {showGroup && (
+                {/* {showGroup && (
                     <Modal
                         animationType="fade"
                         transparent={true}
@@ -90,7 +90,7 @@ function AddAccount(props: AddAccountProp) {
                             </View>
                         </View>
                     </Modal>
-                )}
+                )} */}
 
                 {/* Nút save account */}
                 <TouchableOpacity

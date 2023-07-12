@@ -140,15 +140,20 @@ export default function Chart(props: { navigation: any }) {
             <ScrollView style={[styles.pieDataContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }]}>
                 {chartData.map((data, index) => {
                     return (
-                        <Category
-                            key={index}
-                            cost={data.value}
-                            color={data.color}
-                            name={data.name}
-                            percentage={data.percentage * 100}
-                        />
+                        <View>
+                            <Category
+                                key={index}
+                                cost={data.value}
+                                color={data.color}
+                                name={data.name}
+                                percentage={data.percentage * 100}
+                            />
+                        </View>
                     );
                 })}
+                <SafeAreaView style={{ backgroundColor: theme.componentBackground, width: '100%' }}>
+                    <Text style={{ color: 'blue', padding: '10%' }}>    </Text>
+                </SafeAreaView>
             </ScrollView>
 
             {/* Calendar button */}

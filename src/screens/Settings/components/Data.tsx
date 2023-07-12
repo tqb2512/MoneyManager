@@ -132,7 +132,7 @@ const Data = (props: DataProp) => {
             style={[styles.img, { tintColor: theme.color }]}
             source={require('../../../../assets/settingImage/file-import.png')}
           />
-          <Text style={{ color: theme.color, fontSize: 16, fontWeight: '500' }}>Import Data</Text>
+          <Text style={{ color: theme.color, fontSize: 18, fontWeight: '500' }}>Import Data</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -143,7 +143,7 @@ const Data = (props: DataProp) => {
             style={[styles.img, { tintColor: theme.color }]}
             source={require('../../../../assets/settingImage/file-export.png')}
           />
-          <Text style={{ color: theme.color, fontSize: 16, fontWeight: '500' }}>Export Data</Text>
+          <Text style={{ color: theme.color, fontSize: 18, fontWeight: '500', }}>Export Data</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -155,7 +155,7 @@ const Data = (props: DataProp) => {
             style={[styles.img, { tintColor: theme.color }]}
             source={require('../../../../assets/settingImage/trash.png')}
           />
-          <Text style={{ color: theme.color, fontSize: 16, fontWeight: '500' }}>Delete Data</Text>
+          <Text style={{ color: theme.color, fontSize: 18, fontWeight: '500' }}>Delete Data</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -192,21 +192,23 @@ const styles = StyleSheet.create({
 
   buttonContainer: {
     flexDirection: 'column',
-    paddingHorizontal: '5%',
+    // paddingTop: '2%',
+    // paddingHorizontal: '5%',
     justifyContent: 'center',
   },
 
   button: {
     padding: 20,
     width: '49%',
+    height:'31%',
     alignItems: 'center',
     alignSelf: 'center',
-    paddingVertical: '10%'
+    justifyContent: 'center',
   },
 
   img: {
-    width: 100,
-    height: 100,
-    marginBottom: 8,
+    width: 120,
+    height: 120,
+    marginBottom: 20,
   },
 });

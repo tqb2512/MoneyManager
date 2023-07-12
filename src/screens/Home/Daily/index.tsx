@@ -12,7 +12,7 @@ import DayBox from './components/DayBox';
 import { DayBox as DayBoxModel } from '../../../models/dayBox';
 import { Currency } from '../../../models/currency';
 import { DailyScreenProp } from '../../../navigation/types';
-import { NativeBaseProvider } from 'native-base';
+import { NativeBaseProvider, ScrollView } from 'native-base';
 import {
   getDBConnection,
   getDayBoxFromMonthYear,
@@ -192,6 +192,7 @@ function DailyScreen(props: DailyScreenProp) {
         {/* Show list view chi tiêt schi tiêu ngày */}
         <View>
           <FlatList
+            showsVerticalScrollIndicator={false}
             data={dayBoxes}
             renderItem={({item, index}) => (
               <View>
@@ -199,6 +200,7 @@ function DailyScreen(props: DailyScreenProp) {
                   dayBoxModel={item}
                   navigation={props.navigation}
                   currency={currency}
+                  showFooter={false}
                 />
                 {index === dayBoxes.length - 1 ? (
                   <View style={styles.footerView}>
@@ -271,7 +273,7 @@ const styles = StyleSheet.create({
   },
 
   footerView: {
-    height: 75,
+    height: 200,
     width: '100%',
   }
 });

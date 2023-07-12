@@ -24,6 +24,7 @@ import { DayBox as DayBoxModel } from '../../../models/dayBox';
 import { Language } from '../../../models/language';
 import vi from '../../../config/language/vi';
 import en from '../../../config/language/en';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
@@ -179,7 +180,9 @@ function CalendarScreen(props: CelandarScreenProp) {
                 dayBoxModel={dayBox}
                 currency={currency}
                 navigation={navigation}
+                showFooter={true}
               />
+              
               {dayBox.transactions.length === 0 && (
                 <View>
                   <Image
