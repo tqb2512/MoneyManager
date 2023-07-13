@@ -358,7 +358,7 @@ function AddTransaction(props: AddTransactionProp) {
                           paddingBottom: 2,
                           borderBottomColor: 'grba(0,0,0,0.1)',
                           borderBottomWidth: 0.2,
-                          marginBottom: 6,
+                          // marginBottom: 4,
                           backgroundColor: theme.mode === 'dark' ? '#7d7f84' : 'black',
                           borderTopLeftRadius: 4,
                           borderTopRightRadius: 4,
@@ -392,12 +392,13 @@ function AddTransaction(props: AddTransactionProp) {
                           renderItem={({ item }) => (
                             <TouchableOpacity
                               style={{
-                                width: '30%',
+                                width: '33.33%',
                                 alignItems: 'center',
-                                padding: 6,
+                                justifyContent: 'center',
                                 paddingVertical: 12,
-                                borderWidth: 0.5,
-                                margin: 6,
+                                borderLeftWidth: 0.25,
+                                borderRightWidth: 0.25,
+                                borderBottomWidth: 0.75,
                               }}
                               onPress={() => {
                                 setTransaction({
@@ -505,12 +506,13 @@ function AddTransaction(props: AddTransactionProp) {
                           renderItem={({ item }) => (
                             <TouchableOpacity
                               style={{
-                                width: '30%',
+                                width: '33.33%',
                                 alignItems: 'center',
-                                padding: 6,
+                                justifyContent: 'center',
                                 paddingVertical: 12,
-                                borderWidth: 0.5,
-                                margin: 6
+                                borderLeftWidth: 0.25,
+                                borderRightWidth: 0.25,
+                                borderBottomWidth: 0.75,
                               }}
                               onPress={() => {
                                 setTransaction({
@@ -521,7 +523,7 @@ function AddTransaction(props: AddTransactionProp) {
                                 setShowAccounts(false);
                               }}>
                               {/* test image */}
-                              <Text>{item.name}</Text>
+                              <Text style={{ paddingHorizontal: 8  }}>{item.name}</Text>
                             </TouchableOpacity>
                           )}
                           keyExtractor={item => item.name}

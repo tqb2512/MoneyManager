@@ -163,7 +163,7 @@ function CalendarScreen(props: CelandarScreenProp) {
             return {backgroundColor: event.color, alignItems: 'center'};
           }}
           swipeEnabled={false}
-          
+          bodyContainerStyle={{ borderBottomWidth: 1, borderBottomColor: theme.mode === 'dark' ? theme.color : 'grey' }}
         />
       </View>
 

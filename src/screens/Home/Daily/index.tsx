@@ -116,7 +116,7 @@ function DailyScreen(props: DailyScreenProp) {
             {
               backgroundColor: theme.background,
               borderColor:
-                theme.mode === 'dark' ? 'white' : 'rgba(229, 231, 235, 0.4)',
+                theme.mode === 'dark' ? 'white' : 'grey',
             },
           ]}>
           <View style={styles.totalCalc}>
@@ -133,7 +133,7 @@ function DailyScreen(props: DailyScreenProp) {
               {currency.symbol} {totalIncome}
             </Text>
           </View>
-          <View style={styles.totalCalc}>
+          <View style={[styles.totalCalc]}>
             <Text style={[styles.totalElement, {color: theme.color}]}>
               {languagePack.expense}
             </Text>

@@ -343,15 +343,16 @@ function TransactionDetail(props: TransactionDetailProp) {
                           style={{ width: "100%" }}
                           numColumns={3 / 1}
                           data={categories}
-                          renderItem={({ item }) => (
+                          renderItem={({ item, index }) => (
                             <TouchableOpacity
                               style={{
-                                width: '30%',
+                                width: '33.33%',
                                 alignItems: 'center',
-                                padding: 6,
+                                justifyContent: 'center',
                                 paddingVertical: 12,
-                                borderWidth: 0.5,
-                                margin: 5
+                                borderLeftWidth: 0.25,
+                                borderRightWidth: 0.25,
+                                borderBottomWidth: 0.75,
                               }}
                               onPress={() => {
                                 setTransaction({
@@ -362,7 +363,7 @@ function TransactionDetail(props: TransactionDetailProp) {
                                 setShowCategories(false);
                               }}>
                               {/* test image */}
-                              <Text>{languagePack.categories[CategoryList.indexOf(item.name.toLowerCase())][1]}</Text>
+                              <Text style={{ }}>{languagePack.categories[CategoryList.indexOf(item.name.toLowerCase())][1]}</Text>
                             </TouchableOpacity>
                           )}
                           keyExtractor={item => item.id.toString()}
@@ -454,12 +455,13 @@ function TransactionDetail(props: TransactionDetailProp) {
                           renderItem={({ item }) => (
                             <TouchableOpacity
                               style={{
-                                width: '30%',
+                                width: '33.33%',
                                 alignItems: 'center',
-                                padding: 6,
+                                justifyContent: 'center',
                                 paddingVertical: 12,
-                                borderWidth: 0.5,
-                                margin: 6
+                                borderLeftWidth: 0.25,
+                                borderRightWidth: 0.25,
+                                borderBottomWidth: 0.75,
                               }}
                               onPress={() => {
                                 setTransaction({
@@ -470,7 +472,7 @@ function TransactionDetail(props: TransactionDetailProp) {
                                 setShowAccounts(false);
                               }}>
                               {/* test image */}
-                              <Text>{item.name}</Text>
+                              <Text style={{ paddingHorizontal: 8 }}>{item.name}</Text>
                             </TouchableOpacity>
                           )}
                           keyExtractor={item => item.name}
