@@ -127,7 +127,7 @@ export default function Chart(props: { navigation: any }) {
                     textBackgroundRadius={26}
                     centerLabelComponent={() => {
                         return (
-                            <View style={{ alignItems: "center" }}>
+                            <View style={{ alignItems: "center", }}>
                                 <Text style={{ color: theme.mode === 'dark' ? "black" : 'grey', fontWeight: 'bold', fontSize: 20, textAlign: "center" }}>
                                     {chartPressValue.name}{"\n"}
                                     {currency.symbol} {chartPressValue.value}
@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingLeft: 30,
+        paddingTop: 16,
         // paddingVertical: 15,
         // marginBottom: 15,
         backgroundColor: 'white',
@@ -204,6 +205,7 @@ const styles = StyleSheet.create({
 
     pieDataContainer: {
         // bottom: 0,
+        // paddingTop: 80, 
     },
 
     periodButton: {

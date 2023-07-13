@@ -199,6 +199,7 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     // paddingVertical: 15,
     // marginBottom: 15,
+    paddingTop: 16,
     backgroundColor: 'white',
   },
 
