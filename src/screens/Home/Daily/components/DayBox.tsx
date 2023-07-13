@@ -112,7 +112,7 @@ function DayBox(props: { dayBoxModel: DayBoxModel, navigation: any, currency: Cu
               key={index}
             />
             {props.showFooter ? index === props.dayBoxModel.transactions.length - 1 && 
-            (<SafeAreaView style={{ backgroundColor: theme.background, width: '100%'}}>
+            (<SafeAreaView style={{ backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2', width: '100%'}}>
                 <Text style={{ padding: '15%' }}>    </Text>
               </SafeAreaView>) : null
             }
