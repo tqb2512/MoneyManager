@@ -4,6 +4,7 @@ import { Account } from '../../../models/account';
 import themeContext from '../../../config/themeContext';
 import { themeInterface } from '../../../config/themeInterface';
 import { Currency } from '../../../models/currency';
+import { NumericFormat } from 'react-number-format';
 
 
 export default function AccountBox(props: { account: Account; navigation: any; currency: Currency; }) {
@@ -18,7 +19,13 @@ export default function AccountBox(props: { account: Account; navigation: any; c
                     <Text  numberOfLines={1} ellipsizeMode='tail' style={[styles.accountText, { color: theme.mode === 'dark' ? theme.color : 'grey', width: '85%' }]}>{account.name}</Text>
                 </View>
                 <View style={styles.moneyLabel}>
-                    <Text style={account.balance >= 0 ? [styles.moneyText, { color: "#7DCEA0" }] : [styles.moneyText, { color: "#F1948A" }]}>{props.currency.symbol} {account.balance}</Text>
+                    <NumericFormat
+                        value={account.balance}
+                        displayType={'text'}
+                        thousandSeparator={true}
+                        prefix={props.currency.symbol + ' '}
+                        renderText={value => <Text style={account.balance >= 0 ? [styles.moneyText, { color: "#7DCEA0" }] : [styles.moneyText, { color: "#F1948A" }]}>{value}</Text>}
+                    />
                 </View>
             </View>
         </TouchableOpacity>
@@ -31,16 +38,21 @@ const styles = StyleSheet.create({
     },
 
     accountLabel: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
         marginBottom: 4,
         marginLeft: "3%",
-    },
-    moneyLabel: {
+        //from right to left
+        flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
+    },
+
+    moneyLabel: {
         marginBottom: 4,
-        marginRight: "3%",
+        marginLeft: "3%",
+        //from left to right
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
     },
 
     moneyText: {
@@ -67,7 +79,6 @@ const styles = StyleSheet.create({
     accountButton: {
         backgroundColor: 'white',
         flexDirection: 'row',
-        justifyContent: 'space-between',
         padding: "3.5%",
         borderBottomWidth: 1,
         borderColor: 'rgba(229, 231, 235, 0.6)'

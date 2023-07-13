@@ -62,12 +62,19 @@ export type Language = {
     backup: string;
     deleteData: string;
     success: string;
+    importSuccessMessage: string;
     exportSuccessMessage: string;
     deleteDataAlert: string;
     //change currency
     changeCurrency: string;
     changeCurrencyAlert1: string;
     changeCurrencyAlert2: string;
+    //theme
+    changeTheme: string;
+    //language
+    changeLanguage: string;
+    changeLanguageAlert: string;
+    alert: string;
 }
 
 export const languagePack = {
@@ -76,5 +83,5 @@ export const languagePack = {
 }
 
 export const CategoryList = [
-    "food", "transport", "play", "watch", "study", "entertainment", "salary"
+    "food", "transport", "play", "watch", "study", "entertainment", "salary", "gift", "other"
 ]

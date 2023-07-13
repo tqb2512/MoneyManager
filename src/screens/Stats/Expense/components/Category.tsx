@@ -10,6 +10,7 @@ import vi from '../../../../config/language/vi';
 import { Currency } from '../../../../models/currency';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { NumericFormat } from 'react-number-format';
 
 export type Props = {
     percentage: any,
@@ -58,7 +59,13 @@ export default function Category({ percentage, name, cost, color }: Props) {
                     <Text style={[styles.nameText, { color: theme.color }]}>{loaded == true ? languagePack.categories[CategoryList.indexOf(name.toLowerCase())][1] : ''}</Text>
                 </View>
                 <View style={styles.costContainer}>
-                    <Text style={[styles.costText, { color: theme.color }]}>{currency.symbol} {cost}</Text>
+                    <NumericFormat
+                        value={cost}
+                        displayType={'text'}
+                        thousandSeparator={true}
+                        prefix={currency.symbol + " "}
+                        renderText={value => <Text style={[styles.costText, { color: theme.color }]}>{value}</Text>}
+                    />
                 </View>
             </TouchableOpacity>
         </SafeAreaView>
