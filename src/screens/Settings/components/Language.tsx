@@ -1,4 +1,4 @@
-import {Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Alert, BackHandler} from 'react-native';
 import React, { useContext } from 'react';
 import {LanguageProp} from '../../../navigation/types';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline'
@@ -35,14 +35,30 @@ function Language(props: LanguageProp) {
 
 
     const changeLanguage = async (language: string) => {
-        await AsyncStorage.setItem('language', language);
-        if (language === 'en') {
-            await AsyncStorage.setItem('languagePack', 'en');
-            setLanguagePack(en);
-        } else if (language === 'vi') {
-            await AsyncStorage.setItem('languagePack', 'vi');
-            setLanguagePack(vi);
+      Alert.alert(
+        languagePack.changeLanguage,
+        languagePack.changeLanguageAlert,
+        [
+          {
+            text: "Cancel",
+            onPress: () => {},
+            style: "cancel"
+          },
+          { text: "OK", onPress: async () => {
+            await AsyncStorage.setItem('language', language)
+            if (language === 'en') {
+              setLanguagePack(en);
+              setCurrentLanguage('en')
+            } else if (language === 'vi') {
+              setLanguagePack(vi);
+              setCurrentLanguage('vi')
+            }
+            BackHandler.exitApp();
+          }
         }
+        ],
+        { cancelable: false }
+      );
     }
                       
 
@@ -62,7 +78,7 @@ function Language(props: LanguageProp) {
             color={theme.color}
           />
           <Text style={[styles.accountNameTxt, {color: theme.color}]}>
-            Change Language
+            {languagePack.language}
           </Text>
         </View>
       </View>

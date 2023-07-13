@@ -61,7 +61,7 @@ function DayInfo(props: { transaction: Transaction, navigation: any, currency: C
 
 
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity>
       <View style={{ flexDirection: 'row', backgroundColor: theme.componentBackground, padding: 4 }}>
         <View style={{ width: 100, flexDirection: 'row', alignItems: 'center', padding: 8, marginLeft: "3%" }}>
 

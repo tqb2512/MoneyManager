@@ -11,7 +11,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Calendar } from 'react-native-big-calendar';
 import { getDBConnection, getEventsFromMonth, getDayBoxFromDate } from '../../../services/db-services';
 import { useIsFocused } from '@react-navigation/native';
-import DayBox from '../Daily/components/DayBox';
+import DayBox from './components/DayBox';
 import { ArrowLeftIcon, ArrowRightIcon, PlusIcon, ChevronLeftIcon, ChevronRightIcon } from 'react-native-heroicons/outline';
 import { ScrollView, Button, Dimensions } from 'react-native';
 import { CelandarScreenProp } from '../../../navigation/types';
@@ -150,8 +150,8 @@ function CalendarScreen(props: CelandarScreenProp) {
           date={date}
           height={SCREEN_HEIGHT - 230}
           events={calendarEvents}
-          onPressEvent={() => {
-            setDateValue();
+          onPressEvent={(event) => {
+            setDateValue(event.start);
             setDayClicked(true);
           }}
           onPressCell={event => {
@@ -163,7 +163,7 @@ function CalendarScreen(props: CelandarScreenProp) {
             return {backgroundColor: event.color, alignItems: 'center'};
           }}
           swipeEnabled={false}
-          
+          bodyContainerStyle={{ borderBottomWidth: 1, borderBottomColor: theme.mode === 'dark' ? theme.color : 'grey' }}
         />
       </View>
 

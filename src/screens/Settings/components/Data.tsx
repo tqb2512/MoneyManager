@@ -4,7 +4,7 @@ import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import themeContext from '../../../config/themeContext';
 import { themeInterface } from '../../../config/themeInterface';
 import { DataProp } from '../../../navigation/types';
-import { getDBConnection, getAccounts, getTransactions, insertAccounts, insertTransactions, dropTransactionsAndAccounts, createTables, consoleLogDB } from '../../../services/db-services';
+import { getDBConnection, getAccounts, getTransactions, insertAccounts, insertTransactions, dropTransactionsAndAccounts, createTables, consoleLogDB, firstLoad } from '../../../services/db-services';
 import { Account } from '../../../models/account';
 import { Transaction } from '../../../models/transaction';
 import { useState } from 'react';
@@ -40,7 +40,7 @@ const Data = (props: DataProp) => {
               transactions: transactions,
             };
             RNFS.writeFile(filetPath, JSON.stringify(data), 'utf8').then(() => {
-              Alert.alert('Success', 'Exported to ' + filetPath);
+              Alert.alert(languagePack.alert, languagePack.exportSuccessMessage + filetPath);
             }).catch((err) => {
               console.log(err);
             });
@@ -62,7 +62,7 @@ const Data = (props: DataProp) => {
         getDBConnection().then(db => {
           insertAccounts(db, jsonData.accounts).then(() => {
             insertTransactions(db, jsonData.transactions).then(() => {
-              console.log('inserted');
+              Alert.alert(languagePack.alert, languagePack.importSuccessMessage + path);
             });
           });
         });
@@ -89,7 +89,7 @@ const Data = (props: DataProp) => {
   }, []);
 
   const deleteAllData = async () => {
-    Alert.alert(languagePack.deleteData, languagePack.deleteDataAlert, [
+    Alert.alert(languagePack.alert, languagePack.deleteDataAlert, [
       {
         text: languagePack.cancel,
         style: 'cancel',
@@ -105,7 +105,9 @@ const Data = (props: DataProp) => {
           getDBConnection().then(db => {
             dropTransactionsAndAccounts(db).then(() => {
               createTables(db).then(() => {
-                console.log('deleted');
+                firstLoad(db).then(() => {
+                  Alert.alert(languagePack.success, "Deleted all data");
+                });
               });
             });
           });

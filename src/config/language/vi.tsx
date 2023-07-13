@@ -60,6 +60,8 @@ export default {
         ["study", "Học"],
         ["entertainment", "Giải trí"],
         ["salary", "Lương"],
+        ["gift", "Quà"],
+        ["other", "Khác"],
     ],
     //data
     "import": "Nhập dữ liệu",
@@ -67,10 +69,17 @@ export default {
     "backup": "Sao lưu dữ liệu",
     "deleteData": "Xóa dữ liệu",
     "success": "Thành công",
+    "importSuccessMessage": "Nhập dữ liệu thành công từ ",
     "exportSuccessMessage": "Xuất dữ liệu thành công vào ",
     "deleteDataAlert": "Bạn có chắc muốn xóa dữ liệu?",
     //change currency
     "changeCurrency": "Chuyển đổi tiền tệ",
     "changeCurrencyAlert1": "Bạn có chắc muốn đổi đơn vị tiền tệ sang ",
     "changeCurrencyAlert2": " không?\n\nToàn bộ giao dịch sẽ được chuyển theo đơn vị tiền tệ mới",
+    //change theme
+    "changeTheme": "Bật để chuyển sang chế độ tối.",
+    //change language
+    "changeLanguage": "Chuyển đổi ngôn ngữ",
+    "changeLanguageAlert": "Chuyển đổi ngôn ngữ sẽ khởi động lại ứng dụng.",
+    "alert": "Thông báo",
 }

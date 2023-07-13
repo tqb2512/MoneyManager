@@ -25,6 +25,7 @@ import {Language} from '../../models/language';
 import vi from '../../config/language/vi';
 import en from '../../config/language/en';
 import {TouchableOpacity} from 'react-native';
+import { NumericFormat } from 'react-number-format';
 
 function AccountDetail(props: AccountDetailProp) {
   const theme = useContext(themeContext) as themeInterface;
@@ -278,26 +279,41 @@ function AccountDetail(props: AccountDetailProp) {
         ]}>
         <View style={[styles.column]}>
           <Text style={{color: theme.color}}>{languagePack.income}</Text>
-          <Text style={{color: '#7DCEA0'}}>
-            {currency.symbol} {totalIncome}
-          </Text>
+          <NumericFormat
+            value={totalIncome}
+            displayType={'text'}
+            thousandSeparator={true}
+            renderText={value => (
+              <Text style={{color: '#7DCEA0'}}>
+                {currency.symbol} {value}
+              </Text>
+            )}/>
         </View>
 
         <View style={styles.column}>
           <Text style={{color: theme.color}}>{languagePack.expense}</Text>
-          <Text style={{color: '#F1948A'}}>
-            {currency.symbol} {totalExpense}
-          </Text>
+          <NumericFormat
+            value={totalExpense}
+            displayType={'text'}
+            thousandSeparator={true}
+            renderText={value => (
+              <Text style={{color: '#F1948A'}}>
+                {currency.symbol} {value}
+              </Text>
+            )}/>
         </View>
 
         <View style={styles.column}>
           <Text style={{color: theme.color}}>{languagePack.balance}</Text>
-          <Text
-            style={
-              account.balance >= 0 ? {color: '#7DCEA0'} : {color: '#F1948A'}
-            }>
-            {currency.symbol} {account.balance}
-          </Text>
+          <NumericFormat
+            value={account.balance}
+            displayType={'text'}
+            thousandSeparator={true}
+            renderText={value => (
+              <Text style={account.balance >= 0 ? {color: '#7DCEA0'} : {color: '#F1948A'}}>
+                {currency.symbol} {value}
+              </Text>
+            )}/>
         </View>
       </View>
 

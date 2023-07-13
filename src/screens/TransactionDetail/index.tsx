@@ -338,34 +338,33 @@ function TransactionDetail(props: TransactionDetailProp) {
                         />
                       </View>
 
-                      <View>
+                      <View style={{ alignItems: 'center', width: '100%' }}>
                         <FlatList
-                          contentContainerStyle={{ alignSelf: 'flex-start' }}
+                          style={{ width: "100%" }}
                           numColumns={3 / 1}
                           data={categories}
-                          renderItem={({ item }) => (
+                          renderItem={({ item, index }) => (
                             <TouchableOpacity
-                            style={{
-                              width: '33.33%',
-                              alignItems: 'center',
-                              padding: 6,
-                              paddingVertical: 12,
-                            }}
-                            onPress={() => {
-                              setTransaction({
-                                ...transaction,
-                                category: item,
-                              });
-                              setSelectedInput('');
-                              setShowCategories(false);
-                            }}>
-                            {/* test image */}
-                            <Image
-                              source={require('../../../assets/icons/money.png')}
-                              style={{ width: 48, height: 48, marginBottom: 4 }}
-                            />
-                            <Text>{languagePack.categories[CategoryList.indexOf(item.name.toLowerCase())][1]}</Text>
-                          </TouchableOpacity>
+                              style={{
+                                width: '33.33%',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                paddingVertical: 12,
+                                borderLeftWidth: 0.25,
+                                borderRightWidth: 0.25,
+                                borderBottomWidth: 0.75,
+                              }}
+                              onPress={() => {
+                                setTransaction({
+                                  ...transaction,
+                                  category: item,
+                                });
+                                setSelectedInput('');
+                                setShowCategories(false);
+                              }}>
+                              {/* test image */}
+                              <Text style={{ }}>{languagePack.categories[CategoryList.indexOf(item.name.toLowerCase())][1]}</Text>
+                            </TouchableOpacity>
                           )}
                           keyExtractor={item => item.id.toString()}
                         />
@@ -423,6 +422,7 @@ function TransactionDetail(props: TransactionDetailProp) {
                           paddingBottom: 2,
                           borderBottomColor: 'grba(0,0,0,0.1)',
                           borderBottomWidth: 0.2,
+                          // marginBottom: 6,
                           backgroundColor: theme.mode === 'dark' ? '#7d7f84' : 'black',
                           borderTopLeftRadius: 4,
                           borderTopRightRadius: 4,
@@ -447,30 +447,35 @@ function TransactionDetail(props: TransactionDetailProp) {
                         />
                       </View>
 
-                      <View>
+                      <View style={{ alignItems: 'center', width: '100%' }}>
                         <FlatList
-                          contentContainerStyle={{ alignSelf: 'flex-start' }}
+                          style={{ width: '100%' }}
                           numColumns={3 / 1}
                           data={accounts}
                           renderItem={({ item }) => (
                             <TouchableOpacity
                               style={{
-                                width: accounts.length == 3 ? '33.33%' : accounts.length == 2 ? '50%' : '100%',
+                                width: '33.33%',
                                 alignItems: 'center',
-                                padding: 18,
-                                borderWidth: 0.2,
-                                justifyContent: 'center'
+                                justifyContent: 'center',
+                                paddingVertical: 12,
+                                borderLeftWidth: 0.25,
+                                borderRightWidth: 0.25,
+                                borderBottomWidth: 0.75,
                               }}
                               onPress={() => {
-                                setTransaction({ ...transaction, account: item });
+                                setTransaction({
+                                  ...transaction,
+                                  account: item,
+                                });
                                 setSelectedInput('');
                                 setShowAccounts(false);
                               }}>
-                              <Text numberOfLines={2} ellipsizeMode='tail' style={{ alignSelf: 'center', justifyContent: 'center' }}>{item.name}</Text>
-                              {/* <View style={{ borderWidth: 0.2 }} ></View> */}
+                              {/* test image */}
+                              <Text style={{ paddingHorizontal: 8 }}>{item.name}</Text>
                             </TouchableOpacity>
                           )}
-                          keyExtractor={item => item.id.toString()}
+                          keyExtractor={item => item.name}
                         />
                       </View>
                     </View>
@@ -488,6 +493,9 @@ function TransactionDetail(props: TransactionDetailProp) {
                     placeholder=""
                     value={transaction.amount.toString()}
                     onChangeText={text => {
+                      if (isNaN(Number(text))) {
+                        return;
+                      }
                       setTransaction({ ...transaction, amount: Number(text) });
                     }}
                     keyboardType="number-pad"
@@ -512,7 +520,7 @@ function TransactionDetail(props: TransactionDetailProp) {
                 </View>
               </TouchableWithoutFeedback>
 
-              <View style={[styles.input, {  }]}>
+              <View style={[styles.input, {}]}>
                 <Text style={[styles.inputLabel, { color: theme.mode === 'dark' ? theme.color : 'grey' }]}>{languagePack.note}</Text>
                 <TextInput
                   multiline={true}
