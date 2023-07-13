@@ -80,6 +80,14 @@ function AccountsScreen(props: AccountsScreenProp) {
         return unsubscribe;
     }, [navigation]);
 
+    useEffect(() => {
+        getDBConnection().then(db => {
+            getAccounts(db).then(accounts => {
+                setAccounts(accounts);
+            });
+        });
+    }, [showAddAccount]);
+
     return (
       <NativeBaseProvider>
         <SafeAreaView

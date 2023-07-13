@@ -125,7 +125,7 @@ function AddTransaction(props: AddTransactionProp) {
         setCategories(categories);
       });
       getAccounts(db).then(accounts => {
-        setAccounts(accounts);     
+        setAccounts(accounts);
       });
     });
   }, []);
@@ -384,18 +384,20 @@ function AddTransaction(props: AddTransactionProp) {
                         />
                       </View>
 
-                      <View>
+                      <View style={{ alignItems: 'center', width: '100%' }}>
                         <FlatList
-                          contentContainerStyle={{ alignSelf: 'flex-start' }}
+                          style={{ width: "100%" }}
                           numColumns={3 / 1}
                           data={categories}
                           renderItem={({ item }) => (
                             <TouchableOpacity
                               style={{
-                                width: '33.33%',
+                                width: '30%',
                                 alignItems: 'center',
                                 padding: 6,
                                 paddingVertical: 12,
+                                borderWidth: 0.5,
+                                margin: 6,
                               }}
                               onPress={() => {
                                 setTransaction({
@@ -405,11 +407,6 @@ function AddTransaction(props: AddTransactionProp) {
                                 setSelectedInput('');
                                 setShowCategories(false);
                               }}>
-                              {/* test image */}
-                              <Image
-                                source={require('../../../assets/icons/money.png')}
-                                style={{ width: 48, height: 48, marginBottom: 4 }}
-                              />
                               <Text>{languagePack.categories[CategoryList.indexOf(item.name.toLowerCase())][1]}</Text>
                             </TouchableOpacity>
                           )}
@@ -473,11 +470,12 @@ function AddTransaction(props: AddTransactionProp) {
                           justifyContent: 'space-between',
                           alignItems: 'center',
                           paddingBottom: 2,
-                          backgroundColor: theme.mode === 'dark' ? '#7d7f84' : 'black',
+                          borderBottomColor: 'grba(0,0,0,0.1)',
                           borderBottomWidth: 0.2,
+                          // marginBottom: 6,
+                          backgroundColor: theme.mode === 'dark' ? '#7d7f84' : 'black',
                           borderTopLeftRadius: 4,
                           borderTopRightRadius: 4,
-
                         }}>
                         <Text
                           style={{
@@ -487,7 +485,7 @@ function AddTransaction(props: AddTransactionProp) {
                             color: 'white',
                             marginStart: 4,
                           }}>
-                          Accounts
+                          {languagePack.account}
                         </Text>
                         <CloseIcon
                           color="white"
@@ -499,29 +497,34 @@ function AddTransaction(props: AddTransactionProp) {
                         />
                       </View>
 
-                      <View>
+                      <View style={{ alignItems: 'center', width: '100%' }}>
                         <FlatList
-                          contentContainerStyle={{ alignSelf: 'flex-start' }}
+                          style={{ width: '100%' }}
                           numColumns={3 / 1}
                           data={accounts}
                           renderItem={({ item }) => (
                             <TouchableOpacity
                               style={{
-                                width: accounts.length == 3 ? '33.33%' : accounts.length == 2 ? '50%' : '100%',
+                                width: '30%',
                                 alignItems: 'center',
-                                padding: 18,
-                                borderWidth: 0.2,
+                                padding: 6,
+                                paddingVertical: 12,
+                                borderWidth: 0.5,
+                                margin: 6
                               }}
                               onPress={() => {
-                                setTransaction({ ...transaction, account: item });
+                                setTransaction({
+                                  ...transaction,
+                                  account: item,
+                                });
                                 setSelectedInput('');
                                 setShowAccounts(false);
                               }}>
+                              {/* test image */}
                               <Text>{item.name}</Text>
-                              {/* <View style={{ borderWidth: 0.2 }} ></View> */}
                             </TouchableOpacity>
                           )}
-                          keyExtractor={item => item.id.toString()}
+                          keyExtractor={item => item.name}
                         />
                       </View>
                     </View>
