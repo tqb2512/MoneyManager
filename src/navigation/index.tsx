@@ -17,8 +17,6 @@ import AccountDetail from '../screens/AccountDetail';
 import EditAccount from '../screens/EditAccount';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../screens/Home/CalendarButton';
-import StatsHeaderLeft from '../screens/Stats/StatsHeaderLeft';
-import StatsHeaderRight from '../screens/Stats/StatsHeaderRight';
 import { View } from 'native-base';
 import { styles } from 'react-native-gifted-charts/src/BarChart/styles';
 import Settings from '../screens/Settings';
@@ -27,7 +25,6 @@ import ChangeTheme from '../screens/Settings/components/ChangeTheme';
 import themeContext from '../config/themeContext';
 import { themeInterface } from '../config/themeInterface';
 import { useContext } from 'react';
-import Monthly from '../screens/Home/Monthly';
 import Language from '../screens/Settings/components/Language';
 import { Image, Platform } from 'react-native';
 import { Text } from 'react-native-svg';
@@ -136,7 +133,7 @@ function HomeScreenTopBar() {
             tabBarActiveTintColor: theme.mode === 'dark' ? theme.color : '#566573',
             tabBarInactiveTintColor: '#D5D8DC',
             tabBarBounces: false,
-            tabBarIndicatorStyle: { backgroundColor: 'white' },
+            tabBarIndicatorStyle: { backgroundColor: theme.mode === 'dark' ? 'white' : '#566573' },
             tabBarStyle: { backgroundColor: theme.background }
           }}
         />
@@ -149,7 +146,7 @@ function HomeScreenTopBar() {
             tabBarActiveTintColor: theme.mode === 'dark' ? theme.color : '#566573',
             tabBarInactiveTintColor: '#D5D8DC',
             tabBarBounces: false,
-            tabBarIndicatorStyle: { backgroundColor: 'white' },
+            tabBarIndicatorStyle: { backgroundColor: theme.mode === 'dark' ? 'white' : '#566573' },
             tabBarStyle: { backgroundColor: theme.background }
           }}
         />
@@ -186,10 +183,7 @@ function StatsScreenTopBar() {
             tabBarActiveTintColor: '#7DCEA0',
             tabBarInactiveTintColor: '#D5D8DC',
             tabBarBounces: false,
-            tabBarIndicatorStyle: {
-
-              backgroundColor: 'white',
-            },
+            tabBarIndicatorStyle: { backgroundColor: theme.mode === 'dark' ? 'white' : '#566573' },
             tabBarStyle: { backgroundColor: theme.componentBackground },
           }}
         />
@@ -202,11 +196,7 @@ function StatsScreenTopBar() {
             tabBarActiveTintColor: '#F1948A',
             tabBarInactiveTintColor: '#D5D8DC',
             tabBarBounces: false,
-            tabBarIndicatorStyle: {
-
-
-              backgroundColor: 'white',
-            },
+            tabBarIndicatorStyle: { backgroundColor: theme.mode === 'dark' ? 'white' : '#566573' },
             tabBarStyle: { backgroundColor: theme.componentBackground },
           }}
         />

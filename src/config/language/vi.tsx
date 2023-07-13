@@ -28,6 +28,12 @@ export default {
     //account
     "balance": "Số dư",
     "group": "Nhóm",
+    "edit": "Sửa",
+    "editAccount": "Đổi tên",
+    "name": "Tên",
+    "deleteAccount": "Xóa tài khoản",
+    "deleteAccountAlert": "Bạn có chắc muốn xóa tài khoản này?",
+    "cancel": "Hủy",
     //stats
     "monthly": "Tháng",
     "yearly": "Năm",
@@ -40,6 +46,11 @@ export default {
     "thu": "Th5",
     "fri": "Th6",
     "sat": "Th7",
+    // No data available
+    "nodata": "Chưa có dữ liệu.",
+    // Change theme
+    "dark": "Nhấn để chuyển sang chế độ sáng.",
+    "light": "Nhấn để chuyển sang chế độ tối.",
     //list category
     categories: [
         ["food", "Ăn uống"],
@@ -49,5 +60,17 @@ export default {
         ["study", "Học"],
         ["entertainment", "Giải trí"],
         ["salary", "Lương"],
-    ]
+    ],
+    //data
+    "import": "Nhập dữ liệu",
+    "export": "Xuất dữ liệu",
+    "backup": "Sao lưu dữ liệu",
+    "deleteData": "Xóa dữ liệu",
+    "success": "Thành công",
+    "exportSuccessMessage": "Xuất dữ liệu thành công vào ",
+    "deleteDataAlert": "Bạn có chắc muốn xóa dữ liệu?",
+    //change currency
+    "changeCurrency": "Chuyển đổi tiền tệ",
+    "changeCurrencyAlert1": "Bạn có chắc muốn đổi đơn vị tiền tệ sang ",
+    "changeCurrencyAlert2": " không?\n\nToàn bộ giao dịch sẽ được chuyển theo đơn vị tiền tệ mới",
 }

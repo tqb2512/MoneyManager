@@ -1,43 +1,21 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { useState, useCallback } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import SelectDropdown from 'react-native-select-dropdown';
-import MonthPicker from 'react-native-month-year-picker';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { CalendarIcon } from 'react-native-heroicons/outline'
+import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {useState, useCallback} from 'react';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 
-export default function CalendarButton(props: { date: Date, setDate: Function }) {
-  const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
+export default function AddButton(props: { onPress: Function }) {
 
-  const onValueChange = (event: any, newDate: any) => {
-    const selectedDate = newDate || date;
-    setShow(!show);
-    setDate(selectedDate);
-    props.setDate(selectedDate);
-  };
   return (
     <SafeAreaView style={styles.headerContainer}>
       <View style={styles.dropDownContainer}>
         <TouchableOpacity
           style={styles.selectDropDownContainer}
-          onPress={() => setShow(true)}>
-          <CalendarIcon style={{ alignSelf: 'center' }} size={20} color='white' />
+          onPress={props.onPress}>
           <Text style={styles.selectDropDownText}>
-            {date.getMonth() + 1}/{date.getFullYear()}
+            +
           </Text>
         </TouchableOpacity>
-        
-        {show && (
-          <MonthPicker
-            mode='number'
-            onChange={onValueChange}
-            value={date}
-            locale="ko"
-          />
-        )}
       </View>
     </SafeAreaView>
   );
@@ -50,7 +28,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     position: 'absolute',
     bottom: 0,
-    left: 0,
+    right: 0,
     zIndex: 100,
   },
   titleContainer: {
@@ -80,7 +58,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     borderBottomColor: '#D5D8DC',
     paddingTop: '5%',
-    padding: 20,
+    padding: 20, 
     paddingBottom: '6.5%',
     justifyContent: 'center',
     shadowColor: '#171717',
@@ -88,6 +66,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3,
     height: '70%', 
-    width: 120,
+    width: 120, 
   },
 });

@@ -1,15 +1,20 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View, PermissionsAndroid } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
 import React, { useContext } from 'react';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import themeContext from '../../../config/themeContext';
 import { themeInterface } from '../../../config/themeInterface';
 import { DataProp } from '../../../navigation/types';
-import { getDBConnection, getAccounts, getTransactions, insertAccounts, insertTransactions, dropTransactionsAndAccounts, createTables } from '../../../services/db-services';
+import { getDBConnection, getAccounts, getTransactions, insertAccounts, insertTransactions, dropTransactionsAndAccounts, createTables, consoleLogDB } from '../../../services/db-services';
 import { Account } from '../../../models/account';
 import { Transaction } from '../../../models/transaction';
 import { useState } from 'react';
 import DocumentPicker from 'react-native-document-picker'
 import RNFS from 'react-native-fs';
+import { Language } from '../../../models/language';
+import vi from '../../../config/language/vi';
+import en from '../../../config/language/en';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react';
 
 
 const Data = (props: DataProp) => {
@@ -18,6 +23,7 @@ const Data = (props: DataProp) => {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [showFolderDialog, setShowFolderDialog] = useState(false);
+  const [languagePack, setLanguagePack] = useState<Language>({} as Language);
 
   const exportToJson = async () => {
     getDBConnection().then(db => {
@@ -34,7 +40,7 @@ const Data = (props: DataProp) => {
               transactions: transactions,
             };
             RNFS.writeFile(filetPath, JSON.stringify(data), 'utf8').then(() => {
-              console.log('file written');
+              Alert.alert('Success', 'Exported to ' + filetPath);
             }).catch((err) => {
               console.log(err);
             });
@@ -70,14 +76,42 @@ const Data = (props: DataProp) => {
     });
   }
 
+  useEffect(() => {
+    const getLanguagePack = async () => {
+      const language = await AsyncStorage.getItem('language');
+      if (language === 'vi') {
+        setLanguagePack(vi);
+      } else {
+        setLanguagePack(en);
+      }
+    }
+    getLanguagePack();
+  }, []);
+
   const deleteAllData = async () => {
-    getDBConnection().then(db => {
-      dropTransactionsAndAccounts(db).then(() => {
-        createTables(db).then(() => {
-          console.log('deleted');
-        });
-      });
-    });
+    Alert.alert(languagePack.deleteData, languagePack.deleteDataAlert, [
+      {
+        text: languagePack.cancel,
+        style: 'cancel',
+        onPress: () => {
+          getDBConnection().then(db => {
+            consoleLogDB(db);
+          });
+        }
+      },
+      {
+        text: languagePack.delete,
+        onPress: () => {
+          getDBConnection().then(db => {
+            dropTransactionsAndAccounts(db).then(() => {
+              createTables(db).then(() => {
+                console.log('deleted');
+              });
+            });
+          });
+        },
+      },
+    ]);
   }
 
 
@@ -101,7 +135,7 @@ const Data = (props: DataProp) => {
             color={theme.color}
           />
           <Text style={[styles.accountNameTxt, { color: theme.color }]}>
-            Data
+            {languagePack.backup}
           </Text>
         </View>
       </View>
@@ -116,7 +150,7 @@ const Data = (props: DataProp) => {
             style={[styles.img, { tintColor: theme.color }]}
             source={require('../../../../assets/settingImage/file-import.png')}
           />
-          <Text style={{ color: theme.color }}>Import Data</Text>
+          <Text style={{ color: theme.color, fontSize: 18, fontWeight: '500' }}>{languagePack.import}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -127,7 +161,7 @@ const Data = (props: DataProp) => {
             style={[styles.img, { tintColor: theme.color }]}
             source={require('../../../../assets/settingImage/file-export.png')}
           />
-          <Text style={{ color: theme.color }}>Export Data</Text>
+          <Text style={{ color: theme.color, fontSize: 18, fontWeight: '500', }}>{languagePack.export}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -137,9 +171,9 @@ const Data = (props: DataProp) => {
           }}>
           <Image
             style={[styles.img, { tintColor: theme.color }]}
-            source={require('../../../../assets/settingImage/file-export.png')}
+            source={require('../../../../assets/settingImage/trash.png')}
           />
-          <Text style={{ color: theme.color }}>Delete Data</Text>
+          <Text style={{ color: theme.color, fontSize: 18, fontWeight: '500' }}>{languagePack.deleteData}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -171,25 +205,28 @@ const styles = StyleSheet.create({
     marginLeft: 24,
     fontSize: 18,
     color: 'black',
+    fontWeight: '600',
   },
 
   buttonContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingHorizontal: '5%',
+    flexDirection: 'column',
+    // paddingTop: '2%',
+    // paddingHorizontal: '5%',
     justifyContent: 'center',
   },
 
   button: {
     padding: 20,
     width: '49%',
+    height:'31%',
     alignItems: 'center',
     alignSelf: 'center',
+    justifyContent: 'center',
   },
 
   img: {
-    width: 64,
-    height: 64,
-    marginBottom: 8,
+    width: 120,
+    height: 120,
+    marginBottom: 20,
   },
 });

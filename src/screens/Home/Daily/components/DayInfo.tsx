@@ -67,7 +67,7 @@ function DayInfo(props: { transaction: Transaction, navigation: any, currency: C
           <Text style={{ marginStart: "5%", color: theme.color }}>{loaded == true ? languagePack.categories[CategoryList.indexOf(transaction.category.name.toLowerCase())][1] : ' '}</Text>
         </View>
         <View style={{ flex: 1, marginStart: "5%", justifyContent: 'center' }}>
-          {props.transaction.note !== null && (<Text style={{ fontSize: 16, fontWeight: 'bold', color: theme.color }}>{props.transaction.note}</Text>)}
+          {props.transaction.note !== null && (<Text numberOfLines={1} ellipsizeMode='tail' style={{ fontSize: 16, fontWeight: 'bold', color: theme.color, width: '90%' } }>{props.transaction.note}</Text>)}
           <Text style={{ fontSize: 12, color: theme.color === 'dark' ? theme.color : 'grey', justifyContent: 'center' }}>{props.transaction.account.name}</Text>
         </View>
         <Text

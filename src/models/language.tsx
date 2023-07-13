@@ -31,6 +31,12 @@ export type Language = {
     //account
     balance: string;
     group: string;
+    edit: string;
+    editAccount: string;
+    name: string;
+    deleteAccount: string;
+    deleteAccountAlert: string;
+    cancel: string;
     //stats
     monthly: string;
     yearly: string;
@@ -43,8 +49,25 @@ export type Language = {
     thu: string;
     fri: string;
     sat: string;
+    // No data available
+    nodata: string;
+    // Change theme
+    dark: string,
+    light: string,
     //list category
     categories: string[][];
+    //data
+    import: string;
+    export: string;
+    backup: string;
+    deleteData: string;
+    success: string;
+    exportSuccessMessage: string;
+    deleteDataAlert: string;
+    //change currency
+    changeCurrency: string;
+    changeCurrencyAlert1: string;
+    changeCurrencyAlert2: string;
 }
 
 export const languagePack = {

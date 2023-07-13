@@ -63,7 +63,6 @@ function AddTransaction(props: AddTransactionProp) {
   const [currency, setCurrency] = React.useState<Currency>({} as Currency);
   const [languagePack, setLanguagePack] = React.useState<Language>({} as Language);
 
-
   const saveTransaction = () => {
     if (transaction.type == 'expense') {
       transaction.account.balance =
@@ -92,7 +91,6 @@ function AddTransaction(props: AddTransactionProp) {
   };
 
   useEffect(() => {
-
     const unsubscribe = navigation.addListener('focus', () => {
       const getCurrencyValue = async () => {
         const value = await AsyncStorage.getItem('currency')
@@ -127,7 +125,7 @@ function AddTransaction(props: AddTransactionProp) {
         setCategories(categories);
       });
       getAccounts(db).then(accounts => {
-        setAccounts(accounts);
+        setAccounts(accounts);     
       });
     });
   }, []);
@@ -361,9 +359,10 @@ function AddTransaction(props: AddTransactionProp) {
                           borderBottomColor: 'grba(0,0,0,0.1)',
                           borderBottomWidth: 0.2,
                           marginBottom: 6,
-                          backgroundColor: 'black',
+                          backgroundColor: theme.mode === 'dark' ? '#7d7f84' : 'black',
                           borderTopLeftRadius: 4,
                           borderTopRightRadius: 4,
+
                         }}>
                         <Text
                           style={{
@@ -409,7 +408,7 @@ function AddTransaction(props: AddTransactionProp) {
                               {/* test image */}
                               <Image
                                 source={require('../../../assets/icons/money.png')}
-                                style={{ width: 48, height: 48 }}
+                                style={{ width: 48, height: 48, marginBottom: 4 }}
                               />
                               <Text>{languagePack.categories[CategoryList.indexOf(item.name.toLowerCase())][1]}</Text>
                             </TouchableOpacity>
@@ -474,11 +473,11 @@ function AddTransaction(props: AddTransactionProp) {
                           justifyContent: 'space-between',
                           alignItems: 'center',
                           paddingBottom: 2,
-                          borderBottomColor: 'grba(0,0,0,0.1)',
+                          backgroundColor: theme.mode === 'dark' ? '#7d7f84' : 'black',
                           borderBottomWidth: 0.2,
-                          backgroundColor: 'black',
                           borderTopLeftRadius: 4,
                           borderTopRightRadius: 4,
+
                         }}>
                         <Text
                           style={{
@@ -508,7 +507,7 @@ function AddTransaction(props: AddTransactionProp) {
                           renderItem={({ item }) => (
                             <TouchableOpacity
                               style={{
-                                width: '33.33%',
+                                width: accounts.length == 3 ? '33.33%' : accounts.length == 2 ? '50%' : '100%',
                                 alignItems: 'center',
                                 padding: 18,
                                 borderWidth: 0.2,
@@ -860,6 +859,7 @@ const styles = StyleSheet.create({
     marginLeft: 24,
     fontSize: 18,
     color: 'black',
+    fontWeight: '600',
   },
 
   currencySymbol: {

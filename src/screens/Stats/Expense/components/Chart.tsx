@@ -104,7 +104,7 @@ export default function Chart(props: { navigation: any }) {
     }, [navigation]);
 
     function handlePress() {
-        setShowTimeOptions(!showTimeOptions)
+        timeOptionsValue === 'Monthly' ? setTimeOptionsValue('Yearly') : setTimeOptionsValue('Monthly')
     }
 
     return (
@@ -140,22 +140,27 @@ export default function Chart(props: { navigation: any }) {
             <ScrollView style={[styles.pieDataContainer, { backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2' }]}>
                 {chartData.map((data, index) => {
                     return (
-                        <Category
-                            key={index}
-                            cost={data.value}
-                            color={data.color}
-                            name={data.name}
-                            percentage={data.percentage * 100}
-                        />
+                        <View>
+                            <Category
+                                key={index}
+                                cost={data.value}
+                                color={data.color}
+                                name={data.name}
+                                percentage={data.percentage * 100}
+                            />
+                        </View>
                     );
                 })}
+                <SafeAreaView style={{ backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2', width: '100%'}}>
+                    <Text style={{ color: 'blue', padding: '10%' }}>    </Text>
+                </SafeAreaView>
             </ScrollView>
 
             {/* Calendar button */}
             <CalendarButton date={date} setDate={setDate} />
             <PeriodButton onPress={handlePress} period={timeOptionsValue == 'Yearly' ? languagePack.yearly : languagePack.monthly} />
 
-            {showTimeOptions && (
+            {/* {showTimeOptions && (
                 <View>
                     <TouchableOpacity onPress={() => {
                         setTimeOptionsValue('Yearly')
@@ -170,7 +175,7 @@ export default function Chart(props: { navigation: any }) {
                         <Text style={{ fontSize: 14, padding: 6, color: 'white' }}>{languagePack.monthly}</Text>
                     </TouchableOpacity>
                 </View>
-            )}
+            )} */}
 
             {/* <TouchableOpacity onPress={() => setShowTimeOptions(!showTimeOptions)} style={styles.periodButton}>
                 <Text style={{ fontSize: 16, fontWeight: '500', padding: 6, color: 'white' }}>{timeOptionsValue}</Text>
@@ -192,8 +197,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingLeft: 30,
-        paddingVertical: 15,
-        marginBottom: 15,
+        // paddingVertical: 15,
+        // marginBottom: 15,
         backgroundColor: 'white',
     },
 
