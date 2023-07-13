@@ -151,7 +151,7 @@ export default function Chart(props: { navigation: any }) {
           );
         })}
 
-        <SafeAreaView style={{ backgroundColor: theme.background, width: '100%'}}>
+        <SafeAreaView style={{ backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2', width: '100%'}}>
          <Text style={{ color: 'blue', padding: '10%' }}>    </Text>
         </SafeAreaView>
       </ScrollView>
@@ -197,8 +197,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingLeft: 30,
-    paddingVertical: 15,
-    marginBottom: 15,
+    // paddingVertical: 15,
+    // marginBottom: 15,
     backgroundColor: 'white',
   },
 
