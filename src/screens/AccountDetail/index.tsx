@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {View, Text, StyleSheet, FlatList, Modal, TextInput, Alert, Image} from 'react-native';
 import {AccountDetailProp} from '../../navigation/types';
 import {
@@ -50,6 +50,7 @@ function AccountDetail(props: AccountDetailProp) {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      setMenuShow(false)
       getDBConnection().then(db => {
         getDayBoxByAccount(db, props.route.params.account).then(dayBoxes => {
           setDayBoxes(dayBoxes);
