@@ -65,6 +65,7 @@ export type Language = {
     importSuccessMessage: string;
     exportSuccessMessage: string;
     deleteDataAlert: string;
+    deleteDataSuccess: string;
     //change currency
     changeCurrency: string;
     changeCurrencyAlert1: string;
@@ -75,6 +76,9 @@ export type Language = {
     changeLanguage: string;
     changeLanguageAlert: string;
     alert: string;
+    addAccount: string;
+    accountNameEmpty: string;
+    invalidData: string;
 }
 
 export const languagePack = {
@@ -83,5 +87,5 @@ export const languagePack = {
 }
 
 export const CategoryList = [
-    "food", "transport", "play", "watch", "study", "entertainment", "salary", "gift", "other"
+    "food", "transport", "play","watch", "study", "event", "interest", "beauty", "entertainment", "salary", "bonus", "petty cash", "allowance", "gift", "other"
 ]

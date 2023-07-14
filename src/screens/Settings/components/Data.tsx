@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, Alert, BackHandler } from 'react-native';
 import React, { useContext } from 'react';
 import { ChevronLeftIcon } from 'react-native-heroicons/outline';
 import themeContext from '../../../config/themeContext';
@@ -32,7 +32,7 @@ const Data = (props: DataProp) => {
         getTransactions(db).then(transactions => {
           setTransactions(transactions);
 
-          const path = RNFS.ExternalStorageDirectoryPath + '/MoneyManager';
+          const path = '/storage/emulated/0/Android/media/MoneyManager';
           RNFS.mkdir(path).then(() => {
             const filetPath = path + '/backup.json';
             const data = {
@@ -59,6 +59,11 @@ const Data = (props: DataProp) => {
       const path = result[0].uri;
       RNFS.readFile(path, 'utf8').then((data) => {
         const jsonData = JSON.parse(data);
+        //check if data is valid
+        if (!jsonData.hasOwnProperty('accounts') || !jsonData.hasOwnProperty('transactions')) {
+          Alert.alert(languagePack.alert, languagePack.invalidData);
+          return;
+        }
         getDBConnection().then(db => {
           insertAccounts(db, jsonData.accounts).then(() => {
             insertTransactions(db, jsonData.transactions).then(() => {
@@ -106,7 +111,14 @@ const Data = (props: DataProp) => {
             dropTransactionsAndAccounts(db).then(() => {
               createTables(db).then(() => {
                 firstLoad(db).then(() => {
-                  Alert.alert(languagePack.success, "Deleted all data");
+                  Alert.alert(languagePack.success, languagePack.deleteDataSuccess, [
+                    {
+                      text: "OK",
+                      onPress: () => {
+                        BackHandler.exitApp();
+                      }
+                    }
+                  ]);
                 });
               });
             });
@@ -220,7 +232,7 @@ const styles = StyleSheet.create({
   button: {
     padding: 20,
     width: '49%',
-    height:'31%',
+    height: '31%',
     alignItems: 'center',
     alignSelf: 'center',
     justifyContent: 'center',

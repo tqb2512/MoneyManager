@@ -10,7 +10,6 @@ import CelandarScreen from '../screens/Home/Celandar';
 import IncomeScreen from '../screens/Stats/Income';
 import ExpenseScreen from '../screens/Stats/Expense';
 import AccountsScreen from '../screens/Account';
-import AddAccountScreen from '../screens/AddAccount';
 import AddTransaction from '../screens/AddTransaction';
 import TransactionDetail from '../screens/TransactionDetail';
 import AccountDetail from '../screens/AccountDetail';
@@ -213,7 +212,6 @@ function AppNavigation() {
         headerShown: false
       }}
     >
-      <AppStack.Screen name="add_account" component={AddAccountScreen} />
       <AppStack.Screen name="add_transaction" component={AddTransaction} />
       <AppStack.Screen name="edit_account" component={EditAccount} />
       <AppStack.Screen name="account_detail" component={AccountDetail} />

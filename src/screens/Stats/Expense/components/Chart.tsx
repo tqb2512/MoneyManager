@@ -81,25 +81,25 @@ export default function Chart(props: { navigation: any }) {
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             updateChart()
+
+            const getLanguagePack = async () => {
+                const language = await AsyncStorage.getItem('language');
+                if (language === 'vi') {
+                    setLanguagePack(vi);
+                } else {
+                    setLanguagePack(en);
+                }
+            }
+            getLanguagePack();
+    
+            const getCurrency = async () => {
+                const currency = await AsyncStorage.getItem('currency');
+                if (currency) {
+                    setCurrency(JSON.parse(currency));
+                }
+            }
+            getCurrency();
         });
-
-        const getLanguagePack = async () => {
-            const language = await AsyncStorage.getItem('language');
-            if (language === 'vi') {
-                setLanguagePack(vi);
-            } else {
-                setLanguagePack(en);
-            }
-        }
-        getLanguagePack();
-
-        const getCurrency = async () => {
-            const currency = await AsyncStorage.getItem('currency');
-            if (currency) {
-                setCurrency(JSON.parse(currency));
-            }
-        }
-        getCurrency();
 
         return unsubscribe;
     }, [navigation]);
@@ -110,7 +110,7 @@ export default function Chart(props: { navigation: any }) {
 
     return (
         <SafeAreaView style={[styles.mainContainer, { backgroundColor: theme.background }]}>
-            <View style={[styles.chartContainer, { backgroundColor: theme.componentBackground }]}>
+            <View style={[styles.chartContainer, { backgroundColor: theme.componentBackground, height: 420 }]}>
                 {isLoaded && (<PieChart
                     data={chartData}
                     showText
@@ -128,7 +128,7 @@ export default function Chart(props: { navigation: any }) {
                     textBackgroundRadius={26}
                     centerLabelComponent={() => {
                         return (
-                            <View style={{ alignItems: "center" }}>
+                            <View style={{ alignItems: "center", }}>
                                 <Text style={{ color: theme.mode === 'dark' ? "black" : 'grey', fontWeight: 'bold', fontSize: 20, textAlign: "center" }}>
                                     {chartPressValue.name}
                                 </Text>
@@ -198,6 +198,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingLeft: 30,
+        paddingTop: 16,
         // paddingVertical: 15,
         // marginBottom: 15,
         backgroundColor: 'white',
@@ -205,6 +206,7 @@ const styles = StyleSheet.create({
 
     pieDataContainer: {
         // bottom: 0,
+        // paddingTop: 80, 
     },
 
     periodButton: {

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { AccountsScreenProp } from '../../navigation/types';
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, StyleSheet, FlatList, Image, Modal, TextInput } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, StyleSheet, FlatList, Image, Modal, TextInput, Alert } from 'react-native';
 import { NativeBaseProvider, ThreeDotsIcon } from 'native-base';
 import { getDBConnection, getAccounts, insertAccount } from '../../services/db-services';
 import { Account } from '../../models/account';
@@ -58,9 +58,12 @@ function AccountsScreen(props: AccountsScreenProp) {
     }, [navigation]);
 
     const saveAccount = () => {
+      if (account.name === undefined || account.name === '') {
+        Alert.alert(languagePack.alert, languagePack.accountNameEmpty);
+        return;
+      }
         getDBConnection().then(db => {
             insertAccount(db, account).then(() => {
-         
             });
         });
     }
@@ -210,7 +213,7 @@ function AccountsScreen(props: AccountsScreenProp) {
                         color: 'white',
                         marginStart: 4,
                       }}>
-                      {languagePack.add}
+                      {languagePack.addAccount}
                     </Text>
                     {/* Close icon */}
                     <View style={{right: 4}}>

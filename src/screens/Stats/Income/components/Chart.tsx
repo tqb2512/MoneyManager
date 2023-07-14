@@ -46,13 +46,13 @@ export default function Chart(props: { navigation: any }) {
         getDBConnection().then(db => {
           getChartDataByMonth(db, date.getMonth() + 1, date.getFullYear(), 'income').then(chartData => {
             setChartData(chartData);
-            setIsLoaded(true);
             setChartPressValue({
               name: languagePack.total,
               percentage: 1,
               value: chartData.reduce((a, b) => a + (b.value || 0), 0),
               color: 'white'
             })
+            setIsLoaded(true);
           })
         })
         break;
@@ -60,13 +60,13 @@ export default function Chart(props: { navigation: any }) {
         getDBConnection().then(db => {
           getChartDataByYear(db, date.getFullYear(), 'income').then(chartData => {
             setChartData(chartData);
-            setIsLoaded(true);
             setChartPressValue({
               name: languagePack.total,
               percentage: 1,
               value: chartData.reduce((a, b) => a + (b.value || 0), 0),
               color: 'white'
             })
+            setIsLoaded(true);
           })
         }
         )
@@ -110,7 +110,7 @@ export default function Chart(props: { navigation: any }) {
 
   return (
     <SafeAreaView style={[styles.mainContainer, { backgroundColor: theme.background }]}>
-      <View style={[styles.chartContainer, { backgroundColor: theme.componentBackground }]}>
+      <View style={[styles.chartContainer, { backgroundColor: theme.componentBackground, height: 420 }]}>
         {isLoaded && (<PieChart
           data={chartData}
           showText
@@ -200,6 +200,7 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     // paddingVertical: 15,
     // marginBottom: 15,
+    paddingTop: 16,
     backgroundColor: 'white',
   },
 

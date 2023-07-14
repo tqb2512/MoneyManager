@@ -58,15 +58,22 @@ export const importTestData = async (db: SQLiteDatabase): Promise<void> => {
     ]
 
     const categories: Category[] = [
+        //"food", "transport", "play","watch", "study", "event", "interest", "beauty", "entertainment", "salary", "bonus", "petty cash", "allowance", "gift", "other"
         { id: 1, name: "Food", color: "#FF9B9B", icon: "" },
         { id: 2, name: "Transport", color: "#FFD6A5", icon: "" },
         { id: 3, name: "Play", color: "#FFFEC4", icon: "" },
         { id: 4, name: "Watch", color: "#CBFFA9", icon: "" },
-        { id: 5, name: "Study", color: "#C4DFDF", icon: "" },
-        { id: 6, name: "Entertainment", color: "#BA90C6", icon: "" },
-        { id: 7, name: "Salary", color: "#867070", icon: "" },
-        { id: 8, name: "Gift", color: "#FF9B9B", icon: "" },
-        { id: 9, name: "Other", color: "#FF9B9B", icon: "" },
+        { id: 5, name: "Study", color: "#A0C4FF", icon: "" },
+        { id: 6, name: "Event", color: "#FFC6FF", icon: "" },
+        { id: 7, name: "Interest", color: "#FFFFFC", icon: "" },
+        { id: 8, name: "Beauty", color: "#9BF6FF", icon: "" },
+        { id: 9, name: "Entertainment", color: "#FFD6A5", icon: "" },
+        { id: 10, name: "Salary", color: "#FF9B9B", icon: "" },
+        { id: 11, name: "Bonus", color: "#FFD6A5", icon: "" },
+        { id: 12, name: "Petty cash", color: "#FFFEC4", icon: "" },
+        { id: 13, name: "Allowance", color: "#CBFFA9", icon: "" },
+        { id: 14, name: "Gift", color: "#A0C4FF", icon: "" },
+        { id: 15, name: "Other", color: "#FFC6FF", icon: "" },
     ]
 
     const transactions: Transaction[] = [
@@ -557,11 +564,17 @@ export const firstLoad = async (db: SQLiteDatabase) => {
         { id: 2, name: "Transport", color: "#FFD6A5", icon: "" },
         { id: 3, name: "Play", color: "#FFFEC4", icon: "" },
         { id: 4, name: "Watch", color: "#CBFFA9", icon: "" },
-        { id: 5, name: "Study", color: "#C4DFDF", icon: "" },
-        { id: 6, name: "Entertainment", color: "#BA90C6", icon: "" },
-        { id: 7, name: "Salary", color: "#867070", icon: "" },
-        { id: 8, name: "Gift", color: "#F1948A", icon: "" },
-        { id: 9, name: "Other", color: "#7DCEA0", icon: "" },
+        { id: 5, name: "Study", color: "#A0C4FF", icon: "" },
+        { id: 6, name: "Event", color: "#FFC6FF", icon: "" },
+        { id: 7, name: "Interest", color: "#FFFFFC", icon: "" },
+        { id: 8, name: "Beauty", color: "#9BF6FF", icon: "" },
+        { id: 9, name: "Entertainment", color: "#FFD6A5", icon: "" },
+        { id: 10, name: "Salary", color: "#FF9B9B", icon: "" },
+        { id: 11, name: "Bonus", color: "#FFD6A5", icon: "" },
+        { id: 12, name: "Petty cash", color: "#FFFEC4", icon: "" },
+        { id: 13, name: "Allowance", color: "#CBFFA9", icon: "" },
+        { id: 14, name: "Gift", color: "#A0C4FF", icon: "" },
+        { id: 15, name: "Other", color: "#FFC6FF", icon: "" }, 
     ]
 
     const [result] = await db.executeSql('SELECT * FROM categories');
