@@ -579,7 +579,6 @@ export const firstLoad = async (db: SQLiteDatabase) => {
 
     const [result] = await db.executeSql('SELECT * FROM categories');
     if (result.rows.length < categories.length) {
-        dropTables(db);
         for (let i = 0; i < categories.length; i++) {
             const category = categories[i];
             await db.executeSql('INSERT INTO categories (id, name, color) VALUES (?, ?, ?)', [category.id, category.name, category.color]);
