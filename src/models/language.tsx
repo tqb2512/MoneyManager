@@ -78,6 +78,7 @@ export type Language = {
     alert: string;
     addAccount: string;
     accountNameEmpty: string;
+    invalidData: string;
 }
 
 export const languagePack = {

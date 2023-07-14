@@ -90,6 +90,32 @@ function AddTransaction(props: AddTransactionProp) {
     }
   };
 
+  const continueTransaction = () => {
+    if (transaction.type == 'expense') {
+      transaction.account.balance =
+        transaction.account.balance - transaction.amount;
+    } else if (transaction.type == 'income') {
+      transaction.account.balance =
+        transaction.account.balance + transaction.amount;
+    }
+    if (transaction.amount && transaction.category && transaction.account) {
+      getDBConnection().then(db => {
+        insertTransaction(db, transaction).then(() => {
+          updateAccountBalance(db, transaction.account).then(() => {
+            setTransaction({
+              day: new Date().getDate(),
+              month: new Date().getMonth() + 1,
+              year: new Date().getFullYear(),
+              amount: 0,
+            } as Transaction);
+          });
+        });
+      });
+    } else {
+      Alert.alert('Please fill all fields');
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       const getCurrencyValue = async () => {
@@ -647,7 +673,17 @@ function AddTransaction(props: AddTransactionProp) {
                 <TouchableOpacity
                   style={styles.continueButton}
                   onPress={() => {
-                    setTransaction({ ...transaction, amount: 0, note: '' });
+                    if (transaction.amount == 0) {
+                      Alert.alert('Please enter amount');
+                    } else if (transaction.category == null) {
+                      Alert.alert('Please choose category');
+                    } else if (transaction.account == null) {
+                      Alert.alert('Please choose account');
+                    } else if (transaction.type == null || transaction.type == '') {
+                      Alert.alert('Please choose type');
+                    } else {
+                      continueTransaction();
+                    }
                   }}>
                   <Text style={styles.continueButtonText}>{languagePack.continue}</Text>
                 </TouchableOpacity>

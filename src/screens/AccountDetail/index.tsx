@@ -122,6 +122,10 @@ function AccountDetail(props: AccountDetailProp) {
   };
 
   const saveAccountName = () => {
+    if (account.name == '') {
+      Alert.alert(languagePack.alert, languagePack.accountNameEmpty);
+      return;
+    }
     getDBConnection().then(db => {
       updateAccount(db, account).then(() => {
         setShowEditAccount(false);

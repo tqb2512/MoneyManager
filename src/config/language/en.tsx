@@ -30,7 +30,7 @@ export default {
     "group": "Group",
     "edit": "Edit",
     "editAccount": "Edit Account",
-    "name": "string",
+    "name": "Name",
     "deleteAccount": "Delete Account",
     "deleteAccountAlert": "Are you sure you want to delete this account?",
     "cancel": "Cancel",
@@ -91,4 +91,5 @@ export default {
     "alert": "Alert",
     "addAccount": "Add Account",
     "accountNameEmpty": "Account name cannot be empty.",
+    "invalidData": "Invalid data.",
 }

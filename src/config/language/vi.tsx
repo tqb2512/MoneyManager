@@ -91,4 +91,5 @@ export default {
     "alert": "Thông báo",
     "addAccount": "Thêm tài khoản",
     "accountNameEmpty": "Tên tài khoản không được để trống.",
+    "invalidData": "Dữ liệu không hợp lệ.",
 }

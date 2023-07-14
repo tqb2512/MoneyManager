@@ -59,6 +59,11 @@ const Data = (props: DataProp) => {
       const path = result[0].uri;
       RNFS.readFile(path, 'utf8').then((data) => {
         const jsonData = JSON.parse(data);
+        //check if data is valid
+        if (!jsonData.hasOwnProperty('accounts') || !jsonData.hasOwnProperty('transactions')) {
+          Alert.alert(languagePack.alert, languagePack.invalidData);
+          return;
+        }
         getDBConnection().then(db => {
           insertAccounts(db, jsonData.accounts).then(() => {
             insertTransactions(db, jsonData.transactions).then(() => {
