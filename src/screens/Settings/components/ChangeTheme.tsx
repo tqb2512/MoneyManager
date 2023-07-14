@@ -7,6 +7,9 @@ import { EventRegister } from 'react-native-event-listeners';
 import themeContext from '../../../config/themeContext';
 import { themeInterface } from '../../../config/themeInterface';
 import { ChangeThemeProp } from '../../../navigation/types';
+import { Language } from '../../../models/language';
+import en from '../../../config/language/en';
+import vi from '../../../config/language/vi';
 
 const ChangeTheme = (props: ChangeThemeProp) => {
   const { navigation } = props;
@@ -15,6 +18,7 @@ const ChangeTheme = (props: ChangeThemeProp) => {
 
   const [mode, setMode] = useState(false);
   const [fadeAnim] = useState(new Animated.Value(0));
+  const [languagePack, setLanguagePack] = React.useState<Language>({} as Language);
 
   const startAnimation = () => {
     fadeAnim.setValue(0);
@@ -50,6 +54,16 @@ const ChangeTheme = (props: ChangeThemeProp) => {
       }
     };
     getSwitchValue();
+
+    const getLanguagePack = async () => {
+      const language = await AsyncStorage.getItem('language');
+      if (language === 'vi') {
+        setLanguagePack(vi);
+      } else {
+        setLanguagePack(en);
+      }
+    }
+    getLanguagePack();
   }, []);
 
   return (
@@ -68,7 +82,7 @@ const ChangeTheme = (props: ChangeThemeProp) => {
             color={theme.color}
           />
           <Text style={[styles.accountNameTxt, { color: theme.color }]}>
-            Change Theme
+            {languagePack.theme}
           </Text>
         </View>
       </View>
@@ -89,11 +103,11 @@ const ChangeTheme = (props: ChangeThemeProp) => {
       <Image style={{ width: 120, height: 120, marginBottom: 16, tintColor: theme.color}} source={ theme.mode === 'dark' ? require('../../../../assets/settingImage/moon.png') : require('../../../../assets/settingImage/sun.png') } />
         {mode ? (
               <Text style={[styles.descriptionText, { color: theme.color, marginBottom: 16,  }]}>
-                Switch to change to Light mode
+                {languagePack.changeTheme}
               </Text>
             ) : (
               <Text style={[styles.descriptionText, { color: theme.color, marginBottom: 16, }]}>
-                Switch to change to Dark mode
+                {languagePack.changeTheme}
               </Text>
         )}
       <Switch

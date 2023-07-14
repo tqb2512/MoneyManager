@@ -65,6 +65,8 @@ export const importTestData = async (db: SQLiteDatabase): Promise<void> => {
         { id: 5, name: "Study", color: "#C4DFDF", icon: "" },
         { id: 6, name: "Entertainment", color: "#BA90C6", icon: "" },
         { id: 7, name: "Salary", color: "#867070", icon: "" },
+        { id: 8, name: "Gift", color: "#FF9B9B", icon: "" },
+        { id: 9, name: "Other", color: "#FF9B9B", icon: "" },
     ]
 
     const transactions: Transaction[] = [
@@ -558,10 +560,12 @@ export const firstLoad = async (db: SQLiteDatabase) => {
         { id: 5, name: "Study", color: "#C4DFDF", icon: "" },
         { id: 6, name: "Entertainment", color: "#BA90C6", icon: "" },
         { id: 7, name: "Salary", color: "#867070", icon: "" },
+        { id: 8, name: "Gift", color: "#F1948A", icon: "" },
+        { id: 9, name: "Other", color: "#7DCEA0", icon: "" },
     ]
 
     const [result] = await db.executeSql('SELECT * FROM categories');
-    if (result.rows.length === 0) {
+    if (result.rows.length < categories.length) {
         for (let i = 0; i < categories.length; i++) {
             const category = categories[i];
             await db.executeSql('INSERT INTO categories (id, name, color) VALUES (?, ?, ?)', [category.id, category.name, category.color]);

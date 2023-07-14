@@ -15,6 +15,7 @@ import vi from "../../../../config/language/vi";
 import en from "../../../../config/language/en";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Currency } from "../../../../models/currency";
+import { NumericFormat } from "react-number-format";
 
 export type ChartData = {
     name: string,
@@ -129,9 +130,9 @@ export default function Chart(props: { navigation: any }) {
                         return (
                             <View style={{ alignItems: "center", }}>
                                 <Text style={{ color: theme.mode === 'dark' ? "black" : 'grey', fontWeight: 'bold', fontSize: 20, textAlign: "center" }}>
-                                    {chartPressValue.name}{"\n"}
-                                    {currency.symbol} {chartPressValue.value}
+                                    {chartPressValue.name}
                                 </Text>
+                                {chartPressValue != undefined && <NumericFormat value={chartPressValue.value} displayType={'text'} thousandSeparator={true} renderText={value => <Text style={{ color: theme.mode === 'dark' ? "black" : 'grey', fontWeight: 'bold', fontSize: 14, textAlign: "center" }}>{value} {currency.symbol}</Text>} />}
                             </View>
                         )
                     }}
@@ -151,7 +152,7 @@ export default function Chart(props: { navigation: any }) {
                         </View>
                     );
                 })}
-                <SafeAreaView style={{ backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2', width: '100%'}}>
+                <SafeAreaView style={{ backgroundColor: theme.mode === 'dark' ? theme.background : '#f2f2f2', width: '100%' }}>
                     <Text style={{ color: 'blue', padding: '10%' }}>    </Text>
                 </SafeAreaView>
             </ScrollView>

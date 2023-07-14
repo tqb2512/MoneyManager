@@ -60,6 +60,8 @@ export default {
         ["study", "Study"],
         ["entertainment", "Entertainment"],
         ["salary", "Salary"],
+        ["gift", "Gift"],
+        ["other", "Other"],
     ],
     //data
     "import": "Import",
@@ -67,10 +69,17 @@ export default {
     "backup": "Backup",
     "deleteData": "Delete Data",
     "success": "Success",
+    "importSuccessMessage": "Import data successfully from ",
     "exportSuccessMessage": "Export data successfully to ",
     "deleteDataAlert": "Are you sure you want to delete all data?",
     //change currency
     "changeCurrency": "Change Currency",
     "changeCurrencyAlert1": "Are you sure you want to change currency to ",
     "changeCurrencyAlert2": "?\n\nChange currency will apply current exchange rate to all transaction and account",
+    //change theme
+    "changeTheme": "Switch to change theme to dark mode.",
+    //change language
+    "changeLanguage": "Change Language",
+    "changeLanguageAlert": "Change language will restart the app.",
+    "alert": "Alert",
 }

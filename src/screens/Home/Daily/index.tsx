@@ -30,6 +30,7 @@ import { Language } from '../../../models/language';
 import vi from '../../../config/language/vi';
 import en from '../../../config/language/en';
 import AddButton from './components/AddButton';
+import { NumericFormat } from 'react-number-format';
 
 function DailyScreen(props: DailyScreenProp) {
 
@@ -120,48 +121,47 @@ function DailyScreen(props: DailyScreenProp) {
             },
           ]}>
           <View style={styles.totalCalc}>
-            <Text style={[styles.totalElement, {color: theme.color}]}>
+            <Text style={[styles.totalElement, { color: theme.color }]}>
               {languagePack.income}
             </Text>
-            <Text
-              style={{
-                color: '#7DCEA0',
-                alignSelf: 'center',
-                fontSize: 14,
-                fontWeight: '500',
-              }}>
-              {currency.symbol} {totalIncome}
-            </Text>
+            <NumericFormat
+              value={totalIncome}
+              displayType={'text'}
+              thousandSeparator={true}
+              prefix={currency.symbol + " "}
+              renderText={formattedValue => <Text style={{ color: '#7DCEA0', alignSelf: 'center', fontSize: 14, fontWeight: '500', }}>{formattedValue}</Text>}
+            />
           </View>
           <View style={[styles.totalCalc]}>
-            <Text style={[styles.totalElement, {color: theme.color}]}>
+            <Text style={[styles.totalElement, { color: theme.color }]}>
               {languagePack.expense}
             </Text>
-            <Text
-              style={{
-                color: '#F1948A',
-                alignSelf: 'center',
-                fontSize: 14,
-                fontWeight: '500',
-              }}>
-              {currency.symbol} {totalExpense}
-            </Text>
+            <NumericFormat
+              value={totalExpense}
+              displayType={'text'}
+              thousandSeparator={true}
+              prefix={currency.symbol + " "}
+              renderText={formattedValue => <Text style={{ color: '#F1948A', alignSelf: 'center', fontSize: 14, fontWeight: '500', }}>{formattedValue}</Text>}
+            />
           </View>
           <View style={styles.totalCalc}>
-            <Text style={[styles.totalElement, {color: theme.color}]}>
+            <Text style={[styles.totalElement, { color: theme.color }]}>
               {languagePack.total}
             </Text>
-            <Text
-              style={[
+            <NumericFormat
+              value={total % 1 !== 0 ? total.toFixed(2) : total.toFixed(0)}
+              displayType={'text'}
+              thousandSeparator={true}
+              prefix={currency.symbol + " "}
+              renderText={formattedValue => <Text style={[
                 {
                   alignSelf: 'center',
                   fontSize: 14,
                   fontWeight: '500',
                 },
-                total >= 0 ? {color: '#7DCEA0'} : {color: '#F1948A'},
-              ]}>
-              {currency.symbol} {total.toFixed(2)}
-            </Text>
+                total >= 0 ? { color: '#7DCEA0' } : { color: '#F1948A' },
+              ]}>{formattedValue}</Text>}
+            />
           </View>
         </View>
         {/* No data view */}
@@ -178,7 +178,7 @@ function DailyScreen(props: DailyScreenProp) {
               }}
             />
             <Text
-              style={{color: theme.color, alignSelf: 'center', paddingTop: 4}}>
+              style={{ color: theme.color, alignSelf: 'center', paddingTop: 4 }}>
               {languagePack.nodata}
             </Text>
           </View>
@@ -188,7 +188,7 @@ function DailyScreen(props: DailyScreenProp) {
           <FlatList
             showsVerticalScrollIndicator={false}
             data={dayBoxes}
-            renderItem={({item, index}) => (
+            renderItem={({ item, index }) => (
               <View>
                 <DayBox
                   dayBoxModel={item}
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
 
   totalCalc: {
     justifyContent: 'center',
-    width: 100,
+    width: "25%",
   },
 
   totalElement: {

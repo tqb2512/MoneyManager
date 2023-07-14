@@ -70,7 +70,7 @@ function ChangeCurrency(props: ChangeCurrencyProp) {
   }, []);
 
   const changeCurrency = async (newCurrency: Currency) => {
-    Alert.alert(languagePack.changeCurrency, languagePack.changeCurrencyAlert1 + newCurrency.name + languagePack.changeCurrencyAlert2, [
+    Alert.alert(languagePack.alert, languagePack.changeCurrencyAlert1 + newCurrency.name + languagePack.changeCurrencyAlert2, [
       {
         text: languagePack.cancel,
         style: 'cancel'

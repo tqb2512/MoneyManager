@@ -550,6 +550,9 @@ function AddTransaction(props: AddTransactionProp) {
                     placeholder=""
                     value={transaction.amount.toString()}
                     onChangeText={text => {
+                      if (isNaN(Number(text))) {
+                        return;
+                      }
                       setTransaction({ ...transaction, amount: Number(text) });
                     }}
                     keyboardType="number-pad"
