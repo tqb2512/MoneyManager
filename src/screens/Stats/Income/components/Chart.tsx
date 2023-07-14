@@ -110,7 +110,7 @@ export default function Chart(props: { navigation: any }) {
 
   return (
     <SafeAreaView style={[styles.mainContainer, { backgroundColor: theme.background }]}>
-      <View style={[styles.chartContainer, { backgroundColor: theme.componentBackground }]}>
+      <View style={[styles.chartContainer, { backgroundColor: theme.componentBackground, height: 420 }]}>
         {isLoaded && (<PieChart
           data={chartData}
           showText
