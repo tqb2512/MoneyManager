@@ -78,6 +78,7 @@ export default {
     "importSuccessMessage": "Import data successfully from ",
     "exportSuccessMessage": "Export data successfully to ",
     "deleteDataAlert": "Are you sure you want to delete all data?",
+    "deleteDataSuccess": "Delete data successfully, restart the app to see the effect",
     //change currency
     "changeCurrency": "Change Currency",
     "changeCurrencyAlert1": "Are you sure you want to change currency to ",
@@ -88,4 +89,6 @@ export default {
     "changeLanguage": "Change Language",
     "changeLanguageAlert": "Change language will restart the app.",
     "alert": "Alert",
+    "addAccount": "Add Account",
+    "accountNameEmpty": "Account name cannot be empty.",
 }

@@ -46,13 +46,13 @@ export default function Chart(props: { navigation: any }) {
         getDBConnection().then(db => {
           getChartDataByMonth(db, date.getMonth() + 1, date.getFullYear(), 'income').then(chartData => {
             setChartData(chartData);
-            setIsLoaded(true);
             setChartPressValue({
               name: languagePack.total,
               percentage: 1,
               value: chartData.reduce((a, b) => a + (b.value || 0), 0),
               color: 'white'
             })
+            setIsLoaded(true);
           })
         })
         break;
@@ -60,13 +60,13 @@ export default function Chart(props: { navigation: any }) {
         getDBConnection().then(db => {
           getChartDataByYear(db, date.getFullYear(), 'income').then(chartData => {
             setChartData(chartData);
-            setIsLoaded(true);
             setChartPressValue({
               name: languagePack.total,
               percentage: 1,
               value: chartData.reduce((a, b) => a + (b.value || 0), 0),
               color: 'white'
             })
+            setIsLoaded(true);
           })
         }
         )

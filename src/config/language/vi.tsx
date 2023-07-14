@@ -78,6 +78,7 @@ export default {
     "importSuccessMessage": "Nhập dữ liệu thành công từ ",
     "exportSuccessMessage": "Xuất dữ liệu thành công vào ",
     "deleteDataAlert": "Bạn có chắc muốn xóa dữ liệu?",
+    "deleteDataSuccess": "Xóa dữ liệu thành công, ứng dụng sẽ khởi động lại.",
     //change currency
     "changeCurrency": "Chuyển đổi tiền tệ",
     "changeCurrencyAlert1": "Bạn có chắc muốn đổi đơn vị tiền tệ sang ",
@@ -88,4 +89,6 @@ export default {
     "changeLanguage": "Chuyển đổi ngôn ngữ",
     "changeLanguageAlert": "Chuyển đổi ngôn ngữ sẽ khởi động lại ứng dụng.",
     "alert": "Thông báo",
+    "addAccount": "Thêm tài khoản",
+    "accountNameEmpty": "Tên tài khoản không được để trống.",
 }

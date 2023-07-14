@@ -81,25 +81,25 @@ export default function Chart(props: { navigation: any }) {
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             updateChart()
+
+            const getLanguagePack = async () => {
+                const language = await AsyncStorage.getItem('language');
+                if (language === 'vi') {
+                    setLanguagePack(vi);
+                } else {
+                    setLanguagePack(en);
+                }
+            }
+            getLanguagePack();
+    
+            const getCurrency = async () => {
+                const currency = await AsyncStorage.getItem('currency');
+                if (currency) {
+                    setCurrency(JSON.parse(currency));
+                }
+            }
+            getCurrency();
         });
-
-        const getLanguagePack = async () => {
-            const language = await AsyncStorage.getItem('language');
-            if (language === 'vi') {
-                setLanguagePack(vi);
-            } else {
-                setLanguagePack(en);
-            }
-        }
-        getLanguagePack();
-
-        const getCurrency = async () => {
-            const currency = await AsyncStorage.getItem('currency');
-            if (currency) {
-                setCurrency(JSON.parse(currency));
-            }
-        }
-        getCurrency();
 
         return unsubscribe;
     }, [navigation]);

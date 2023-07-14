@@ -372,7 +372,7 @@ function AddTransaction(props: AddTransactionProp) {
                             color: 'white',
                             marginStart: 4,
                           }}>
-                          Categories
+                          {languagePack.category}
                         </Text>
                         <CloseIcon
                           color="white"
